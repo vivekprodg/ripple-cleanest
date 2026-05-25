@@ -1,0 +1,47 @@
+{% load static %}
+
+{% if overview.is_active %}
+<section class="premium-overview" id="overview">
+    <div class="overview-container">
+
+        <div class="overview-content reveal-up">
+            <span class="section-subtitle">
+                {{ overview.subtitle|default:"Firm Overview" }}
+            </span>
+
+            <h2 class="section-title">
+                {{ overview.title|default:"Designing spaces with purpose. Creating a continuous ripple in modern living." }}
+            </h2>
+
+            <p class="section-description">
+                {{ overview.description|default:"We believe in an architectural philosophy that bridges the gap between the built environment and human experience. By eliminating rigid boundaries and uncompromising constraints, we shape fluid, dynamic spaces tailored to exact specifications." }}
+            </p>
+
+            <a href="{{ overview.button_link|default:'#studio' }}" class="btn-premium">
+                {{ overview.button_text|default:"Discover Our Studio" }}
+            </a>
+        </div>
+
+        <div class="overview-visuals reveal-up" style="transition-delay: 0.2s;">
+            {% if overview.main_image %}
+            <div class="img-wrapper img-main">
+                <img
+                    src="{{ overview.main_image.url }}"
+                    alt="{{ overview.main_image_alt|default:'Modern architectural exterior with clean lines' }}"
+                >
+            </div>
+            {% endif %}
+
+            {% if overview.secondary_image %}
+            <div class="img-wrapper img-secondary">
+                <img
+                    src="{{ overview.secondary_image.url }}"
+                    alt="{{ overview.secondary_image_alt|default:'Refined interior design detailing' }}"
+                >
+            </div>
+            {% endif %}
+        </div>
+
+    </div>
+</section>
+{% endif %}

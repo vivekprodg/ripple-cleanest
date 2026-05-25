@@ -1,0 +1,19 @@
+{% load static %}
+
+<section class="blog-grid-section">
+
+    <div class="container">
+
+        <div class="blog-grid">
+
+            {% for post in posts %}
+
+                {% include "blogs/sections/blog_card.html" with post=post %}
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>

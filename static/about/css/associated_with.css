@@ -1,0 +1,196 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600&family=Jost:wght@300;400;500;600&family=Poppins:wght@300;400;500;600&display=swap');
+
+/* ===================== BASE SECTION ===================== */
+.assoc-marquee-section {
+  padding: 0 20px 110px;
+  background: var(--bg, #ffffff);
+  color: var(--text-dark, #111111);
+  overflow: hidden;
+
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* ===================== HEADER ===================== */
+.assoc-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.assoc-header .kicker {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  line-height: 1.2;
+  color: #111111;
+}
+
+.assoc-header h2 {
+  font-family: 'Jost', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  text-transform: none;
+  line-height: 1.08;
+  color: #111111;
+  margin: 12px 0;
+}
+
+.assoc-header p {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.02rem;
+  font-weight: 400;
+  letter-spacing: normal;
+  text-transform: none;
+  line-height: 1.8;
+  color: #777777;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* ===================== MARQUEE WRAPPER ===================== */
+.assoc-marquee-section .marquee {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+/* ===================== TRACK ===================== */
+.assoc-marquee-section .marquee-track {
+  display: flex;
+  align-items: center;
+  gap: 70px;
+  width: max-content;
+
+  animation: assoc-scroll 22s linear infinite;
+  will-change: transform;
+}
+
+/* ===================== LOGO CARD ===================== */
+.assoc-marquee-section .logo {
+  flex: 0 0 auto;
+
+  width: 180px;
+  height: 120px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #fafafa;
+  border: 1px solid #eeeeee;
+
+  transition: all 0.35s ease;
+
+  filter: grayscale(100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* LOGO IMAGE */
+.assoc-marquee-section .logo img {
+  width: 120px;
+  height: auto;
+  object-fit: contain;
+  transition: transform 0.35s ease;
+  opacity: 0.9;
+}
+
+/* ===================== HOVER EFFECT ===================== */
+.assoc-marquee-section .logo:hover {
+  filter: grayscale(0%);
+  background: #ffffff;
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.08);
+  border-color: #eaeaea;
+}
+
+.assoc-marquee-section .logo:hover img {
+  transform: scale(1.08);
+  opacity: 1;
+}
+
+/* ===================== ANIMATION ===================== */
+@keyframes assoc-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* ===================== FADE EDGES ===================== */
+.assoc-marquee-section .marquee::before,
+.assoc-marquee-section .marquee::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 120px;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.assoc-marquee-section .marquee::before {
+  left: 0;
+  background: linear-gradient(to right, #ffffff 0%, transparent 100%);
+}
+
+.assoc-marquee-section .marquee::after {
+  right: 0;
+  background: linear-gradient(to left, #ffffff 0%, transparent 100%);
+}
+
+/* ===================== RESPONSIVE ===================== */
+@media (max-width: 900px) {
+  .assoc-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .assoc-header p {
+    font-size: 0.95rem;
+  }
+
+  .assoc-marquee-section .logo {
+    width: 150px;
+    height: 100px;
+  }
+
+  .assoc-marquee-section .logo img {
+    width: 100px;
+  }
+
+  .assoc-marquee-section .marquee-track {
+    gap: 50px;
+  }
+}
+
+@media (max-width: 500px) {
+  .assoc-marquee-section {
+    padding: 80px 15px;
+  }
+
+  .assoc-header h2 {
+    font-size: 1.3rem;
+  }
+
+  .assoc-header p {
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+
+  .assoc-marquee-section .logo {
+    width: 130px;
+    height: 90px;
+  }
+
+  .assoc-marquee-section .logo img {
+    width: 85px;
+  }
+
+  .assoc-marquee-section .marquee-track {
+    gap: 40px;
+  }
+}

@@ -1,0 +1,96 @@
+{% load static %}
+
+{% if philosophy %}
+<section class="interior-philosophy-section">
+
+    <!-- SECTION HEADER -->
+    {% if philosophy.eyebrow %}
+    <div class="title">
+        {{ philosophy.eyebrow }}
+    </div>
+    {% endif %}
+
+    {% if philosophy.heading %}
+    <h2 class="h2">
+        {{ philosophy.heading }}
+    </h2>
+    {% endif %}
+
+    <!-- MAIN GRID -->
+    <div class="philosophy">
+
+        <!-- LEFT CONTENT -->
+        <div class="philosophy-text">
+
+            {% if philosophy.paragraph_one %}
+            <p>
+                {{ philosophy.paragraph_one }}
+            </p>
+            {% endif %}
+
+            {% if philosophy.paragraph_two %}
+            <p>
+                {{ philosophy.paragraph_two }}
+            </p>
+            {% endif %}
+
+            <!-- IMAGE STRIP -->
+            {% if philosophy_images %}
+            <div class="philosophy-media">
+
+                {% for image in philosophy_images %}
+
+                    {% if image.image %}
+                    <img
+                        src="{{ image.image.url }}"
+                        alt="{{ image.alt_text|default:philosophy.heading|default:'Interior Philosophy Image' }}"
+                        loading="lazy"
+                    >
+                    {% endif %}
+
+                {% endfor %}
+
+            </div>
+            {% endif %}
+
+        </div>
+
+        <!-- RIGHT POINTS -->
+        {% if philosophy_points %}
+        <div class="points">
+
+            {% for point in philosophy_points %}
+            <div class="point">
+
+                {% if point.number %}
+                <div class="num">
+                    {{ point.number }}
+                </div>
+                {% endif %}
+
+                <div>
+
+                    {% if point.title %}
+                    <h4>
+                        {{ point.title }}
+                    </h4>
+                    {% endif %}
+
+                    {% if point.description %}
+                    <p>
+                        {{ point.description }}
+                    </p>
+                    {% endif %}
+
+                </div>
+
+            </div>
+            {% endfor %}
+
+        </div>
+        {% endif %}
+
+    </div>
+
+</section>
+{% endif %}

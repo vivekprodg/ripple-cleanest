@@ -1,0 +1,469 @@
+{% load static %}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<link rel="stylesheet" href="{% static 'services/css/services_extra_sections.css' %}">
+
+{% if extra_section %}
+
+<div class="services-wrapper">
+
+    <!-- ===================================================== -->
+    <!-- SPOTLIGHT SECTION -->
+    <!-- ===================================================== -->
+    {% if extra_spotlight or extra_spotlight_items %}
+
+    <section class="service-spotlight">
+
+        <div class="section-inner">
+
+            <div class="spotlight-grid">
+
+                <!-- IMAGE -->
+                <div
+                    class="spotlight-card image reveal"
+
+                    {% if extra_spotlight and extra_spotlight.image %}
+                    style="
+                        background:
+                        linear-gradient(
+                            180deg,
+                            rgba(0,0,0,.12),
+                            rgba(0,0,0,.58)
+                        ),
+                        url('{{ extra_spotlight.image.url }}')
+                        center/cover no-repeat;
+                    "
+                    {% endif %}
+                ></div>
+
+                <!-- CONTENT -->
+                <div class="spotlight-card content reveal">
+
+                    {% if extra_spotlight.label %}
+                    <div class="section-label">
+                        {{ extra_spotlight.label|striptags|cut:"\n"|cut:"\r" }}
+                    </div>
+                    {% endif %}
+
+                    {% if extra_spotlight.title %}
+                    <h2 class="section-title">
+                        {{ extra_spotlight.title|striptags|cut:"\n"|cut:"\r" }}
+                    </h2>
+                    {% endif %}
+
+                    {% if extra_spotlight.subtitle %}
+                    <p class="section-subtitle">
+                        {{ extra_spotlight.subtitle|striptags|cut:"\n"|cut:"\r" }}
+                    </p>
+                    {% endif %}
+
+                    <!-- SPOTLIGHT ITEMS -->
+                    {% if extra_spotlight_items %}
+
+                    <div class="spotlight-list">
+
+                        {% for item in extra_spotlight_items %}
+
+                        <div class="spotlight-item">
+
+                            {% if item.icon %}
+                            <i class="{{ item.icon }}"></i>
+                            {% endif %}
+
+                            <div>
+
+                                {% if item.title %}
+                                <h4>{{ item.title|striptags|cut:"\n"|cut:"\r" }}</h4>
+                                {% endif %}
+
+                                {% if item.description %}
+                                <p>{{ item.description|striptags|cut:"\n"|cut:"\r" }}</p>
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                    {% endif %}
+
+                    <!-- SPOTLIGHT BUTTONS -->
+                    {% if extra_spotlight %}
+
+                        {% if extra_spotlight.primary_button_text or extra_spotlight.secondary_button_text %}
+
+                        <div class="btn-row">
+
+                            {% if extra_spotlight.primary_button_text %}
+                            <a
+                                href="{% if extra_spotlight.primary_button_link %}{{ extra_spotlight.primary_button_link }}{% else %}#contact{% endif %}"
+                                class="btn btn-primary"
+                            >
+                                <i class="fa-solid fa-message"></i>
+                                {{ extra_spotlight.primary_button_text|striptags|cut:"\n"|cut:"\r" }}
+                            </a>
+                            {% endif %}
+
+                            {% if extra_spotlight.secondary_button_text %}
+                            <a
+                                href="{% if extra_spotlight.secondary_button_link %}{{ extra_spotlight.secondary_button_link }}{% else %}#faq{% endif %}"
+                                class="btn btn-outline-dark"
+                            >
+                                <i class="fa-solid fa-circle-question"></i>
+                                {{ extra_spotlight.secondary_button_text|striptags|cut:"\n"|cut:"\r" }}
+                            </a>
+                            {% endif %}
+
+                        </div>
+
+                        {% endif %}
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    {% endif %}
+
+    <!-- ===================================================== -->
+    <!-- PROCESS SECTION -->
+    <!-- ===================================================== -->
+    {% if extra_section.process_label or extra_section.process_title or extra_section.process_subtitle or extra_process_steps %}
+
+    <section class="process">
+
+        <div class="section-inner">
+
+            <div class="reveal">
+
+                {% if extra_section.process_label %}
+                <div class="section-label">
+                    {{ extra_section.process_label|striptags|cut:"\n"|cut:"\r" }}
+                </div>
+                {% endif %}
+
+                {% if extra_section.process_title %}
+                <h2 class="section-title">
+                    {{ extra_section.process_title|striptags|cut:"\n"|cut:"\r" }}
+                </h2>
+                {% endif %}
+
+                {% if extra_section.process_subtitle %}
+                <p class="section-subtitle">
+                    {{ extra_section.process_subtitle|striptags|cut:"\n"|cut:"\r" }}
+                </p>
+                {% endif %}
+
+            </div>
+
+            {% if extra_process_steps %}
+
+            <div class="process-grid">
+
+                {% for step in extra_process_steps %}
+
+                <div class="process-card reveal">
+
+                    {% if step.number %}
+                    <span class="process-no">
+                        {{ step.number|stringformat:"02d" }}
+                    </span>
+                    {% endif %}
+
+                    {% if step.title %}
+                    <h3>{{ step.title|striptags|cut:"\n"|cut:"\r" }}</h3>
+                    {% endif %}
+
+                    {% if step.description %}
+                    <p>{{ step.description|striptags|cut:"\n"|cut:"\r" }}</p>
+                    {% endif %}
+
+                    {% if step.icon %}
+                    <div class="icon">
+                        <i class="{{ step.icon }}"></i>
+                    </div>
+                    {% endif %}
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </section>
+
+    {% endif %}
+
+    <!-- ===================================================== -->
+    <!-- METRICS SECTION -->
+    <!-- ===================================================== -->
+    {% if extra_section.metrics_label or extra_section.metrics_title or extra_section.metrics_subtitle or extra_metrics %}
+
+    <section class="metrics">
+
+        <div class="section-inner metrics-inner">
+
+            <div class="reveal">
+
+                {% if extra_section.metrics_label %}
+                <div class="section-label">
+                    {{ extra_section.metrics_label|striptags|cut:"\n"|cut:"\r" }}
+                </div>
+                {% endif %}
+
+                {% if extra_section.metrics_title %}
+                <h2 class="section-title">
+                    {{ extra_section.metrics_title|striptags|cut:"\n"|cut:"\r" }}
+                </h2>
+                {% endif %}
+
+                {% if extra_section.metrics_subtitle %}
+                <p class="section-subtitle metrics-subtitle">
+                    {{ extra_section.metrics_subtitle|striptags|cut:"\n"|cut:"\r" }}
+                </p>
+                {% endif %}
+
+            </div>
+
+            {% if extra_metrics %}
+
+            <div class="metrics-grid">
+
+                {% for metric in extra_metrics %}
+
+                <div class="metric-card reveal">
+
+                    {% if metric.value %}
+                    <span class="value">
+                        {{ metric.value|striptags|cut:"\n"|cut:"\r" }}
+                    </span>
+                    {% endif %}
+
+                    {% if metric.name %}
+                    <span class="name">
+                        {{ metric.name|striptags|cut:"\n"|cut:"\r" }}
+                    </span>
+                    {% endif %}
+
+                    {% if metric.description %}
+                    <span class="desc">
+                        {{ metric.description|striptags|cut:"\n"|cut:"\r" }}
+                    </span>
+                    {% endif %}
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </section>
+
+    {% endif %}
+
+    <!-- ===================================================== -->
+    <!-- FAQ SECTION -->
+    <!-- ===================================================== -->
+    {% if extra_section.faq_label or extra_section.faq_title or extra_section.faq_subtitle or extra_section.faq_side_title or extra_section.faq_side_description or extra_faqs %}
+
+    <section class="faq" id="faq">
+
+        <div class="section-inner">
+
+            <div class="reveal">
+
+                {% if extra_section.faq_label %}
+                <div class="section-label">
+                    {{ extra_section.faq_label|striptags|cut:"\n"|cut:"\r" }}
+                </div>
+                {% endif %}
+
+                {% if extra_section.faq_title %}
+                <h2 class="section-title">
+                    {{ extra_section.faq_title|striptags|cut:"\n"|cut:"\r" }}
+                </h2>
+                {% endif %}
+
+                {% if extra_section.faq_subtitle %}
+                <p class="section-subtitle">
+                    {{ extra_section.faq_subtitle|striptags|cut:"\n"|cut:"\r" }}
+                </p>
+                {% endif %}
+
+            </div>
+
+            <div class="faq-grid">
+
+                <!-- FAQ SIDE -->
+                {% if extra_section.faq_side_title or extra_section.faq_side_description %}
+
+                <div class="faq-side reveal">
+
+                    {% if extra_section.faq_side_title %}
+                    <h3>
+                        {{ extra_section.faq_side_title|striptags|cut:"\n"|cut:"\r" }}
+                    </h3>
+                    {% endif %}
+
+                    {% if extra_section.faq_side_description %}
+                    <p>
+                        {{ extra_section.faq_side_description|striptags|cut:"\n"|cut:"\r" }}
+                    </p>
+                    {% endif %}
+
+                </div>
+
+                {% endif %}
+
+                <!-- FAQ ITEMS -->
+                {% if extra_faqs %}
+
+                <div class="accordion reveal">
+
+                    {% for faq in extra_faqs %}
+
+                    <div class="accordion-item">
+
+                        <button
+                            class="accordion-button"
+                            type="button"
+                        >
+
+                            <span>
+                                {{ faq.question|striptags|cut:"\n"|cut:"\r" }}
+                            </span>
+
+                            <i class="fa-solid fa-chevron-down"></i>
+
+                        </button>
+
+                        <div class="accordion-panel">
+
+                            <div class="accordion-panel-inner">
+
+                                {{ faq.answer|striptags|cut:"\n"|cut:"\r" }}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </section>
+
+    {% endif %}
+
+    <!-- ===================================================== -->
+    <!-- CTA SECTION -->
+    <!-- ===================================================== -->
+    {% if extra_cta %}
+
+        {% if extra_cta.label or extra_cta.title or extra_cta.description or extra_cta.primary_button_text or extra_cta.secondary_button_text %}
+
+        <section class="cta" id="contact">
+
+            <div class="section-inner">
+
+                <div class="cta-card reveal">
+
+                    <div class="cta-content">
+
+                        <div>
+
+                            {% if extra_cta.label %}
+                            <div class="section-label cta-label">
+                                {{ extra_cta.label|striptags|cut:"\n"|cut:"\r" }}
+                            </div>
+                            {% endif %}
+
+                            {% if extra_cta.title %}
+                            <h2>
+                                {{ extra_cta.title|striptags|cut:"\n"|cut:"\r" }}
+                            </h2>
+                            {% endif %}
+
+                            {% if extra_cta.description %}
+                            <p>
+                                {{ extra_cta.description|striptags|cut:"\n"|cut:"\r" }}
+                            </p>
+                            {% endif %}
+
+                        </div>
+
+                        {% if extra_cta.primary_button_text or extra_cta.secondary_button_text %}
+
+                        <div class="cta-actions">
+
+                            {% if extra_cta.primary_button_text %}
+                            <a
+                                href="{% if extra_cta.primary_button_link %}{{ extra_cta.primary_button_link }}{% else %}#{% endif %}"
+                                class="btn btn-primary"
+                            >
+                                <i class="fa-solid fa-paper-plane"></i>
+                                {{ extra_cta.primary_button_text|striptags|cut:"\n"|cut:"\r" }}
+                            </a>
+                            {% endif %}
+
+                            {% if extra_cta.secondary_button_text %}
+                            <a
+                                href="{% if extra_cta.secondary_button_link %}{{ extra_cta.secondary_button_link }}{% else %}#services{% endif %}"
+                                class="btn btn-outline"
+                            >
+                                <i class="fa-solid fa-arrow-up"></i>
+                                {{ extra_cta.secondary_button_text|striptags|cut:"\n"|cut:"\r" }}
+                            </a>
+                            {% endif %}
+
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        {% endif %}
+
+    {% endif %}
+
+</div>
+
+{% endif %}
+
+<script src="{% static 'services/js/services_extra_sections.js' %}"></script>

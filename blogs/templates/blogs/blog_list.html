@@ -1,0 +1,75 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>Ripple Journal Listing</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="{% static 'blogs/css/blog_list.css' %}">
+</head>
+
+<body>
+
+<div class="container">
+
+<section class="blog-section">
+
+    <div class="blog-grid">
+
+        {% for post in blog_posts %}
+
+        <article class="blog-card {% if forloop.counter == 2 %}large{% endif %}">
+
+            <a href="{% url 'blogs:blog_detail' post.slug %}" class="read-more">→</a>
+
+            <div class="blog-image">
+                {% if post.featured_image %}
+                    <img src="{{ post.featured_image.url }}" alt="{{ post.title }}">
+                {% endif %}
+            </div>
+
+            <div class="blog-content">
+
+                {% if post.category %}
+                <span class="blog-category">{{ post.category }}</span>
+                {% endif %}
+
+                <h3>{{ post.title }}</h3>
+
+                {% if post.excerpt %}
+                <p>{{ post.excerpt }}</p>
+                {% endif %}
+
+                <div class="blog-meta">
+                    <span>{{ post.created_at|date:"M d, Y" }}</span>
+                    <span>{{ post.read_time|default:"5 min read" }}</span>
+                </div>
+
+            </div>
+
+        </article>
+
+        {% empty %}
+        <p style="text-align:center; width:100%; padding:60px 0;">
+            No blog posts available.
+        </p>
+        {% endfor %}
+
+    </div>
+
+</section>
+
+</div>
+
+<script src="{% static 'blogs/js/blog_list.js' %}" defer></script>
+
+</body>
+</html>

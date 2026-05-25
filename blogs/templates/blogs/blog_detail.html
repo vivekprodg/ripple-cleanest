@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block body_class %}has-hero{% endblock %}
+
+{% block title %}
+    {% if blog.seo_title %}
+        {{ blog.seo_title }}
+    {% elif blog.title %}
+        {{ blog.title }}
+    {% else %}
+        Blog Detail
+    {% endif %}
+{% endblock %}
+
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'blogs/css/blog_detail.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="hero-trigger">
+    {% include "blogs/sections/blog_header.html" %}
+</div>
+
+<div id="scroll-progress"></div>
+
+<article class="main-content">
+
+    <header>
+        {% if blog.category %}
+            <span class="category">
+                {% if blog.category.name %}
+                    {{ blog.category.name }}
+                {% else %}
+                    {{ blog.category }}
+                {% endif %}
+            </span>
+        {% endif %}
+
+        {% if blog.title %}
+            <h1>{{ blog.title }}</h1>
+        {% endif %}
+
+        {% if blog.excerpt %}
+            <p class="lead-paragraph">
+                {{ blog.excerpt }}
+            </p>
+        {% elif blog.lead_paragraph %}
+            <p class="lead-paragraph">
+                {{ blog.lead_paragraph }}
+            </p>
+        {% endif %}
+    </header>
+
+    <section class="article-body">
+
+        {% if blog.featured_image %}
+            <div class="visual-container reveal">
+                <img
+                    src="{{ blog.featured_image.url }}"
+                    alt="{{ blog.title }}"
+                >
+            </div>
+        {% elif blog.shadow_image %}
+            <div class="visual-container reveal">
+                <img
+                    src="{{ blog.shadow_image.url }}"
+                    alt="{% if blog.shadow_image_alt %}{{ blog.shadow_image_alt }}{% endif %}"
+                >
+
+                {% if blog.shadow_image_caption %}
+                    <p class="caption">{{ blog.shadow_image_caption }}</p>
+                {% endif %}
+            </div>
+        {% endif %}
+
+        {% if blog.content %}
+            {{ blog.content|safe }}
+        {% elif blog.body %}
+            {{ blog.body|safe }}
+        {% else %}
+
+            {% if blog.paragraph_1 %}
+                <p>{{ blog.paragraph_1 }}</p>
+            {% endif %}
+
+            {% if blog.paragraph_2 %}
+                <p>{{ blog.paragraph_2 }}</p>
+            {% endif %}
+
+            {% if blog.pull_quote %}
+                <div class="quote-block reveal">
+                    {{ blog.pull_quote }}
+                </div>
+            {% endif %}
+
+            {% if blog.paragraph_3 %}
+                <p>{{ blog.paragraph_3 }}</p>
+            {% endif %}
+
+            {% if blog.transparency_image %}
+                <div class="visual-container reveal transparency-section">
+                    <img
+                        src="{{ blog.transparency_image.url }}"
+                        alt="{% if blog.transparency_image_alt %}{{ blog.transparency_image_alt }}{% endif %}"
+                    >
+
+                    {% if blog.transparency_tag_title or blog.transparency_tag_text %}
+                        <div class="transparency-tag">
+                            {% if blog.transparency_tag_title %}
+                                <h3>{{ blog.transparency_tag_title }}</h3>
+                            {% endif %}
+
+                            {% if blog.transparency_tag_text %}
+                                <p>{{ blog.transparency_tag_text }}</p>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+
+            {% if blog.paragraph_4 %}
+                <p>{{ blog.paragraph_4 }}</p>
+            {% endif %}
+
+        {% endif %}
+
+    </section>
+
+    {% if blog.author or blog.author_name or blog.author_image %}
+        <footer class="author-footer">
+
+            {% if blog.author_image %}
+                <img
+                    src="{{ blog.author_image.url }}"
+                    alt="{% if blog.author_name %}{{ blog.author_name }}{% endif %}"
+                    class="author-img"
+                >
+            {% elif blog.author.profile_image %}
+                <img
+                    src="{{ blog.author.profile_image.url }}"
+                    alt="{% if blog.author.name %}{{ blog.author.name }}{% endif %}"
+                    class="author-img"
+                >
+            {% endif %}
+
+            <div class="author-meta">
+                {% if blog.author_name %}
+                    <h4>{{ blog.author_name }}</h4>
+                {% elif blog.author.name %}
+                    <h4>{{ blog.author.name }}</h4>
+                {% endif %}
+
+                {% if blog.author_role %}
+                    <p>{{ blog.author_role }}</p>
+                {% elif blog.author.designation %}
+                    <p>{{ blog.author.designation }}</p>
+                {% elif blog.author %}
+                    <p>{{ blog.author }}</p>
+                {% endif %}
+            </div>
+
+        </footer>
+    {% endif %}
+
+</article>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'blogs/js/blog_detail.js' %}"></script>
+{% endblock %}

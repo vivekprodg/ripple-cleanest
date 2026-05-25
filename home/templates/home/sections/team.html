@@ -1,0 +1,55 @@
+{% if team_section or team_members %}
+
+<section class="team-section">
+
+    <header class="team-header">
+        <span class="eyebrow">
+            {{ team_section.eyebrow|default:"The Studio" }}
+        </span>
+
+        <h2>
+            {{ team_section.heading|default:"Our Collective" }}
+        </h2>
+    </header>
+
+    {% if team_members %}
+    <div class="passport-row" id="teamStrip">
+
+        {% for member in team_members %}
+        <div class="member-card">
+
+            <div class="image-container">
+
+                {% if member.image %}
+                    <img src="{{ member.image.url }}"
+                         alt="{{ member.alt_text|default:member.full_name|default:'Team Member' }}">
+                {% else %}
+                    <img src="https://via.placeholder.com/400x533"
+                         alt="Team Member">
+                {% endif %}
+
+            </div>
+
+            <div class="member-info">
+
+                <h3>
+                    {{ member.full_name|default_if_none:"" }}
+                </h3>
+
+                <p>
+                    {{ member.designation|default_if_none:"" }}
+                </p>
+
+            </div>
+
+        </div>
+        {% endfor %}
+
+    </div>
+    {% else %}
+        <div class="passport-row" id="teamStrip"></div>
+    {% endif %}
+
+</section>
+
+{% endif %}

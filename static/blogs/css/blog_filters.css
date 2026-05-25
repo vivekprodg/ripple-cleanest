@@ -1,0 +1,88 @@
+/* =========================================
+   BLOG FILTERS ONLY
+   Editorial Typography System
+========================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600&display=swap');
+
+:root{
+    --bg:#ffffff;
+    --text-dark:#111111;
+    --text-muted:#777777;
+    --border:#e7dfd5;
+    --transition:all .45s cubic-bezier(.19,1,.22,1);
+}
+
+/* =========================================
+   FILTER WRAPPER
+========================================= */
+
+.blog-filters{
+    padding:40px 40px 40px;
+    font-family:'Montserrat',sans-serif;
+}
+
+.blog-filters .categories{
+    display:flex;
+    flex-wrap:wrap;
+    gap:14px;
+}
+
+/* =========================================
+   FILTER BUTTONS
+========================================= */
+
+.blog-filters button{
+    border:none;
+    background:rgba(255,255,255,.75);
+    border:1px solid var(--border);
+    backdrop-filter:blur(10px);
+
+    padding:15px 24px;
+    border-radius:100px;
+
+    /* Typography aligned with ripple_difference.css */
+    font-family:'Montserrat',sans-serif;
+    font-size:0.75rem;
+    font-weight:600;
+    letter-spacing:0.3em;
+    text-transform:uppercase;
+    line-height:1.2;
+    color:var(--text-dark);
+
+    cursor:pointer;
+    transition:var(--transition);
+}
+
+/* =========================================
+   HOVER / ACTIVE
+========================================= */
+
+.blog-filters button:hover,
+.blog-filters button.active{
+    background:#111111;
+    color:#ffffff;
+    border-color:#111111;
+    transform:translateY(-2px);
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media(max-width:768px){
+
+    .blog-filters{
+        padding:40px 0 30px;
+    }
+
+}
+
+@media(max-width:480px){
+
+    .blog-filters button{
+        width:100%;
+        text-align:center;
+    }
+
+}

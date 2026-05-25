@@ -1,0 +1,136 @@
+{% load static %}
+
+<!-- ================= INTERIOR GALLERY SECTION ================= -->
+
+<section class="section interior-gallery-section">
+
+    <!-- SECTION HEADER -->
+    <div class="title">
+        Gallery
+    </div>
+
+    <h2 class="h2">
+        Interior Projects
+    </h2>
+
+    <!-- FILTERS -->
+    <div class="gallery-filters">
+        <button class="filter-btn active" data-filter="all" type="button">
+            All
+        </button>
+
+        {% for category in gallery_categories %}
+            <button class="filter-btn" data-filter="{{ category.slug|default:category.name|slugify }}" type="button">
+                {{ category.name }}
+            </button>
+        {% endfor %}
+    </div>
+
+    <!-- GALLERY GRID -->
+    <div class="grid gallery">
+
+        {% for item in gallery_items %}
+
+            <div
+                class="card gallery-item"
+                data-category="{{ item.gallery_category.slug|default:'' }}"
+                data-img="{% if item.image %}{{ item.image.url }}{% endif %}"
+                data-title="{{ item.title|default:''|escapejs }}"
+                data-desc="{{ item.description|default:''|escapejs }}"
+                data-category-label="{{ item.gallery_category.name|default:''|escapejs }}"
+                data-location="{{ item.location|default:''|escapejs }}"
+                data-year="{{ item.year|default:''|escapejs }}"
+                data-client="{{ item.client|default:''|escapejs }}"
+                type="button"
+            >
+
+                <!-- IMAGE -->
+                {% if item.image %}
+                    <img src="{{ item.image.url }}" alt="{{ item.title|default:'Interior Project' }}">
+                {% else %}
+                    <img src="{% static 'interior/images/placeholder.jpg' %}" alt="Interior Project">
+                {% endif %}
+
+                <!-- OVERLAY -->
+                <div class="overlay">
+                    <h4>
+                        {{ item.title|default:"Untitled Project" }}
+                    </h4>
+
+                    <p>
+                        {{ item.gallery_category.name|default:"" }}
+                    </p>
+                </div>
+
+            </div>
+
+        {% empty %}
+            <div class="gallery-empty">
+                No gallery items available.
+            </div>
+        {% endfor %}
+
+    </div>
+
+</section>
+
+<!-- ================= FULLSCREEN MODAL ================= -->
+
+<div class="gallery-modal" id="galleryModal" aria-hidden="true">
+
+    <!-- CLOSE -->
+    <button class="modal-close" onclick="closeModal()" type="button">
+        ✕
+    </button>
+
+    <!-- LEFT IMAGE -->
+    <div class="gallery-left">
+        <img id="modalImg" alt="Gallery Image">
+    </div>
+
+    <!-- RIGHT DETAILS -->
+    <div class="gallery-right">
+
+        <!-- CATEGORY -->
+        <div class="modal-category" id="modalCategory">
+            Category
+        </div>
+
+        <!-- TITLE -->
+        <h1 id="modalTitle">
+            Project Title
+        </h1>
+
+        <!-- DESCRIPTION -->
+        <p class="modal-description" id="modalDesc">
+            Project description goes here.
+        </p>
+
+        <!-- DETAILS GRID -->
+        <div class="details-grid">
+
+            <div class="detail-card">
+                <span>Category</span>
+                <strong id="detailCategory">-</strong>
+            </div>
+
+            <div class="detail-card">
+                <span>Location</span>
+                <strong id="detailLocation">-</strong>
+            </div>
+
+            <div class="detail-card">
+                <span>Year</span>
+                <strong id="detailYear">-</strong>
+            </div>
+
+            <div class="detail-card">
+                <span>Client Name</span>
+                <strong id="detailClient">-</strong>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

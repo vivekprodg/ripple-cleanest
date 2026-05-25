@@ -1,0 +1,431 @@
+.about-hero{
+    position: relative;
+    width: 100%;
+    min-height: 85vh;
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+
+    padding: 160px 5vw 120px;
+
+    background: #111111;
+    isolation: isolate;
+
+    /* =====================================================
+       TYPOGRAPHY VARIABLES
+    ===================================================== */
+
+    --about-title-font:
+        var(--about-hero-title-font, 'Cormorant Garamond', serif);
+
+    --about-title-weight:
+        var(--about-hero-title-weight, 600);
+
+    --about-title-size-desktop:
+        var(--about-hero-title-size-desktop, clamp(46px, 7vw, 96px));
+
+    --about-title-size-tablet:
+        var(--about-hero-title-size-tablet, 52px);
+
+    --about-title-size-mobile:
+        var(--about-hero-title-size-mobile, 40px);
+
+    --about-title-line-height:
+        var(--about-hero-title-line-height, 1);
+
+    --about-title-letter-spacing:
+        var(--about-hero-title-letter-spacing, -0.5px);
+
+    --about-title-transform:
+        var(--about-hero-title-transform, none);
+
+    --about-title-color:
+        var(--about-hero-title-color, #ffffff);
+
+    --about-body-font:
+        var(--about-hero-body-font, 'Inter', sans-serif);
+
+    --about-body-weight:
+        var(--about-hero-body-weight, 300);
+
+    --about-body-size-desktop:
+        var(--about-hero-body-size-desktop, 15px);
+
+    --about-body-size-tablet:
+        var(--about-hero-body-size-tablet, 14px);
+
+    --about-body-size-mobile:
+        var(--about-hero-body-size-mobile, 13px);
+
+    --about-body-line-height:
+        var(--about-hero-body-line-height, 1.9);
+
+    --about-body-letter-spacing:
+        var(--about-hero-body-letter-spacing, normal);
+
+    --about-body-transform:
+        var(--about-hero-body-transform, none);
+
+    --about-body-color:
+        var(--about-hero-body-color, rgba(255,255,255,0.84));
+
+    --about-button-font:
+        var(--about-hero-button-font, 'Inter', sans-serif);
+
+    --about-button-weight:
+        var(--about-hero-button-weight, 500);
+
+    --about-button-size-desktop:
+        var(--about-hero-button-size-desktop, 13px);
+
+    --about-button-size-tablet:
+        var(--about-hero-button-size-tablet, 13px);
+
+    --about-button-size-mobile:
+        var(--about-hero-button-size-mobile, 13px);
+
+    --about-button-letter-spacing:
+        var(--about-hero-button-letter-spacing, 1px);
+
+    --about-button-transform:
+        var(--about-hero-button-transform, uppercase);
+
+    --about-button-color:
+        var(--about-hero-button-color, #ffffff);
+}
+
+/* =========================================================
+   BACKGROUND
+========================================================= */
+
+.about-hero-bg{
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+
+    background-color: #111111;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    transform: scale(1.02);
+    transition: transform 8s ease;
+}
+
+.about-hero:hover .about-hero-bg{
+    transform: scale(1);
+}
+
+.about-hero-overlay{
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+
+    background:
+        linear-gradient(
+            rgba(0,0,0,0.58),
+            rgba(0,0,0,0.58)
+        );
+}
+
+/* =========================================================
+   CONTENT WRAPPER
+   display: contents so CTA can anchor to full hero
+========================================================= */
+
+.about-hero-content{
+    display: contents;
+    color: #ffffff;
+}
+
+/* =========================================================
+   EYEBROW
+========================================================= */
+
+.hero-eyebrow{
+    position: relative;
+    z-index: 2;
+
+    display: inline-block;
+
+    margin-bottom: 28px;
+    margin-left: 0;
+    margin-right: 0;
+
+    font-family: var(--about-body-font);
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.4;
+
+    letter-spacing: 4px;
+    text-transform: uppercase;
+
+    color: rgba(255,255,255,0.82);
+
+    opacity: 0.82;
+}
+
+/* =========================================================
+   TITLE
+========================================================= */
+
+.about-hero-title{
+    position: relative;
+    z-index: 2;
+
+    display: block;
+
+    margin: 0 0 14px;
+    max-width: 720px;
+
+    font-family: var(--about-title-font);
+    font-size: var(--about-title-size-desktop);
+    font-weight: var(--about-title-weight);
+
+    line-height: var(--about-title-line-height);
+    letter-spacing: var(--about-title-letter-spacing);
+
+    text-transform: var(--about-title-transform);
+
+    color: var(--about-title-color);
+
+    text-wrap: balance;
+    white-space: nowrap;
+}
+
+.about-hero-title br{
+    display: block;
+}
+
+/* =========================================================
+   DESCRIPTION
+   Independent block placed directly below title
+========================================================= */
+
+.about-hero-description{
+    position: relative;
+    z-index: 2;
+
+    display: block;
+
+    max-width: 580px;
+    margin: 0;
+
+    font-family: var(--about-body-font);
+    font-size: var(--about-body-size-desktop);
+    font-weight: var(--about-body-weight);
+
+    line-height: var(--about-body-line-height);
+    letter-spacing: var(--about-body-letter-spacing);
+
+    text-transform: var(--about-body-transform);
+
+    color: var(--about-body-color);
+
+    text-wrap: pretty;
+}
+
+/* =========================================================
+   CTA BUTTONS
+   Bottom-right of the FULL hero section
+========================================================= */
+
+.hero-buttons{
+    position: absolute;
+    right: clamp(18px, 3vw, 40px);
+    bottom: clamp(24px, 4vw, 48px);
+    z-index: 3;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+
+    width: fit-content;
+}
+
+.hero-btn{
+    position: relative;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 52px;
+    padding: 0 24px;
+
+    border-radius: 999px;
+    text-decoration: none;
+
+    font-family: var(--about-button-font);
+    font-size: var(--about-button-size-desktop);
+    font-weight: var(--about-button-weight);
+
+    letter-spacing: var(--about-button-letter-spacing);
+    text-transform: var(--about-button-transform);
+
+    transition:
+        transform 0.25s ease,
+        background-color 0.25s ease,
+        border-color 0.25s ease,
+        color 0.25s ease,
+        box-shadow 0.25s ease;
+
+    will-change: transform;
+}
+
+.hero-btn:hover{
+    transform: translateY(-2px);
+}
+
+/* =========================================================
+   PRIMARY BUTTON
+   MATCH HOME HERO "BOOK A CONSULTATION" BEFORE HOVER
+========================================================= */
+
+.primary-btn{
+    background-color: rgba(255,255,255,0.05);
+    color: #ffffff;
+    border: 1px solid rgba(255,255,255,0.18);
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
+    box-shadow: 0 16px 40px rgba(0,0,0,0.20);
+}
+
+.primary-btn:hover{
+    background-color: #ffffff;
+    color: #0b0d10;
+    border-color: #ffffff;
+
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+/* =========================================================
+   SECONDARY BUTTON
+========================================================= */
+
+.secondary-btn{
+    background-color: rgba(255,255,255,0.03);
+    color: #ffffff;
+    border: 1px solid rgba(255,255,255,0.12);
+
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.secondary-btn:hover{
+    background-color: #ffffff !important;
+    color: #0b0d10 !important;
+    border-color: #ffffff !important;
+    box-shadow: 0 16px 40px rgba(0,0,0,0.18);
+
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    opacity: 1 !important;
+}
+
+/* =========================================================
+   ANIMATION
+========================================================= */
+
+.about-hero-content > *{
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 1s ease;
+}
+
+.about-hero-content.active > *{
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.about-hero-content.active .hero-eyebrow{
+    transition-delay: 0.2s;
+}
+
+.about-hero-content.active .about-hero-title{
+    transition-delay: 0.4s;
+}
+
+.about-hero-content.active .about-hero-description{
+    transition-delay: 0.6s;
+}
+
+.about-hero-content.active .hero-buttons{
+    transition-delay: 0.8s;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 768px){
+    .about-hero{
+        min-height: 70vh;
+        padding: 100px 7vw 70px;
+    }
+
+    .about-hero-title{
+        font-size: var(--about-title-size-tablet);
+        white-space: normal;
+    }
+
+    .about-hero-description{
+        font-size: var(--about-body-size-tablet);
+        line-height: 1.8;
+    }
+
+    .hero-btn{
+        font-size: var(--about-button-size-tablet);
+    }
+}
+
+@media (max-width: 480px){
+    .about-hero-title{
+        font-size: var(--about-title-size-mobile);
+    }
+
+    .about-hero-description{
+        font-size: var(--about-body-size-mobile);
+    }
+
+    .hero-buttons{
+        right: 14px;
+        bottom: 22px;
+
+        flex-direction: column;
+        align-items: stretch;
+
+        width: calc(100% - 28px);
+    }
+
+    .hero-btn{
+        width: 100%;
+        font-size: var(--about-button-size-mobile);
+    }
+}
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce){
+    *,
+    *::before,
+    *::after{
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+@media (prefers-reduced-motion: no-preference){
+    .about-hero-bg,
+    .hero-btn{
+        transform: translateZ(0);
+    }
+}

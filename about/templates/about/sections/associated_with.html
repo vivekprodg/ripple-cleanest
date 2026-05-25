@@ -1,0 +1,123 @@
+{% load static %}
+
+{% if associated_with.is_active %}
+
+<section
+  class="assoc-marquee-section"
+  style="
+    --assoc-padding-top: {{ associated_with.section_padding_top|default:110 }}px;
+    --assoc-padding-bottom: {{ associated_with.section_padding_bottom|default:110 }}px;
+    --assoc-speed: {{ associated_with.marquee_speed|default:22 }}s;
+  "
+>
+  <div class="assoc-header reveal">
+
+    {% if associated_with.kicker %}
+      <span class="kicker">
+        {{ associated_with.kicker }}
+      </span>
+    {% endif %}
+
+    {% if associated_with.heading %}
+      <h2>
+        {{ associated_with.heading }}
+      </h2>
+    {% endif %}
+
+    {% if associated_with.description %}
+      <p>
+        {{ associated_with.description }}
+      </p>
+    {% endif %}
+
+  </div>
+
+  {% if associated_partners %}
+  <div class="marquee">
+
+    <div class="marquee-track">
+
+      {% for partner in associated_partners %}
+
+        <div class="logo">
+
+          {% if partner.website_url %}
+            <a
+              href="{{ partner.website_url }}"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="{{ partner.name }}"
+            >
+
+              {% if partner.logo %}
+                <img
+                  src="{{ partner.logo.url }}"
+                  alt="{{ partner.name }}"
+                  loading="lazy"
+                >
+              {% endif %}
+
+            </a>
+
+          {% else %}
+
+            {% if partner.logo %}
+              <img
+                src="{{ partner.logo.url }}"
+                alt="{{ partner.name }}"
+                loading="lazy"
+              >
+            {% endif %}
+
+          {% endif %}
+
+        </div>
+
+      {% endfor %}
+
+      {% for partner in associated_partners %}
+
+        <div class="logo">
+
+          {% if partner.website_url %}
+            <a
+              href="{{ partner.website_url }}"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="{{ partner.name }}"
+            >
+
+              {% if partner.logo %}
+                <img
+                  src="{{ partner.logo.url }}"
+                  alt="{{ partner.name }}"
+                  loading="lazy"
+                >
+              {% endif %}
+
+            </a>
+
+          {% else %}
+
+            {% if partner.logo %}
+              <img
+                src="{{ partner.logo.url }}"
+                alt="{{ partner.name }}"
+                loading="lazy"
+              >
+            {% endif %}
+
+          {% endif %}
+
+        </div>
+
+      {% endfor %}
+
+    </div>
+
+  </div>
+  {% endif %}
+
+</section>
+
+{% endif %}

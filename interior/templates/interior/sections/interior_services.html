@@ -1,0 +1,66 @@
+<!-- ================= INTERIOR SERVICES SECTION ================= -->
+
+<section class="services-section">
+
+    {% if services %}
+        <div class="services-title">Services</div>
+        <h2 class="services-heading">What We Do</h2>
+
+        <div class="services-grid">
+
+            {% for service in services %}
+                <div class="service-card">
+
+                    <!-- ICON (optional fallback) -->
+                    <div class="service-icon">
+                        {{ service.icon|default:"★" }}
+                    </div>
+
+                    <!-- TITLE (optional safe render) -->
+                    {% if service.title %}
+                        <h3>{{ service.title }}</h3>
+                    {% else %}
+                        <h3>Untitled Service</h3>
+                    {% endif %}
+
+                    <!-- DESCRIPTION (optional safe render) -->
+                    {% if service.description %}
+                        <p>{{ service.description }}</p>
+                    {% else %}
+                        <p>No description available.</p>
+                    {% endif %}
+
+                </div>
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+        <!-- Optional fallback when no CMS data exists -->
+        <div class="services-title">Services</div>
+        <h2 class="services-heading">What We Do</h2>
+
+        <div class="services-grid">
+
+            <div class="service-card">
+                <div class="service-icon">🏠</div>
+                <h3>Residential</h3>
+                <p>Luxury homes with timeless design.</p>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">🏢</div>
+                <h3>Commercial</h3>
+                <p>Workspaces with identity.</p>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">🧊</div>
+                <h3>Visualization</h3>
+                <p>Realistic 3D interiors.</p>
+            </div>
+
+        </div>
+    {% endif %}
+
+</section>

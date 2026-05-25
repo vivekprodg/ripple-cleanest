@@ -1,0 +1,92 @@
+{% load static %}
+
+<!-- =========================
+     KEY STATS SECTION
+========================= -->
+
+<section class="ripple-stats-section">
+
+    <div class="stats-container">
+
+        <div class="stats-header">
+            <span class="stats-tag">
+                {{ stats.tag|default:"OUR IMPACT" }}
+            </span>
+
+            <h2>
+                {{ stats.title|default:"Numbers That Define Our Architectural Journey" }}
+            </h2>
+
+            <p>
+                {{ stats.subtitle|default:"A reflection of our commitment to precision, innovation, and timeless architectural excellence." }}
+            </p>
+        </div>
+
+        <div class="stats-grid" id="stats-counter-wrapper">
+
+            {% for stat in stats.items.all %}
+
+            <div class="stat-card">
+                <div class="stat-glow"></div>
+
+                <h3 class="stat-number-wrapper">
+                    <span class="count-up" data-target="{{ stat.value }}">0</span>
+                    <span class="stat-suffix">{{ stat.suffix|default:"+" }}</span>
+                </h3>
+
+                <p class="stat-label">{{ stat.label }}</p>
+            </div>
+
+            {% empty %}
+
+            <div class="stat-card">
+                <div class="stat-glow"></div>
+
+                <h3 class="stat-number-wrapper">
+                    <span class="count-up" data-target="120">0</span>
+                    <span class="stat-suffix">+</span>
+                </h3>
+
+                <p class="stat-label">Projects Completed</p>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-glow"></div>
+
+                <h3 class="stat-number-wrapper">
+                    <span class="count-up" data-target="14">0</span>
+                    <span class="stat-suffix">+</span>
+                </h3>
+
+                <p class="stat-label">Years Experience</p>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-glow"></div>
+
+                <h3 class="stat-number-wrapper">
+                    <span class="count-up" data-target="45">0</span>
+                    <span class="stat-suffix">+</span>
+                </h3>
+
+                <p class="stat-label">Expert Team Members</p>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-glow"></div>
+
+                <h3 class="stat-number-wrapper">
+                    <span class="count-up" data-target="98">0</span>
+                    <span class="stat-suffix">%</span>
+                </h3>
+
+                <p class="stat-label">Client Satisfaction</p>
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>

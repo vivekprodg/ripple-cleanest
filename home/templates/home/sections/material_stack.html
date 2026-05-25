@@ -1,0 +1,79 @@
+{% load static %}
+
+<main class="editorial-container" id="material-stack-section">
+
+    <!-- TOP HEADER -->
+    <header class="header-proposition">
+        <span class="eyebrow">
+            {{ material_stack.eyebrow }}
+        </span>
+
+        <h1 class="main-title">
+            {{ material_stack.title }}
+        </h1>
+    </header>
+
+    <!-- LEFT: TEXT COLUMN -->
+    <section class="narrative-col">
+
+        <div class="text-stage">
+
+            {% for card in material_cards %}
+            <div class="text-block {% if forloop.first %}active{% endif %}"
+                 data-index="{{ forloop.counter0 }}">
+
+                <span class="meta-num">
+                    {{ card.meta_num }}
+                </span>
+
+                <h2>{{ card.title }}</h2>
+
+                <p>{{ card.description }}</p>
+            </div>
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+    <!-- CENTER: IMAGE COLUMN -->
+    <section class="visual-col">
+
+        <div class="image-viewport">
+
+            {% for card in material_cards %}
+            <div class="image-panel {% if forloop.first %}active{% endif %}"
+                 data-index="{{ forloop.counter0 }}">
+
+                {% if card.image %}
+                    <img src="{{ card.image.url }}" alt="{{ card.title }}">
+                {% endif %}
+
+            </div>
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+    <!-- RIGHT: NAVIGATION -->
+    <section class="index-col">
+
+        <ul class="index-menu">
+
+            {% for card in material_cards %}
+            <li class="index-item {% if forloop.first %}active{% endif %}"
+                data-target="{{ forloop.counter0 }}">
+
+                <div class="index-link">
+                    {{ forloop.counter|stringformat:"02d" }} / {{ card.title|upper }}
+                </div>
+
+            </li>
+            {% endfor %}
+
+        </ul>
+
+    </section>
+
+</main>

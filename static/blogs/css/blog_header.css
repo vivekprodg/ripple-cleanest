@@ -1,0 +1,88 @@
+/* =========================
+   BLOG HERO HEADER ONLY
+   No grid, no cards, no filters
+========================= */
+
+.blog-hero{
+  position:relative;
+  width:100%;
+  height:85vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  background:#fff;
+}
+
+.blog-hero__media{
+  position:absolute;
+  inset:0;
+  z-index:0;
+}
+
+.blog-hero__media img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  filter: none !important;
+  will-change:transform;
+}
+
+.blog-hero__overlay{
+  position:absolute;
+  inset:0;
+  z-index:1;
+  background:none;
+}
+
+.blog-hero__content{
+  position:relative;
+  z-index:2;
+  text-align:center;
+  padding:0 20px;
+  max-width:900px;
+}
+
+.blog-hero__eyebrow{
+  display:block;
+  font-size:0.75rem;
+  font-weight: 600;
+  letter-spacing:0.3em;
+  text-transform:uppercase;
+  color:#c5a059;
+  margin-bottom:12px;
+  font-family:'Montserrat', sans-serif;
+}
+
+.blog-hero__title{
+  font-family:"Cormorant Garamond", serif;
+  font-size:clamp(3rem,7vw,7rem);
+  font-weight:600;
+  letter-spacing:2px;
+  color:#111;
+  text-transform:uppercase;
+  margin:0;
+}
+
+.blog-hero__description{
+  margin:20px auto 0;
+  max-width:600px;
+  font-size:16px;
+  line-height:1.6;
+  color:#333;
+  font-family:system-ui, sans-serif;
+}
+
+@media (max-width:768px){
+  .blog-hero{
+    height:55vh;
+  }
+
+  .blog-hero__title{
+    font-size:3.2rem;
+  }
+
+  .blog-hero__description{
+    font-size:14px;
+  }
+}

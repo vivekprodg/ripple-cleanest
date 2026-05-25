@@ -1,0 +1,34 @@
+{% load static %}
+
+{% if blog_header and blog_header.is_active %}
+
+<header class="blog-hero" data-navbar-hero>
+
+  <div class="blog-hero__media">
+    <img src="{{ blog_header.background_image.url }}" alt="{{ blog_header.title }}">
+  </div>
+
+  <div class="blog-hero__overlay"></div>
+
+  <div class="blog-hero__content">
+
+    <span class="blog-hero__eyebrow">
+      {{ blog_header.eyebrow }}
+    </span>
+
+    <h1 class="blog-hero__title">
+      {{ blog_header.title }}
+    </h1>
+
+    <p class="blog-hero__description">
+      {{ blog_header.description }}
+    </p>
+
+  </div>
+
+</header>
+
+<link rel="stylesheet" href="{% static 'blogs/css/blog_header.css' %}">
+<script src="{% static 'blogs/js/blog_header.js' %}" defer></script>
+
+{% endif %}

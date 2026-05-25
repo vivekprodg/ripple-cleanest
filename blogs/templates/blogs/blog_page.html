@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Blog | Ripple Architecture & Design
+{% endblock %}
+
+{% block body_class %}has-hero{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'blogs/css/blog_header.css' %}">
+<link rel="stylesheet" href="{% static 'blogs/css/blog_filters.css' %}">
+<link rel="stylesheet" href="{% static 'blogs/css/blog_grid.css' %}">
+<link rel="stylesheet" href="{% static 'blogs/css/blog_card.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div data-navbar-hero>
+    {% include "blogs/sections/blog_header.html" %}
+</div>
+
+<div id="progress-container">
+    <div id="progress-bar"></div>
+</div>
+
+<main class="blog-page">
+
+    <section class="blog-filters-wrap">
+        {% include "blogs/sections/blog_filters.html" %}
+    </section>
+
+    {% include "blogs/sections/blog_grid.html" with posts=blog_posts %}
+
+</main>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'blogs/js/blog_filters.js' %}" defer></script>
+<script src="{% static 'blogs/js/blog_grid.js' %}" defer></script>
+<script src="{% static 'blogs/js/blog_card.js' %}" defer></script>
+{% endblock %}

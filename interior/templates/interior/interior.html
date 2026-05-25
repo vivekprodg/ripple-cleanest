@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    Interior Studio | Ripple Architecture
+{% endblock %}
+
+{% block body_class %}
+has-hero interior-page
+{% endblock %}
+
+{% block content %}
+
+<!-- =========================================================
+     INTERIOR PAGE STYLES
+========================================================= -->
+{% block extra_css %}
+
+<link rel="stylesheet" href="{% static 'interior/css/interior_hero.css' %}">
+<link rel="stylesheet" href="{% static 'interior/css/interior_philosophy.css' %}">
+<link rel="stylesheet" href="{% static 'interior/css/interior_services.css' %}">
+<link rel="stylesheet" href="{% static 'interior/css/interior_selected_work.css' %}">
+<link rel="stylesheet" href="{% static 'interior/css/interior_gallery.css' %}">
+
+{% endblock %}
+
+
+<div class="interior-page-wrapper">
+
+    <!-- =========================================================
+         HERO SECTION
+    ========================================================== -->
+    {% if hero and hero.is_active %}
+        {% include "interior/sections/interior_hero.html" %}
+    {% endif %}
+
+
+    <!-- =========================================================
+         PHILOSOPHY SECTION
+    ========================================================== -->
+    {% if philosophy and philosophy.is_active %}
+        {% include "interior/sections/interior_philosophy.html" %}
+    {% endif %}
+
+
+    <!-- =========================================================
+         SERVICES SECTION
+    ========================================================== -->
+    {% if services %}
+        {% include "interior/sections/interior_services.html" %}
+    {% endif %}
+
+
+    <!-- =========================================================
+         SELECTED WORK SECTION
+    ========================================================== -->
+    {% if selected_work %}
+        {% include "interior/sections/interior_selected_work.html" %}
+    {% endif %}
+
+
+    <!-- =========================================================
+         GALLERY SECTION
+    ========================================================== -->
+    {% if gallery_items %}
+        {% include "interior/sections/interior_gallery.html" %}
+    {% endif %}
+
+</main>
+
+
+<!-- =========================================================
+     SCRIPTS
+========================================================= -->
+<script src="{% static 'interior/js/interior_hero.js' %}" defer></script>
+<script src="{% static 'interior/js/interior_philosophy.js' %}" defer></script>
+<script src="{% static 'interior/js/interior_selected_work.js' %}" defer></script>
+<script src="{% static 'interior/js/interior_gallery.js' %}" defer></script>
+
+{% endblock %}

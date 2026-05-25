@@ -1,0 +1,276 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600&family=Jost:wght@300;400;500;600&family=Poppins:wght@300;400;500;600&display=swap');
+
+/* ========================================
+   VISION / MISSION / VALUES SECTION
+   RIPPLE TYPOGRAPHY SYSTEM
+======================================== */
+
+:root{
+    --bg:#ffffff;
+    --text-dark:#111111;
+    --text-muted:#777777;
+
+    --font-heading:'Jost', sans-serif;
+    --font-body:'Montserrat', sans-serif;
+    --font-ui:'Poppins', sans-serif;
+
+    --transition:all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* ========================================
+   BASE
+======================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:var(--font-body);
+    background:var(--bg);
+    color:var(--text-dark);
+
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+}
+
+/* ========================================
+   SECTION
+======================================== */
+
+.pillars-section{
+    max-width:1200px;
+    margin:auto;
+
+    padding:80px 20px 20px;
+
+    text-align:center;
+
+    font-family:var(--font-body);
+    color:var(--text-dark);
+}
+
+/* ========================================
+   TITLE
+   Matches feature-text h2
+======================================== */
+
+.pillars-title{
+    font-family:var(--font-heading);
+    font-size:1.75rem;
+    font-weight:400;
+    letter-spacing:-0.02em;
+    text-transform:none;
+    line-height:1.08;
+
+    color:var(--text-dark);
+
+    margin-bottom:60px;
+}
+
+/* ========================================
+   GRID
+======================================== */
+
+.pillars-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+
+    gap:30px;
+}
+
+/* ========================================
+   CARD
+======================================== */
+
+.pillar-card{
+    position:relative;
+    overflow:hidden;
+
+    padding:50px 35px;
+    border-radius:24px;
+
+    border:1px solid rgba(0,0,0,0.06);
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,0.06);
+
+    transition:var(--transition);
+
+    text-align:center;
+}
+
+/* ========================================
+   CARD GLOW EFFECT
+======================================== */
+
+.pillar-card::before{
+    content:"";
+
+    position:absolute;
+
+    top:-50%;
+    left:-50%;
+
+    width:200%;
+    height:200%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,255,255,0.4),
+            transparent 60%
+        );
+
+    opacity:0;
+
+    transition:0.5s ease;
+}
+
+.pillar-card:hover::before{
+    opacity:1;
+}
+
+.pillar-card:hover{
+    transform:translateY(-12px) scale(1.02);
+
+    box-shadow:
+        0 20px 45px rgba(0,0,0,0.12);
+}
+
+/* ========================================
+   ICON
+======================================== */
+
+.pillar-icon{
+    font-size:62px;
+
+    margin-bottom:28px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    animation:floatIcon 3s ease-in-out infinite;
+}
+
+@keyframes floatIcon{
+
+    0%,100%{
+        transform:translateY(0);
+    }
+
+    50%{
+        transform:translateY(-10px);
+    }
+
+}
+
+/* ========================================
+   CONTENT
+======================================== */
+
+/* Card Heading → matches feature-info h4 */
+
+.pillar-card h3{
+    font-family:var(--font-heading);
+    font-size:1.75rem;
+    font-weight:500;
+    letter-spacing:normal;
+    text-transform:none;
+    line-height:1.15;
+
+    color:var(--text-dark);
+
+    margin-bottom:10px;
+}
+
+/* Card Paragraph → matches feature-info p */
+
+.pillar-card p{
+    font-family:var(--font-body);
+    font-size:0.95rem;
+    font-weight:400;
+    letter-spacing:normal;
+    text-transform:none;
+    line-height:1.7;
+
+    color:var(--text-muted);
+}
+
+/* ========================================
+   VISION CARD
+======================================== */
+
+.pillar-card.vision{
+    background:
+        linear-gradient(
+            135deg,
+            rgba(37,99,235,0.10),
+            rgba(255,255,255,0.95)
+        );
+}
+
+.pillar-card.vision .pillar-icon{
+    color:#2563eb;
+}
+
+/* ========================================
+   MISSION CARD
+======================================== */
+
+.pillar-card.mission{
+    background:
+        linear-gradient(
+            135deg,
+            rgba(249,115,22,0.10),
+            rgba(255,255,255,0.95)
+        );
+}
+
+.pillar-card.mission .pillar-icon{
+    color:#f97316;
+}
+
+/* ========================================
+   VALUES CARD
+======================================== */
+
+.pillar-card.values{
+    background:
+        linear-gradient(
+            135deg,
+            rgba(16,185,129,0.10),
+            rgba(255,255,255,0.95)
+        );
+}
+
+.pillar-card.values .pillar-icon{
+    color:#10b981;
+}
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+
+@media(max-width:768px){
+
+    .pillars-title{
+        font-size:1.5rem;
+    }
+
+    .pillar-card{
+        padding:40px 28px;
+    }
+
+    .pillar-icon{
+        font-size:52px;
+    }
+
+    .pillar-card h3{
+        font-size:1.5rem;
+    }
+
+}

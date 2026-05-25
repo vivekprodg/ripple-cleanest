@@ -1,0 +1,77 @@
+{% if our_team and our_team.is_active %}
+
+<section class="team-section">
+
+    <header class="team-header">
+        <span class="eyebrow">{{ our_team.eyebrow|default:"The Studio" }}</span>
+        <h2>{{ our_team.section_title|default:"Our Collective" }}</h2>
+    </header>
+
+    <div class="passport-wrapper">
+        <div class="passport-row">
+
+            {% for member in our_team.members.all %}
+                {% if member.is_active %}
+                    <div class="member-card"
+                        data-name="{{ member.name|default:''|escape }}"
+                        data-role="{{ member.role|default:''|escape }}"
+                        data-desc="{{ member.description|default:''|escape }}"
+                        data-img="{% if member.image %}{{ member.image.url }}{% endif %}">
+
+                        <div class="image-container">
+                            {% if member.image %}
+                                <img src="{{ member.image.url }}" alt="{{ member.name|default:'Team member'|escape }}">
+                            {% else %}
+                                <div style="width:100%;height:100%;background:#e9e9e9;"></div>
+                            {% endif %}
+                        </div>
+
+                        <div class="member-info">
+                            <h3>{{ member.name }}</h3>
+
+                            {% if member.role %}
+                                <p>{{ member.role }}</p>
+                            {% endif %}
+                        </div>
+
+                    </div>
+                {% endif %}
+            {% empty %}
+                <div style="padding:24px 0;color:#999;font-size:14px;">
+                    No team members added yet.
+                </div>
+            {% endfor %}
+
+        </div>
+    </div>
+
+</section>
+
+<div class="popup" id="teamPopup">
+    <div class="popup-box">
+
+        <div class="popup-img">
+            <img id="popupImg" alt="">
+        </div>
+
+        <div class="popup-content">
+            <h2 id="popupName"></h2>
+
+            {% comment %} Role is filled via JS; keep empty safely {% endcomment %}
+            <small id="popupRole"></small>
+
+            <p id="popupDesc"></p>
+
+            <div class="social">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-x-twitter"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+        </div>
+
+        <div class="close" id="popupClose">✕</div>
+
+    </div>
+</div>
+
+{% endif %}

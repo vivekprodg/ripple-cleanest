@@ -1,0 +1,140 @@
+{% load static %}
+
+<form class="filters-bar" id="filtersForm" onsubmit="return false;">
+
+    <!-- SEARCH -->
+    <div class="filter-group filter-search">
+        <label for="searchInput">
+            {{ search_label|default:"Search" }}
+        </label>
+
+        <input
+            type="text"
+            id="searchInput"
+            value="{{ filters.search|default:'' }}"
+            placeholder="{{ search_placeholder|default:'Search name, email, phone, project, location...' }}"
+        >
+    </div>
+
+    <!-- LEAD TYPE FILTER -->
+    <div class="filter-group">
+        <label for="filterType">
+            {{ type_filter_label|default:"Lead Type" }}
+        </label>
+
+        <select id="filterType">
+            <option value="">
+                {{ all_types_label|default:"All Types" }}
+            </option>
+
+            {% for value, label in lead_types %}
+                <option
+                    value="{{ value }}"
+                    {% if filters.lead_type == value %}selected{% endif %}
+                >
+                    {{ label }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- STATUS FILTER -->
+    <div class="filter-group">
+        <label for="filterStatus">
+            {{ status_filter_label|default:"Status" }}
+        </label>
+
+        <select id="filterStatus">
+            <option value="">
+                {{ all_status_label|default:"All Status" }}
+            </option>
+
+            {% for value, label in lead_statuses %}
+                <option
+                    value="{{ value }}"
+                    {% if filters.status == value %}selected{% endif %}
+                >
+                    {{ label }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- PRIORITY FILTER -->
+    <div class="filter-group">
+        <label for="filterPriority">
+            {{ priority_filter_label|default:"Priority" }}
+        </label>
+
+        <select id="filterPriority">
+            <option value="">
+                {{ all_priority_label|default:"All Priority" }}
+            </option>
+
+            {% for value, label in lead_priorities %}
+                <option
+                    value="{{ value }}"
+                    {% if filters.priority == value %}selected{% endif %}
+                >
+                    {{ label }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- SOURCE FILTER -->
+    <div class="filter-group">
+        <label for="filterSource">
+            {{ source_filter_label|default:"Lead Source" }}
+        </label>
+
+        <select id="filterSource">
+
+            <option value="">
+                {{ all_sources_label|default:"All Sources" }}
+            </option>
+
+            {% for value, label in lead_sources %}
+                <option
+                    value="{{ value }}"
+                    {% if filters.source == value %}selected{% endif %}
+                >
+                    {{ label }}
+                </option>
+            {% endfor %}
+
+            <!-- Explicit RFQ Source Support -->
+            <option
+                value="rfq"
+                {% if filters.source == "rfq" %}selected{% endif %}
+            >
+                {{ rfq_source_label|default:"RFQ" }}
+            </option>
+
+        </select>
+    </div>
+
+    <!-- FILTER ACTIONS -->
+    <div class="filter-actions">
+
+        <button
+            class="btn btn-secondary"
+            type="button"
+            onclick="resetFilters()"
+        >
+            <i class="fas fa-rotate-left"></i>
+            {{ reset_button_label|default:"Reset" }}
+        </button>
+
+        <button
+            class="btn btn-primary"
+            type="button"
+            onclick="applyFilters()"
+        >
+            <i class="fas fa-filter"></i>
+            {{ filter_button_label|default:"Apply Filters" }}
+        </button>
+
+    </div>
+
+</form>

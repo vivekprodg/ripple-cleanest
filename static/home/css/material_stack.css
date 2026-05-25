@@ -1,0 +1,312 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600&family=Jost:wght@300;400;500;600&family=Poppins:wght@300;400;500;600&display=swap');
+
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ROOT */
+:root {
+    --bg: #ffffff;
+    --surface: #ffffff;
+    --text-dark: #111111;
+    --text-muted: #777777;
+    --accent: #111111;
+
+    --transition-panel: cubic-bezier(0.76, 0, 0.24, 1);
+    --transition-text: cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* SECTION WRAPPER */
+#material-stack-section {
+    width: 100%;
+    min-height: auto;
+    overflow: hidden;
+    background: var(--bg);
+    color: var(--text-dark);
+    font-family: 'Montserrat', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    padding-bottom: 48px;
+}
+
+/* =========================================================
+   MAIN GRID LAYOUT (UNCHANGED)
+========================================================= */
+.editorial-container {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr 1fr;
+    grid-template-rows: min-content 1fr;
+    width: 100%;
+    min-height: auto;
+    position: relative;
+    padding: 0 40px;
+    column-gap: 40px;
+    row-gap: 32px;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+.header-proposition {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    padding-bottom: 32px;
+    line-height: 1;
+}
+
+.header-proposition .eyebrow {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    line-height: 1.2;
+    color: #111111;
+    margin-bottom: 4px;
+}
+
+.header-proposition .main-title {
+    font-family: 'Jost', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    text-transform: none;
+    line-height: 1.08;
+    color: #111111;
+}
+
+/* =========================================================
+   LEFT COLUMN — TEXT STACK
+========================================================= */
+.narrative-col {
+    grid-column: 1;
+    grid-row: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    margin-top: -20px;
+}
+
+.text-stage {
+    position: relative;
+    height: 45%;
+    display: flex;
+    align-items: flex-start;
+    transform: translateY(-70px);
+}
+
+.text-block {
+    position: absolute;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(15px);
+    transition:
+        opacity 0.8s var(--transition-text),
+        transform 0.8s var(--transition-text),
+        visibility 0.8s;
+}
+
+.text-block.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* META NUMBER */
+.text-block .meta-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.75rem;
+    font-weight: 500;
+    letter-spacing: normal;
+    text-transform: none;
+    line-height: 1.15;
+    color: #111111;
+    margin-bottom: 8px;
+    display: block;
+}
+
+/* TITLE */
+.text-block h2 {
+    font-family: 'Jost', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    text-transform: none;
+    line-height: 1.08;
+    color: #111111;
+    margin-bottom: 15px;
+}
+
+/* DESCRIPTION */
+.text-block p {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.02rem;
+    font-weight: 400;
+    letter-spacing: normal;
+    text-transform: none;
+    line-height: 1.8;
+    color: #777777;
+}
+
+/* =========================================================
+   CENTER IMAGE COLUMN
+========================================================= */
+.visual-col {
+    grid-column: 2;
+    grid-row: 2;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    position: relative;
+}
+
+.image-viewport {
+    width: 420px;
+    height: 420px;
+    position: relative;
+    overflow: hidden;
+}
+
+.image-panel {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transform: scale(1.04);
+    transition:
+        transform 1.4s var(--transition-panel),
+        opacity 1s ease-in-out;
+}
+
+.image-panel.active {
+    opacity: 1;
+    transform: scale(1);
+    z-index: 2;
+}
+
+.image-panel img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* =========================================================
+   RIGHT INDEX COLUMN
+========================================================= */
+.index-col {
+    grid-column: 3;
+    grid-row: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 40px;
+}
+
+.index-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    list-style: none;
+}
+
+.index-item {
+    position: relative;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+}
+
+.index-link {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    line-height: 1.2;
+    color: #111111;
+    display: block;
+    transition: color 0.3s ease, transform 0.4s var(--transition-text);
+}
+
+/* HOVER */
+.index-item:hover .index-link {
+    color: var(--accent);
+    transform: translateX(6px);
+}
+
+/* ACTIVE */
+.index-item.active .index-link {
+    color: var(--accent);
+    font-weight: 600;
+    transform: translateX(6px);
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+@media (max-width: 1024px) {
+
+    #material-stack-section {
+        padding: 32px 0;
+    }
+
+    .editorial-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto 1fr auto;
+        padding: 0 24px;
+        gap: 24px;
+    }
+
+    .header-proposition {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    .narrative-col {
+        grid-column: 1;
+        grid-row: 2;
+    }
+
+    .visual-col {
+        grid-column: 1;
+        grid-row: 3;
+        height: 40vh;
+    }
+
+    .index-col {
+        grid-column: 1;
+        grid-row: 4;
+        padding-left: 0;
+    }
+
+    .image-viewport {
+        height: 100%;
+    }
+
+    .text-stage {
+        margin-bottom: 10px;
+    }
+
+    .text-block {
+        position: relative;
+        display: none;
+        transform: none !important;
+    }
+
+    .text-block.active {
+        display: block;
+    }
+
+    .index-item:hover .index-link,
+    .index-item.active .index-link {
+        transform: none;
+    }
+}

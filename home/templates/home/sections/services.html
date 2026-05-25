@@ -1,0 +1,66 @@
+<section class="services-section">
+    <div class="services-container">
+
+        <!-- Header -->
+        <div class="services-top-header">
+            <div>
+                <span>Our Expertise</span>
+                <h2>Our Services</h2>
+            </div>
+        </div>
+
+        <div class="services-grid">
+
+            <!-- LEFT: SERVICES -->
+            <div class="services-list">
+
+                {% for service in home_services %}
+                <div class="service-item {% if forloop.first %}active{% endif %}"
+                     data-index="{{ forloop.counter0 }}"
+                     data-service="{{ forloop.counter0 }}">
+
+                    <div class="service-content">
+                        <h2 class="service-title">{{ service.title }}</h2>
+
+                        <div class="service-detail">
+                            <p>{{ service.description }}</p>
+                        </div>
+                    </div>
+
+                </div>
+                {% empty %}
+                <div class="service-item active">
+                    <div class="service-content">
+                        <h2 class="service-title">No Services Found</h2>
+
+                        <div class="service-detail">
+                            <p>Please add services in the admin panel and tick “Show on homepage”.</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+                <div class="services-cta">
+                    <a href="{% url 'services:services_page' %}" class="btn btn--primary">
+                        View All Services
+                    </a>
+                </div>
+
+            </div>
+
+            <!-- RIGHT: VISUAL -->
+            <div class="services-visual">
+
+                {% for service in home_services %}
+                <img src="{{ service.image.url }}"
+                     class="visual-image {% if forloop.first %}active{% endif %}"
+                     data-index="{{ forloop.counter0 }}"
+                     data-service="{{ forloop.counter0 }}"
+                     alt="{{ service.title }}">
+                {% endfor %}
+
+            </div>
+
+        </div>
+    </div>
+</section>

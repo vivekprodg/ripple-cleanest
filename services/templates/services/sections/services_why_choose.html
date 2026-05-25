@@ -1,0 +1,99 @@
+{% load static %}
+
+<section class="intro why-choose-section">
+
+    <div class="section-inner">
+
+        <div class="intro-grid">
+
+            <!-- LEFT IMAGE CARD -->
+            <div class="intro-card reveal"
+                 {% if why_choose and why_choose.card_image %}
+                 style="background:
+                        linear-gradient(180deg, rgba(0,0,0,0.05), rgba(0,0,0,0.42)),
+                        url('{{ why_choose.card_image.url }}') center/cover no-repeat;"
+                 {% endif %}>
+
+                <div class="intro-card-overlay">
+
+                    {% if why_choose and why_choose.chip_text %}
+                    <div class="intro-chip">
+                        <i class="{{ why_choose.chip_icon }}"></i>
+                        {{ why_choose.chip_text }}
+                    </div>
+                    {% endif %}
+
+                    {% if why_choose and why_choose.card_heading %}
+                    <h3>
+                        {{ why_choose.card_heading }}
+                    </h3>
+                    {% endif %}
+
+                    {% if why_choose and why_choose.card_description %}
+                    <p>
+                        {{ why_choose.card_description }}
+                    </p>
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+            <!-- RIGHT CONTENT -->
+            <div class="intro-copy reveal">
+
+                {% if why_choose and why_choose.section_label %}
+                <div class="section-label">
+                    {{ why_choose.section_label }}
+                </div>
+                {% endif %}
+
+                {% if why_choose and why_choose.title %}
+                <h2 class="section-title">
+                    {{ why_choose.title }}
+                </h2>
+                {% endif %}
+
+                {% if why_choose and why_choose.subtitle %}
+                <p class="section-subtitle">
+                    {{ why_choose.subtitle }}
+                </p>
+                {% endif %}
+
+                <div class="intro-list">
+
+                    {% for feature in why_choose_features %}
+                        <div class="intro-item">
+
+                            {% if feature.icon %}
+                            <i class="{{ feature.icon }}"></i>
+                            {% endif %}
+
+                            <div>
+
+                                {% if feature.title %}
+                                <h4>
+                                    {{ feature.title }}
+                                </h4>
+                                {% endif %}
+
+                                {% if feature.description %}
+                                <p>
+                                    {{ feature.description }}
+                                </p>
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>

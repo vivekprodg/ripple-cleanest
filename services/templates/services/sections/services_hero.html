@@ -1,0 +1,92 @@
+{% load static %}
+
+{% if hero %}
+<section class="hero services-hero"
+    {% if hero.hero_image %}
+        style="background-image: url('{{ hero.hero_image.url }}');"
+    {% endif %}
+>
+
+    <div class="section-inner hero-inner">
+
+        <div class="hero-grid">
+
+            <!-- LEFT CONTENT -->
+            <div class="hero-content reveal">
+
+                {% if hero.kicker %}
+                    <div class="hero-kicker">
+                        <i class="fa-solid fa-compass-drafting"></i>
+                        <span>{{ hero.kicker }}</span>
+                    </div>
+                {% endif %}
+
+                {% if hero.title %}
+                    <h1>{{ hero.title }}</h1>
+                {% endif %}
+
+                {% if hero.description %}
+                    <p>{{ hero.description }}</p>
+                {% endif %}
+
+                {% if hero.btn_primary_text or hero.btn_secondary_text %}
+                    <div class="btn-row">
+
+                        {% if hero.btn_primary_text %}
+                            <a href="{{ hero.btn_primary_link|default:'#' }}" class="btn btn-primary">
+                                <i class="fa-solid fa-arrow-down"></i>
+                                <span>{{ hero.btn_primary_text }}</span>
+                            </a>
+                        {% endif %}
+
+                        {% if hero.btn_secondary_text %}
+                            <a href="{{ hero.btn_secondary_link|default:'#' }}" class="btn btn-outline">
+                                <i class="fa-solid fa-phone-volume"></i>
+                                <span>{{ hero.btn_secondary_text }}</span>
+                            </a>
+                        {% endif %}
+
+                    </div>
+                {% endif %}
+
+            </div>
+
+            <!-- RIGHT STATS -->
+            <div class="hero-stats reveal">
+
+                {% if hero.stat_1_text %}
+                    <div class="hero-stat">
+                        <span class="num">01</span>
+                        <span class="label">{{ hero.stat_1_text }}</span>
+                    </div>
+                {% endif %}
+
+                {% if hero.stat_2_text %}
+                    <div class="hero-stat">
+                        <span class="num">02</span>
+                        <span class="label">{{ hero.stat_2_text }}</span>
+                    </div>
+                {% endif %}
+
+                {% if hero.stat_3_text %}
+                    <div class="hero-stat">
+                        <span class="num">03</span>
+                        <span class="label">{{ hero.stat_3_text }}</span>
+                    </div>
+                {% endif %}
+
+                {% if hero.stat_4_text %}
+                    <div class="hero-stat">
+                        <span class="num">04</span>
+                        <span class="label">{{ hero.stat_4_text }}</span>
+                    </div>
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+{% endif %}

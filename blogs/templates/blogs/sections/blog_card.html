@@ -1,0 +1,76 @@
+{% load static %}
+
+<article class="blog-card {% if post.is_featured %}featured{% endif %}">
+
+    <!-- BLOG IMAGE -->
+    <div class="blog-image">
+
+        {% if post.featured_image %}
+            <img
+                src="{{ post.featured_image.url }}"
+                alt="{{ post.title }}"
+            >
+        {% else %}
+            <img
+                src="{% static 'blogs/images/blog-placeholder.jpg' %}"
+                alt="{{ post.title }}"
+            >
+        {% endif %}
+
+    </div>
+
+    <!-- BLOG CONTENT -->
+    <div class="blog-content">
+
+        <!-- CATEGORY -->
+        {% if post.category %}
+            <span class="blog-category">
+                {{ post.category.name }}
+            </span>
+        {% endif %}
+
+        <!-- TITLE -->
+        <h2 class="blog-title">
+
+            <a href="{% url 'blogs:blog_detail' post.slug %}">
+                {{ post.title }}
+            </a>
+
+        </h2>
+
+        <!-- DESCRIPTION / EXCERPT -->
+        {% if post.excerpt %}
+            <p class="blog-description">
+                {{ post.excerpt }}
+            </p>
+        {% endif %}
+
+        <!-- META -->
+        <div class="blog-meta">
+
+            <span>
+                {{ post.published_at|date:"F j, Y" }}
+            </span>
+
+            <span>
+                {{ post.read_time }} min read
+            </span>
+
+        </div>
+
+        <!-- READ MORE -->
+        <a
+            href="{% url 'blogs:blog_detail' post.slug %}"
+            class="read-more"
+        >
+            Read Article
+
+            <span>
+                →
+            </span>
+
+        </a>
+
+    </div>
+
+</article>

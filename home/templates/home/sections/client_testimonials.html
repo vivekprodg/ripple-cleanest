@@ -1,0 +1,92 @@
+{% if testimonials %}
+
+<section class="homepage-testimonials-section" id="testimonials-module">
+
+    <!-- SECTION HEADER -->
+    <header class="section-header-matrix">
+
+        <div class="header-narrative">
+
+            {% if page.testimonials_eyebrow %}
+                <span class="section-eyebrow">
+                    {{ page.testimonials_eyebrow }}
+                </span>
+            {% endif %}
+
+            {% if page.testimonials_heading %}
+                <h2 class="section-title">
+                    {{ page.testimonials_heading }}
+                </h2>
+            {% endif %}
+
+        </div>
+
+        <!-- PROGRESS LINE -->
+        <div class="slider-meta-metrics">
+            <div class="progress-rail">
+                <div class="progress-fill" id="lux-progress-indicator"></div>
+            </div>
+        </div>
+
+    </header>
+
+    <!-- TESTIMONIAL SLIDER VIEWPORT -->
+    <div class="testimonial-stage-viewport" id="carousel-viewport">
+
+        {% for t in testimonials %}
+
+        <article
+            class="premium-patron-card {% if forloop.first %}active{% endif %}"
+            data-slide-id="{{ forloop.counter0 }}"
+        >
+
+            <!-- CLIENT IMAGE -->
+            {% if t.image %}
+                <div class="portrait-frame-lux">
+                    <img
+                        src="{{ t.image.url }}"
+                        alt="{{ t.name }}"
+                        loading="lazy"
+                    >
+                </div>
+            {% endif %}
+
+            <!-- CLIENT META -->
+            <div class="meta-text-block">
+
+                {% if t.name %}
+                    <h3 class="patron-name">
+                        {{ t.name }}
+                    </h3>
+                {% endif %}
+
+                {% if t.designation %}
+                    <span class="patron-designation">
+                        {{ t.designation }}
+                    </span>
+                {% endif %}
+
+                {% if t.company %}
+                    <span class="patron-company">
+                        {{ t.company }}
+                    </span>
+                {% endif %}
+
+            </div>
+
+            <!-- CLIENT QUOTE -->
+            {% if t.quote %}
+                <p class="patron-editorial-quote">
+                    “{{ t.quote }}”
+                </p>
+            {% endif %}
+
+        </article>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+{% endif %}

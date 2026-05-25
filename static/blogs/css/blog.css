@@ -1,0 +1,256 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600&display=swap');
+
+/* =========================================
+   BLOG GLOBAL / CONTROLLER STYLES
+========================================= */
+
+:root{
+    --bg:#ffffff;
+    --text-main:#111111;
+    --text-muted:#777777;
+    --text:#111111;
+    --muted:#777777;
+    --accent:#111111;
+    --border:#eeeeee;
+
+    --transition:all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    --ease:cubic-bezier(0.23, 1, 0.32, 1);
+    --container-width:1300px;
+
+    --font-sans:'Montserrat', sans-serif;
+    --font-serif:'Cormorant Garamond', serif;
+
+    --shadow:0 20px 60px rgba(0,0,0,0.04);
+}
+
+/* =========================
+   GLOBAL RESET
+========================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    background:var(--bg);
+    color:var(--text-main);
+
+    font-family:var(--font-sans);
+    font-size:0.95rem;
+    font-weight:400;
+    letter-spacing:normal;
+    text-transform:none;
+    line-height:1.7;
+
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+}
+
+a{
+    text-decoration:none;
+    color:inherit;
+    transition:var(--transition);
+
+    font-family:var(--font-sans);
+    font-weight:400;
+    letter-spacing:normal;
+    text-transform:none;
+    line-height:1.7;
+}
+
+ul{
+    list-style:none;
+}
+
+img{
+    width:100%;
+    display:block;
+    object-fit:cover;
+}
+
+/* =========================
+   TYPOGRAPHY SYSTEM
+========================= */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6{
+    font-family:var(--font-serif);
+    color:var(--text-main);
+    font-weight:400;
+    letter-spacing:-0.02em;
+    text-transform:none;
+    line-height:1.08;
+}
+
+p{
+    font-family:var(--font-sans);
+    font-size:0.95rem;
+    font-weight:400;
+    letter-spacing:normal;
+    text-transform:none;
+    line-height:1.7;
+    color:var(--text-muted);
+}
+
+/* =========================
+   PROGRESS BAR
+========================= */
+
+#progress-container{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:3px;
+    z-index:1001;
+    pointer-events:none;
+}
+
+#progress-bar{
+    width:0%;
+    height:100%;
+    background:var(--accent);
+    transition:width 0.1s linear;
+}
+
+/* =========================
+   PAGE WRAPPERS
+========================= */
+
+.blog-page{
+    width:100%;
+    display:block;
+}
+
+.section-padding{
+    padding:80px 5vw;
+}
+
+.container{
+    max-width:var(--container-width);
+    margin:0 auto;
+    padding:0 32px;
+}
+
+/* =========================
+   PAGE-LEVEL SPACING ONLY
+========================= */
+
+.blog-page > .blog-filters-wrap{
+    margin-bottom:40px;
+}
+
+.blog-page > .blog-grid-section{
+    margin-top:0;
+}
+
+/* =========================
+   COMMON BLOG TYPOGRAPHY
+========================= */
+
+.blog-eyebrow,
+.section-eyebrow,
+.blog-label{
+    font-family:var(--font-sans);
+    font-size:0.75rem;
+    font-weight:600;
+    letter-spacing:0.3em;
+    text-transform:uppercase;
+    line-height:1.2;
+    color:#111111;
+}
+
+.blog-title,
+.section-title{
+    font-family:var(--font-serif);
+    font-size:clamp(2.3rem, 3vw, 3.4rem);
+    font-weight:400;
+    letter-spacing:-0.02em;
+    text-transform:none;
+    line-height:1.08;
+    color:#111111;
+}
+
+.blog-subtitle,
+.blog-description,
+.blog-text{
+    font-family:var(--font-sans);
+    font-size:0.95rem;
+    font-weight:400;
+    letter-spacing:normal;
+    text-transform:none;
+    line-height:1.7;
+    color:#777777;
+}
+
+/* =========================
+   BUTTON STYLE
+========================= */
+
+.btn--primary{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+
+    min-height:52px;
+    padding:0 32px;
+
+    border-radius:999px;
+
+    text-decoration:none;
+
+    font-family:'Montserrat', sans-serif;
+    font-weight:600;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    font-size:0.85rem;
+    line-height:1;
+
+    background-color:#0b1f3a;
+    color:#ffffff;
+    border:1px solid #0b1f3a;
+
+    transition:var(--transition);
+}
+
+.btn--primary:hover{
+    background-color:#ffffff !important;
+    color:#0b0d10 !important;
+    border-color:#ffffff !important;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width:768px){
+
+    .section-padding{
+        padding:60px 5vw;
+    }
+
+    .blog-page > .blog-filters-wrap{
+        margin-bottom:28px;
+    }
+
+    body{
+        font-size:0.95rem;
+        line-height:1.7;
+    }
+
+    .blog-title,
+    .section-title{
+        font-size:clamp(2rem, 7vw, 2.8rem);
+    }
+
+}

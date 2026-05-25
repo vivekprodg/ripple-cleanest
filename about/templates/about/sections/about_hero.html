@@ -1,0 +1,83 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'about/css/about_hero.css' %}">
+
+<section
+    class="about-hero"
+    data-navbar-hero
+    {% if hero.aria_label %}
+    aria-label="{{ hero.aria_label }}"
+    {% endif %}
+>
+
+    <!-- =========================
+         BACKGROUND IMAGE (CMS)
+    ========================== -->
+    <div
+        class="about-hero-bg"
+        {% if hero.background_image %}
+            style="background-image: url('{{ hero.background_image.url }}');"
+        {% endif %}
+    ></div>
+
+    <!-- Overlay -->
+    <div class="about-hero-overlay"></div>
+
+    <!-- =========================
+         CONTENT
+    ========================== -->
+    <div class="about-hero-content">
+
+        <!-- EYEBROW -->
+        {% if hero.eyebrow %}
+            <span class="hero-eyebrow">
+                {{ hero.eyebrow }}
+            </span>
+        {% endif %}
+
+        <!-- TITLE -->
+        {% if hero.title %}
+            <h1 class="about-hero-title">
+                {{ hero.title|linebreaksbr }}
+            </h1>
+        {% endif %}
+
+        <!-- DESCRIPTION -->
+        {% if hero.description %}
+            <p class="about-hero-description">
+                {{ hero.description }}
+            </p>
+        {% endif %}
+
+        <!-- =========================
+             BUTTONS (CMS CONTROLLED)
+        ========================== -->
+        {% if hero.primary_button_text or hero.secondary_button_text %}
+            <div class="hero-buttons">
+
+                {% if hero.primary_button_text %}
+                    <a
+                        href="{{ hero.primary_button_url|default:'#' }}"
+                        class="hero-btn primary-btn"
+                    >
+                        {{ hero.primary_button_text }}
+                    </a>
+                {% endif %}
+
+                {% if hero.secondary_button_text %}
+                    <a
+                        href="{{ hero.secondary_button_url|default:'#' }}"
+                        class="hero-btn secondary-btn"
+                    >
+                        {{ hero.secondary_button_text }}
+                    </a>
+                {% endif %}
+
+            </div>
+        {% endif %}
+
+    </div>
+
+</section>
+
+<script src="{% static 'about/js/about_hero.js' %}"></script>

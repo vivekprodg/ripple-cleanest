@@ -1,0 +1,164 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600&family=Jost:wght@300;400;500;600&family=Poppins:wght@300;400;500;600&display=swap');
+
+/* ================= BASE ================= */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Montserrat', sans-serif;
+    background:#f7f8fa;
+    color:#111111;
+}
+
+/* ================= SECTION ================= */
+.section{
+    padding:40px 7vw 0px;
+}
+
+.title{
+    font-family:'Montserrat', sans-serif;
+    font-size:0.75rem;
+    font-weight:600;
+    letter-spacing:0.3em;
+    text-transform:uppercase;
+    line-height:1.2;
+    color:#111111;
+    margin-bottom:14px;
+}
+
+.h2{
+    font-family:'Jost', sans-serif;
+    font-size:1.75rem;
+    font-weight:400;
+    letter-spacing:-0.02em;
+    text-transform:none;
+    line-height:1.08;
+    color:#111111;
+    margin:0 0 40px 0;
+}
+
+/* ================= FEATURED + GALLERY ================= */
+.grid{
+    display:grid;
+    gap:28px;
+}
+
+.featured{
+    grid-template-columns:1.6fr 1fr;
+}
+
+/* CARD */
+.card{
+    position:relative;
+    overflow:hidden;
+    border-radius:18px;
+    cursor:pointer;
+}
+
+/* IMAGE */
+.card img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transition:0.5s ease;
+}
+
+.card:hover img{
+    transform:scale(1.06);
+}
+
+/* MAIN + SIDE HEIGHTS */
+.featured-main{
+    height:420px;
+}
+
+.featured-side{
+    height:200px;
+}
+
+/* OVERLAY */
+.overlay{
+    position:absolute;
+    bottom:0;
+    left:0;
+    right:0;
+    padding:16px;
+    background:linear-gradient(to top,rgba(0,0,0,0.8),transparent);
+    color:#ffffff;
+}
+
+.overlay h4{
+    font-family:'Jost', sans-serif;
+    font-size:1.75rem;
+    font-weight:500;
+    letter-spacing:-0.02em;
+    text-transform:none;
+    line-height:1.15;
+    color:#ffffff;
+}
+
+.overlay p{
+    font-family:'Montserrat', sans-serif;
+    font-size:0.95rem;
+    font-weight:400;
+    letter-spacing:normal;
+    text-transform:none;
+    line-height:1.7;
+    color:rgba(255,255,255,0.75);
+}
+
+/* ================= MODAL ================= */
+.modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.92);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:9999;
+    padding:40px;
+}
+
+.modal-box{
+    max-width:900px;
+    width:100%;
+    background:#111111;
+    border-radius:16px;
+    overflow:hidden;
+}
+
+.modal img{
+    width:100%;
+    height:450px;
+    object-fit:cover;
+}
+
+.modal-content{
+    padding:25px;
+    color:#ffffff;
+    font-family:'Montserrat', sans-serif;
+    font-size:1.02rem;
+    font-weight:400;
+    letter-spacing:normal;
+    text-transform:none;
+    line-height:1.8;
+}
+
+/* ================= RESPONSIVE ================= */
+@media(max-width:1000px){
+
+    .featured{
+        grid-template-columns:1fr;
+    }
+
+    .featured-main{
+        height:360px;
+    }
+
+    .featured-side{
+        height:220px;
+    }
+}

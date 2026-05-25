@@ -1,0 +1,186 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600&display=swap');
+
+/* =========================================
+   BLOG LIST PAGE ONLY
+========================================= */
+
+:root {
+    --bg: #ffffff;
+    --text-dark: #111111;
+    --text-muted: #777777;
+    --accent: #111111;
+
+    --transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+
+    --font-sans: 'Montserrat', sans-serif;
+    --font-serif: 'Cormorant Garamond', serif;
+}
+
+/* =========================================
+   BLOG SECTION
+========================================= */
+
+.blog-section{
+    padding:100px 0 120px;
+
+    background: var(--bg);
+
+    font-family: var(--font-sans);
+    color: var(--text-dark);
+}
+
+/* =========================================
+   TYPOGRAPHY SYSTEM
+========================================= */
+
+.blog-section h1,
+.blog-section h2,
+.blog-section h3,
+.blog-section h4,
+.blog-section h5,
+.blog-section h6{
+    font-family: var(--font-serif);
+
+    color: var(--text-dark);
+
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    text-transform: none;
+    line-height: 1.08;
+}
+
+.blog-section h1{
+    font-size: clamp(2.3rem, 3vw, 3.4rem);
+}
+
+.blog-section h2{
+    font-size: clamp(2rem, 2.8vw, 3rem);
+}
+
+.blog-section h3{
+    font-size: 1.75rem;
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: normal;
+}
+
+.blog-section h4{
+    font-size: 1.4rem;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: normal;
+}
+
+.blog-section h5,
+.blog-section .eyebrow,
+.blog-section .section-label{
+    font-family: var(--font-sans);
+
+    font-size: 0.75rem;
+    font-weight: 600;
+
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    line-height: 1.2;
+
+    color: #111111;
+}
+
+.blog-section p,
+.blog-section .description,
+.blog-section .excerpt{
+    font-family: var(--font-sans);
+
+    font-size: 0.95rem;
+    font-weight: 400;
+
+    letter-spacing: normal;
+    text-transform: none;
+    line-height: 1.7;
+
+    color: #777777;
+}
+
+.blog-section a{
+    font-family: var(--font-sans);
+
+    font-size: 0.95rem;
+    font-weight: 400;
+
+    letter-spacing: normal;
+    text-transform: none;
+    line-height: 1.7;
+
+    color: inherit;
+
+    text-decoration: none;
+
+    transition: var(--transition);
+}
+
+/* =========================================
+   BUTTON SYSTEM
+========================================= */
+
+.blog-section .btn--primary{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 52px;
+    padding: 0 32px;
+
+    border-radius: 999px;
+
+    text-decoration: none;
+
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    line-height: 1;
+
+    background-color: #0b1f3a;
+    color: #ffffff;
+
+    border: 1px solid #0b1f3a;
+
+    transition: var(--transition);
+}
+
+.blog-section .btn--primary:hover{
+    background-color: #ffffff !important;
+    color: #0b0d10 !important;
+    border-color: #ffffff !important;
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media(max-width:768px){
+
+    .blog-section{
+        padding:80px 0 100px;
+    }
+
+    .blog-section h1{
+        font-size: clamp(2rem, 7vw, 2.8rem);
+    }
+
+    .blog-section h2{
+        font-size: clamp(1.8rem, 6vw, 2.5rem);
+    }
+
+    .blog-section h3{
+        font-size: 1.5rem;
+    }
+
+    .blog-section p,
+    .blog-section a{
+        font-size: 0.95rem;
+        line-height: 1.7;
+    }
+
+}

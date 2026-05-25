@@ -1,0 +1,210 @@
+<section
+    class="hero hero--home"
+    data-navbar-hero
+    {% if page.hero_aria_label %}
+    aria-label="{{ page.hero_aria_label }}"
+    {% endif %}
+>
+    <picture class="hero__picture">
+
+        {% if page.hero_mobile_image %}
+            <source
+                media="(max-width: 768px)"
+                srcset="{{ page.hero_mobile_image.url }}"
+            >
+        {% endif %}
+
+        {% if page.hero_background_image %}
+            <img
+                class="hero__bg"
+                src="{{ page.hero_background_image.url }}"
+                {% if page.hero_background_alt %}
+                alt="{{ page.hero_background_alt }}"
+                {% endif %}
+                fetchpriority="high"
+                loading="eager"
+            >
+        {% elif page.hero_mobile_image %}
+            <img
+                class="hero__bg"
+                src="{{ page.hero_mobile_image.url }}"
+                {% if page.hero_background_alt %}
+                alt="{{ page.hero_background_alt }}"
+                {% endif %}
+                fetchpriority="high"
+                loading="eager"
+            >
+        {% endif %}
+
+    </picture>
+
+    <div class="hero__overlay"></div>
+    <div class="hero__grain"></div>
+
+    <div class="hero__inner">
+
+        <div class="hero__content">
+
+            <!-- LEFT CONTENT -->
+            <div class="hero__copy">
+
+                <div class="hero__text">
+
+                    {% if page.hero_heading %}
+                    <h1 class="hero__title hero__title--home">
+                        {{ page.hero_heading|linebreaksbr }}
+                    </h1>
+                    {% endif %}
+
+                    {% if page.hero_subheading %}
+                    <p class="hero__subhead hero__subhead--home">
+                        {{ page.hero_subheading }}
+                    </p>
+                    {% endif %}
+
+                </div>
+
+                {% if page.hero_primary_cta_text or page.hero_secondary_cta_text %}
+                <div class="hero__actions">
+
+                    {% if page.hero_primary_cta_text and page.hero_primary_cta_link %}
+                    <a
+                        class="btn btn--primary btn--home-primary"
+                        href="{{ page.hero_primary_cta_link }}"
+                    >
+                        {{ page.hero_primary_cta_text }}
+                    </a>
+                    {% endif %}
+
+                    {% if page.hero_secondary_cta_text and page.hero_secondary_cta_link %}
+                    <a
+                        class="btn btn--ghost btn--home-secondary"
+                        href="{{ page.hero_secondary_cta_link }}"
+                    >
+                        {{ page.hero_secondary_cta_text }}
+                    </a>
+                    {% endif %}
+
+                </div>
+                {% endif %}
+
+            </div>
+
+            <!-- RIGHT CONTENT -->
+            {% if page.hero_stat_1_value or page.hero_stat_2_value or page.hero_stat_3_value %}
+            <div class="hero__stats hero__stats--home hero__stats--right" aria-label="Studio highlights">
+
+                {% if page.hero_stat_1_value or page.hero_stat_1_label %}
+                <div class="stat stat--home">
+                    {% if page.hero_stat_1_value %}
+                    <strong class="stat__value stat__value--home">
+                        {{ page.hero_stat_1_value }}
+                    </strong>
+                    {% endif %}
+
+                    {% if page.hero_stat_1_label %}
+                    <span class="stat__label stat__label--home">
+                        {{ page.hero_stat_1_label }}
+                    </span>
+                    {% endif %}
+                </div>
+                {% endif %}
+
+                {% if page.hero_stat_2_value or page.hero_stat_2_label %}
+                <div class="stat stat--home">
+                    {% if page.hero_stat_2_value %}
+                    <strong class="stat__value stat__value--home">
+                        {{ page.hero_stat_2_value }}
+                    </strong>
+                    {% endif %}
+
+                    {% if page.hero_stat_2_label %}
+                    <span class="stat__label stat__label--home">
+                        {{ page.hero_stat_2_label }}
+                    </span>
+                    {% endif %}
+                </div>
+                {% endif %}
+
+                {% if page.hero_stat_3_value or page.hero_stat_3_label %}
+                <div class="stat stat--home">
+                    {% if page.hero_stat_3_value %}
+                    <strong class="stat__value stat__value--home">
+                        {{ page.hero_stat_3_value }}
+                    </strong>
+                    {% endif %}
+
+                    {% if page.hero_stat_3_label %}
+                    <span class="stat__label stat__label--home">
+                        {{ page.hero_stat_3_label }}
+                    </span>
+                    {% endif %}
+                </div>
+                {% endif %}
+
+            </div>
+            {% endif %}
+
+            <!-- RIGHT PANEL DISABLED -->
+            {% if False %}
+            <aside class="hero__panel hero__panel--home" aria-label="Featured project">
+
+                {% if page.featured_project_label %}
+                <div class="panel__label panel__label--home">
+                    {{ page.featured_project_label }}
+                </div>
+                {% endif %}
+
+                {% if page.featured_project_title %}
+                <h2 class="panel__title panel__title--home">
+                    {{ page.featured_project_title }}
+                </h2>
+                {% endif %}
+
+                {% if page.featured_project_description %}
+                <p class="panel__description panel__description--home">
+                    {{ page.featured_project_description }}
+                </p>
+                {% endif %}
+
+                {% if page.featured_project_type or page.featured_project_location or page.featured_project_status %}
+                <div class="panel__metrics panel__metrics--home">
+
+                    {% if page.featured_project_type %}
+                    <div class="metric metric--home">
+                        <span class="metric__label metric__label--home">Type</span>
+                        <strong class="metric__value metric__value--home">
+                            {{ page.featured_project_type }}
+                        </strong>
+                    </div>
+                    {% endif %}
+
+                    {% if page.featured_project_location %}
+                    <div class="metric metric--home">
+                        <span class="metric__label metric__label--home">Location</span>
+                        <strong class="metric__value metric__value--home">
+                            {{ page.featured_project_location }}
+                        </strong>
+                    </div>
+                    {% endif %}
+
+                    {% if page.featured_project_status %}
+                    <div class="metric metric--home">
+                        <span class="metric__label metric__label--home">Status</span>
+                        <strong class="metric__value metric__value--home">
+                            {{ page.featured_project_status }}
+                        </strong>
+                    </div>
+                    {% endif %}
+
+                </div>
+                {% endif %}
+
+            </aside>
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</section>

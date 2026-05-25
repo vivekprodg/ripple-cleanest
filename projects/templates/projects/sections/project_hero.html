@@ -1,0 +1,41 @@
+<section
+    class="project-hero"
+    data-navbar-hero
+    {% if project_hero and project_hero.background_image %}
+        style="--hero-image: url('{{ project_hero.background_image.url }}');"
+    {% endif %}
+>
+
+    <!-- HERO OVERLAY -->
+
+    {% if project_hero and project_hero.overlay_opacity %}
+        <div
+            class="project-hero__overlay"
+            style="
+                background: linear-gradient(
+                    rgba(0, 0, 0, {{ project_hero.overlay_opacity }}),
+                    rgba(0, 0, 0, {{ project_hero.overlay_opacity }})
+                );
+            "
+        ></div>
+    {% endif %}
+
+    <!-- HERO CONTENT -->
+
+    <div class="project-hero__content">
+
+        {% if project_hero and project_hero.title %}
+            <h1 class="project-hero__title">
+                {{ project_hero.title }}
+            </h1>
+        {% endif %}
+
+        {% if project_hero and project_hero.description %}
+            <p class="project-hero__description">
+                {{ project_hero.description }}
+            </p>
+        {% endif %}
+
+    </div>
+
+</section>

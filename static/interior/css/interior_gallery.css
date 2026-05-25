@@ -1,0 +1,315 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600&family=Jost:wght@300;400;500;600&family=Poppins:wght@300;400;500;600&display=swap');
+
+/* =========================================================
+   INTERIOR GALLERY
+========================================================= */
+.interior-gallery-section{
+    padding-bottom:80px;
+    background:#ffffff;
+    color:#111111;
+    font-family:'Montserrat', sans-serif;
+}
+
+/* =========================================================
+   FILTERS
+========================================================= */
+.interior-gallery-section .gallery-filters{
+    display:flex;
+    flex-wrap:wrap;
+    gap:14px;
+    margin-bottom:45px;
+}
+
+.interior-gallery-section .filter-btn{
+    border:none;
+    background:#ffffff;
+    padding:12px 22px;
+    border-radius:999px;
+    cursor:pointer;
+
+    font-family:'Montserrat', sans-serif;
+    font-size:0.75rem;
+    font-weight:600;
+    letter-spacing:0.3em;
+    text-transform:uppercase;
+    line-height:1.2;
+    color:#111111;
+
+    transition:0.3s ease;
+    box-shadow:0 8px 20px rgba(0,0,0,0.05);
+}
+
+.interior-gallery-section .filter-btn.active{
+    background:#111111;
+    color:#ffffff;
+}
+
+/* =========================================================
+   GALLERY GRID
+========================================================= */
+.interior-gallery-section .gallery{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:28px;
+}
+
+.interior-gallery-section .gallery-item{
+    position:relative;
+    overflow:hidden;
+    border-radius:18px;
+    cursor:pointer;
+    height:320px;
+}
+
+.interior-gallery-section .gallery-item.hide{
+    display:none;
+}
+
+.interior-gallery-section .gallery-item img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transition:0.5s ease;
+}
+
+.interior-gallery-section .gallery-item:hover img{
+    transform:scale(1.06);
+}
+
+/* =========================================================
+   OVERLAY
+========================================================= */
+.interior-gallery-section .overlay{
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:0;
+    padding:18px;
+    background:linear-gradient(
+        to top,
+        rgba(0,0,0,0.88),
+        transparent
+    );
+    color:#ffffff;
+}
+
+.interior-gallery-section .overlay h4{
+    font-family:'Jost', sans-serif;
+    font-size:1.75rem;
+    font-weight:400;
+    letter-spacing:-0.02em;
+    text-transform:none;
+    line-height:1.08;
+    color:#ffffff;
+    margin-bottom:4px;
+}
+
+.interior-gallery-section .overlay p{
+    font-family:'Montserrat', sans-serif;
+    font-size:0.95rem;
+    font-weight:400;
+    letter-spacing:normal;
+    text-transform:none;
+    line-height:1.7;
+    color:rgba(255,255,255,0.75);
+}
+
+/* =========================================================
+   FULLSCREEN MODAL
+========================================================= */
+.gallery-modal{
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100vh;
+    background:#ffffff;
+    z-index:99999;
+    display:none;
+    grid-template-columns:1.2fr 0.8fr;
+}
+
+.gallery-modal.active{
+    display:grid;
+}
+
+/* =========================================================
+   LEFT IMAGE
+========================================================= */
+.gallery-left{
+    height:100vh;
+    overflow:hidden;
+}
+
+.gallery-left img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+/* =========================================================
+   RIGHT CONTENT
+========================================================= */
+.gallery-right{
+    padding:70px 60px;
+    overflow-y:auto;
+    background:#f8f8f8;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+/* =========================================================
+   CATEGORY
+========================================================= */
+.modal-category{
+    font-family:'Montserrat', sans-serif;
+    font-size:0.75rem;
+    font-weight:600;
+    letter-spacing:0.3em;
+    text-transform:uppercase;
+    line-height:1.2;
+    color:#777777;
+    margin-bottom:30px;
+}
+
+/* =========================================================
+   TITLE
+========================================================= */
+.gallery-right h1{
+    font-family:'Jost', sans-serif;
+    font-size:1.75rem;
+    font-weight:400;
+    letter-spacing:-0.02em;
+    text-transform:none;
+    line-height:1.08;
+    color:#111111;
+    margin-bottom:28px;
+}
+
+/* =========================================================
+   DESCRIPTION
+========================================================= */
+.modal-description{
+    font-family:'Montserrat', sans-serif;
+    font-size:1.02rem;
+    font-weight:400;
+    letter-spacing:normal;
+    text-transform:none;
+    line-height:1.8;
+    color:#777777;
+    margin-bottom:55px;
+    max-width:520px;
+}
+
+/* =========================================================
+   DETAILS GRID
+========================================================= */
+.details-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:24px;
+}
+
+.detail-card{
+    background:#ffffff;
+    padding:28px;
+    border-radius:22px;
+    border:1px solid rgba(0,0,0,0.05);
+}
+
+.detail-card span{
+    display:block;
+    font-family:'Montserrat', sans-serif;
+    font-size:0.75rem;
+    font-weight:600;
+    letter-spacing:0.3em;
+    text-transform:uppercase;
+    line-height:1.2;
+    color:#777777;
+    margin-bottom:12px;
+}
+
+.detail-card strong{
+    font-family:'Jost', sans-serif;
+    font-size:1.25rem;
+    font-weight:500;
+    letter-spacing:normal;
+    text-transform:none;
+    line-height:1.15;
+    color:#111111;
+}
+
+/* =========================================================
+   CLOSE BUTTON
+========================================================= */
+.modal-close{
+    position:fixed;
+    top:25px;
+    right:25px;
+    width:52px;
+    height:52px;
+    border:none;
+    border-radius:50%;
+    background:#111111;
+    color:#ffffff;
+    cursor:pointer;
+
+    font-family:'Poppins', sans-serif;
+    font-size:18px;
+    font-weight:600;
+    letter-spacing:normal;
+    text-transform:none;
+    line-height:1;
+
+    z-index:999999;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+@media(max-width:1100px){
+
+    .interior-gallery-section .gallery{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .gallery-modal{
+        grid-template-columns:1fr;
+    }
+
+    .gallery-left{
+        height:45vh;
+    }
+
+    .gallery-right{
+        height:55vh;
+        padding:45px 30px;
+    }
+
+    .gallery-right h1{
+        font-size:1.5rem;
+    }
+}
+
+@media(max-width:600px){
+
+    .interior-gallery-section .gallery{
+        grid-template-columns:1fr;
+    }
+
+    .interior-gallery-section .gallery-item{
+        height:260px;
+    }
+
+    .gallery-right h1{
+        font-size:1.35rem;
+    }
+
+    .details-grid{
+        grid-template-columns:1fr;
+    }
+
+    .gallery-right{
+        padding:35px 22px;
+    }
+}

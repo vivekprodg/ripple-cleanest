@@ -1,0 +1,104 @@
+{% if selected_work %}
+<!-- FEATURED / SELECTED WORK -->
+<section class="section">
+
+<div class="title">Featured</div>
+
+<h2 class="h2">
+    {{ selected_work.title|default:"Selected Work" }}
+</h2>
+
+{% if selected_work.description %}
+<p style="max-width:700px; opacity:0.7; margin-bottom:40px;">
+    {{ selected_work.description }}
+</p>
+{% endif %}
+
+<div class="grid featured">
+
+    <!-- ================= MAIN CARD ================= -->
+    <div class="card featured-main js-work-card"
+         data-img="{% if selected_work.main_image %}{{ selected_work.main_image.url }}{% endif %}"
+         data-title="{{ selected_work.main_title|default:'' }}"
+         data-desc="{{ selected_work.main_desc|default:'' }}">
+
+        {% if selected_work.main_image %}
+        <img src="{{ selected_work.main_image.url }}"
+             alt="{{ selected_work.main_title|default:'Selected Work' }}">
+        {% endif %}
+
+        <div class="overlay">
+            <h4>
+                {{ selected_work.main_title|default:selected_work.title|default:"Main Project" }}
+            </h4>
+            <p>
+                {{ selected_work.main_subtitle|default:selected_work.category|default:"Interior" }}
+            </p>
+        </div>
+
+    </div>
+
+    <!-- ================= SIDE STACK ================= -->
+    <div style="display:flex; flex-direction:column; gap:18px;">
+
+        <!-- SIDE CARD 1 -->
+        <div class="card featured-side js-work-card"
+             data-img="{% if selected_work.side_image_1 %}{{ selected_work.side_image_1.url }}{% endif %}"
+             data-title="{{ selected_work.side_title_1|default:'' }}"
+             data-desc="{{ selected_work.side_desc_1|default:'' }}">
+
+            {% if selected_work.side_image_1 %}
+            <img src="{{ selected_work.side_image_1.url }}"
+                 alt="{{ selected_work.side_title_1|default:'Project 1' }}">
+            {% endif %}
+
+            <div class="overlay">
+                <h4>
+                    {{ selected_work.side_title_1|default:"Side Project 1" }}
+                </h4>
+                <p>
+                    {{ selected_work.side_subtitle_1|default:"Commercial" }}
+                </p>
+            </div>
+
+        </div>
+
+        <!-- SIDE CARD 2 -->
+        <div class="card featured-side js-work-card"
+             data-img="{% if selected_work.side_image_2 %}{{ selected_work.side_image_2.url }}{% endif %}"
+             data-title="{{ selected_work.side_title_2|default:'' }}"
+             data-desc="{{ selected_work.side_desc_2|default:'' }}">
+
+            {% if selected_work.side_image_2 %}
+            <img src="{{ selected_work.side_image_2.url }}"
+                 alt="{{ selected_work.side_title_2|default:'Project 2' }}">
+            {% endif %}
+
+            <div class="overlay">
+                <h4>
+                    {{ selected_work.side_title_2|default:"Side Project 2" }}
+                </h4>
+                <p>
+                    {{ selected_work.side_subtitle_2|default:"Minimal" }}
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+<!-- ================= MODAL ================= -->
+<div class="modal" id="modal" onclick="this.style.display='none'">
+    <div class="modal-box" onclick="event.stopPropagation()">
+        <img id="mimg" src="">
+        <div class="modal-content">
+            <h2 id="mtitle"></h2>
+            <p id="mdesc"></p>
+        </div>
+    </div>
+</div>
+{% endif %}

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Ripple{% endblock %}
+
+{% block body_class %}home-page has-hero{% endblock %}
+
+{% block extra_css %}
+
+<link rel="stylesheet" href="{% static 'home/css/hero.css' %}">
+<link rel="stylesheet" href="{% static 'home/css/ripples_difference.css' %}">
+<link rel="stylesheet" href="{% static 'home/css/material_stack.css' %}">
+<link rel="stylesheet" href="{% static 'home/css/services.css' %}">
+<link rel="stylesheet" href="{% static 'home/css/team.css' %}">
+<link rel="stylesheet" href="{% static 'home/css/client_testimonials.css' %}">
+<link rel="stylesheet" href="{% static 'home/css/journal.css' %}">
+
+{% endblock %}
+
+
+{% block content %}
+
+    <!-- HERO -->
+    <div data-navbar-hero>
+        {% include "home/sections/hero.html" %}
+    </div>
+
+    <!-- MAIN SECTIONS -->
+    {% include "home/sections/ripples_difference.html" %}
+    {% include "home/sections/material_stack.html" %}
+    {% include "home/sections/services.html" %}
+    {% include "home/sections/team.html" %}
+    {% include "home/sections/client_testimonials.html" %}
+    {% include "home/sections/journal.html" %}
+
+{% endblock %}
+
+{% block extra_js %}
+
+<script src="{% static 'home/js/ripples_difference.js' %}" defer></script>
+<script src="{% static 'home/js/material_stack.js' %}" defer></script>
+<script src="{% static 'home/js/services.js' %}" defer></script>
+<script src="{% static 'home/js/team.js' %}" defer></script>
+<script src="{% static 'home/js/client_testimonials.js' %}" defer></script>
+<script src="{% static 'home/js/journal.js' %}" defer></script>
+
+{% endblock %}

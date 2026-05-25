@@ -1,0 +1,244 @@
+html,
+body{
+    margin:0;
+    padding:0;
+    overflow-x:hidden;
+}
+
+/* =========================================================
+   HERO SECTION
+========================================================= */
+.hero{
+    position:relative;
+    width:100%;
+    min-height:100vh;
+
+    display:flex;
+    align-items:center;
+
+    padding:0 7vw;
+
+    overflow:hidden;
+
+    z-index:1;
+
+    background-color:#111;
+    background-size:cover;
+    background-position:center center;
+    background-repeat:no-repeat;
+
+    isolation:isolate;
+}
+
+/* CMS background image support */
+.hero[style]{
+    background-size:cover !important;
+    background-position:center center !important;
+    background-repeat:no-repeat !important;
+}
+
+/* Overlay */
+.hero::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:1;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(0,0,0,0.78) 0%,
+            rgba(0,0,0,0.35) 45%,
+            rgba(0,0,0,0.68) 100%
+        );
+}
+
+/* HERO CONTENT */
+.hero-content{
+    position:relative;
+    z-index:2;
+    width:100%;
+    max-width:780px;
+}
+
+/* EYEBROW */
+.hero-tag{
+    margin-bottom:18px;
+
+    font-size:11px;
+    font-weight:500;
+    letter-spacing:3px;
+    text-transform:uppercase;
+
+    color:rgba(255,255,255,0.72);
+}
+
+/* TITLE */
+.hero h1{
+    margin:0 0 22px;
+
+    font-size:clamp(52px, 6vw, 96px);
+    font-weight:300;
+    line-height:1.02;
+    letter-spacing:-1px;
+
+    color:#ffffff;
+}
+
+/* SUBTITLE */
+.hero p{
+    max-width:620px;
+    margin:0;
+
+    font-size:16px;
+    font-weight:400;
+    line-height:1.9;
+
+    color:rgba(255,255,255,0.78);
+}
+
+/* =========================================================
+   HERO END SENTINEL
+   Use this with IntersectionObserver to switch navbar state
+========================================================= */
+
+.hero-end-sentinel{
+    width:100%;
+    height:1px;
+}
+
+/* =========================================================
+   INTERIOR BODY LAYER
+========================================================= */
+
+.interior-body{
+    position:relative;
+    z-index:2;
+
+    background:#ffffff;
+    border-radius:38px 38px 0 0;
+
+    margin-top:-30px;
+    overflow:hidden;
+}
+
+/* =========================================================
+   NAVBAR STATE SUPPORT
+   Expected JS classes:
+   .navbar.on-hero  -> transparent on hero
+   .navbar.scrolled -> solid after hero
+========================================================= */
+
+.navbar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    z-index:999;
+
+    transition:
+        background-color 0.25s ease,
+        box-shadow 0.25s ease,
+        backdrop-filter 0.25s ease,
+        -webkit-backdrop-filter 0.25s ease;
+}
+
+.navbar.on-hero{
+    background:transparent;
+    box-shadow:none;
+    backdrop-filter:none;
+    -webkit-backdrop-filter:none;
+}
+
+.navbar.scrolled{
+    background:rgba(255,255,255,0.92);
+    box-shadow:0 10px 30px rgba(0,0,0,0.08);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+}
+
+/* =========================================================
+   LARGE DESKTOPS
+========================================================= */
+
+@media (min-width:1600px){
+    .hero{
+        padding:0 9vw;
+    }
+
+    .hero-content{
+        max-width:900px;
+    }
+
+    .hero p{
+        font-size:18px;
+    }
+}
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width:991px){
+    .hero{
+        padding:0 6vw;
+    }
+
+    .hero h1{
+        font-size:clamp(42px, 8vw, 72px);
+    }
+
+    .interior-body{
+        border-radius:30px 30px 0 0;
+    }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width:768px){
+    .hero{
+        min-height:92vh;
+        padding:0 5vw;
+        align-items:flex-end;
+    }
+
+    .hero-content{
+        padding-bottom:12vh;
+    }
+
+    .hero h1{
+        font-size:38px;
+        line-height:1.08;
+    }
+
+    .hero p{
+        font-size:15px;
+        line-height:1.75;
+    }
+
+    .hero-tag{
+        font-size:10px;
+        letter-spacing:2.5px;
+    }
+
+    .interior-body{
+        border-radius:24px 24px 0 0;
+        margin-top:-18px;
+    }
+}
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width:480px){
+    .hero h1{
+        font-size:32px;
+    }
+
+    .hero p{
+        font-size:14px;
+    }
+}

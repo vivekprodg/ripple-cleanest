@@ -1,0 +1,106 @@
+{% load static %}
+
+{% if quote_hero %}
+<section
+    class="rfq-hero"
+    {% if quote_hero.background_image or quote_hero.background_image_mobile or quote_hero.overlay_opacity or quote_hero.text_color or quote_hero.accent_color %}
+        style="
+            {% if quote_hero.background_image %}--rfq-hero-bg: url('{{ quote_hero.background_image.url }}');{% endif %}
+            {% if quote_hero.background_image_mobile %}--rfq-hero-bg-mobile: url('{{ quote_hero.background_image_mobile.url }}');{% endif %}
+            {% if quote_hero.overlay_opacity != None %}--rfq-hero-overlay: {{ quote_hero.overlay_opacity }};{% endif %}
+            {% if quote_hero.text_color %}--rfq-hero-text: {{ quote_hero.text_color }};{% endif %}
+            {% if quote_hero.accent_color %}--rfq-hero-accent: {{ quote_hero.accent_color }};{% endif %}
+        "
+    {% endif %}
+>
+
+    <div class="rfq-hero__content">
+
+        {% if quote_hero.badge_text %}
+        <div class="rfq-hero__badge">
+            {{ quote_hero.badge_text }}
+        </div>
+        {% endif %}
+
+        {% if quote_hero.title %}
+        <h1>
+            {{ quote_hero.title }}
+        </h1>
+        {% endif %}
+
+        {% if quote_hero.subtitle %}
+        <p>
+            {{ quote_hero.subtitle }}
+        </p>
+        {% endif %}
+
+        {% if quote_hero.meta_one or quote_hero.meta_two or quote_hero.meta_three %}
+        <div class="rfq-hero__meta">
+            {% if quote_hero.meta_one %}
+            <span>{{ quote_hero.meta_one }}</span>
+            {% endif %}
+
+            {% if quote_hero.meta_two %}
+            <span>{{ quote_hero.meta_two }}</span>
+            {% endif %}
+
+            {% if quote_hero.meta_three %}
+            <span>{{ quote_hero.meta_three }}</span>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {% if quote_hero.primary_button_text or quote_hero.secondary_button_text %}
+        <div class="rfq-hero__actions">
+
+            {% if quote_hero.primary_button_text %}
+            <a
+                {% if quote_hero.primary_button_link %}href="{{ quote_hero.primary_button_link }}"{% else %}href="#"{% endif %}
+                class="rfq-hero__button rfq-hero__button--solid"
+            >
+                {{ quote_hero.primary_button_text }}
+            </a>
+            {% endif %}
+
+            {% if quote_hero.secondary_button_text %}
+            <a
+                {% if quote_hero.secondary_button_link %}href="{{ quote_hero.secondary_button_link }}"{% else %}href="#"{% endif %}
+                class="rfq-hero__button"
+            >
+                {{ quote_hero.secondary_button_text }}
+            </a>
+            {% endif %}
+
+        </div>
+        {% endif %}
+
+    </div>
+
+    {% if quote_hero.visual_label or quote_hero.visual_title or quote_hero.visual_description %}
+    <div class="rfq-hero__visual">
+        <div class="rfq-hero__overlay-card">
+
+            {% if quote_hero.visual_label %}
+            <div class="label">
+                {{ quote_hero.visual_label }}
+            </div>
+            {% endif %}
+
+            {% if quote_hero.visual_title %}
+            <h3>
+                {{ quote_hero.visual_title }}
+            </h3>
+            {% endif %}
+
+            {% if quote_hero.visual_description %}
+            <p>
+                {{ quote_hero.visual_description }}
+            </p>
+            {% endif %}
+
+        </div>
+    </div>
+    {% endif %}
+
+</section>
+{% endif %}

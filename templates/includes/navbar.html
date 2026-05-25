@@ -1,0 +1,55 @@
+{% load static %}
+
+<!-- Font Awesome ONLY -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<!-- Hardcoded Navbar Font -->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<nav class="navbar navbar--transparent" id="globalNavbar">
+
+    <!-- LOGO -->
+    <div class="logo">
+        {% if logo and logo.logo %}
+            <a href="/">
+                <img src="{{ logo.logo.url }}" alt="RIPPLE Logo">
+            </a>
+        {% endif %}
+    </div>
+
+    <!-- NAVIGATION LINKS -->
+    <ul class="nav-links">
+        {% for item in nav_items %}
+            <li>
+                <a href="{{ item.url }}">
+                    {{ item.title }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <!-- MOBILE MENU -->
+    <button class="menu-toggle" type="button" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+
+    <!-- CTA -->
+    <div class="cta-section">
+
+        {% if nav_cta %}
+            <div class="btn-pill-wrapper">
+                <a href="{{ nav_cta.url }}" class="btn-pill">
+                    {{ nav_cta.title }}
+                </a>
+            </div>
+        {% endif %}
+
+        <div class="login-container">
+            <span class="login-icon">
+                <i class="fa-solid fa-user"></i>
+            </span>
+        </div>
+
+    </div>
+
+</nav>

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Projects | Ripple Architecture
+{% endblock %}
+
+{% block body_class %}
+has-hero projects-page
+{% endblock %} 
+
+{# =========================================================
+   PAGE-SPECIFIC CSS
+========================================================= #}
+{% block extra_css %}
+
+<link rel="stylesheet" href="{% static 'projects/css/project_hero.css' %}">
+<link rel="stylesheet" href="{% static 'projects/css/project_overall.css' %}">
+
+{% endblock %}
+
+{# =========================================================
+   PAGE CONTENT
+========================================================= #}
+{% block content %}
+
+<div class="projects-page-wrapper">
+
+    {# ================= HERO SECTION (CMS) ================= #}
+    {% include "projects/sections/project_hero.html" %}
+
+    {# ================= OVERALL PROJECT SECTION (CMS) ================= #}
+    {% include "projects/sections/project_overall.html" %}
+
+</div>
+
+{% endblock %}
+
+{# =========================================================
+   PAGE-SPECIFIC JS
+========================================================= #}
+{% block extra_js %}
+
+<script src="{% static 'projects/js/project_hero.js' %}" defer></script>
+<script src="{% static 'projects/js/project_overall.js' %}" defer></script>
+
+{% endblock %}

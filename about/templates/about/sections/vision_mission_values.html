@@ -1,0 +1,68 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'about/css/vision_mission_values.css' %}">
+
+<section class="pillars-section">
+
+    <h2 class="pillars-title">
+        {{ vmv.section_title|default:"Vision, Mission & Values" }}
+    </h2>
+
+    <div class="pillars-grid">
+
+        <!-- VISION -->
+        <div class="pillar-card vision">
+
+            <div class="pillar-icon">
+                <i class="{{ vmv.vision_icon|default:'fa-solid fa-eye' }}"></i>
+            </div>
+
+            <h3>
+                {{ vmv.vision_title|default:"Vision" }}
+            </h3>
+
+            <p>
+                {{ vmv.vision_text|default:"To shape timeless architectural experiences..." }}
+            </p>
+
+        </div>
+
+        <!-- MISSION -->
+        <div class="pillar-card mission">
+
+            <div class="pillar-icon">
+                <i class="{{ vmv.mission_icon|default:'fa-solid fa-compass' }}"></i>
+            </div>
+
+            <h3>
+                {{ vmv.mission_title|default:"Mission" }}
+            </h3>
+
+            <p>
+                {{ vmv.mission_text|default:"To deliver thoughtful, detail-driven architectural solutions..." }}
+            </p>
+
+        </div>
+
+        <!-- VALUES -->
+        <div class="pillar-card values">
+
+            <div class="pillar-icon">
+                <i class="{{ vmv.values_icon|default:'fa-solid fa-gem' }}"></i>
+            </div>
+
+            <h3>
+                {{ vmv.values_title|default:"Values" }}
+            </h3>
+
+            <p>
+                {{ vmv.values_text|default:"We believe in honesty, craftsmanship, innovation..." }}
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+<script src="{% static 'about/js/vision_mission_values.js' %}"></script>

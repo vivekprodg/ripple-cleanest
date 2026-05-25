@@ -1,0 +1,71 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'home/css/journal.css' %}">
+
+<section class="hp-journal">
+    <div class="hp-journal-container">
+
+        <header class="hp-journal-header hp-reveal">
+            <span>Curated Insights</span>
+            <h2>The Journal</h2>
+        </header>
+
+        <div class="hp-journal-grid">
+
+            {% for blog in homepage_blogs %}
+                {% if blog.slug %}
+                    <a href="{% url 'blogs:blog_detail' blog.slug %}"
+                       class="hp-journal-card hp-reveal">
+                {% else %}
+                    <div class="hp-journal-card hp-reveal hp-card-disabled">
+                {% endif %}
+
+                    <div class="hp-card-img">
+                        {% if blog.featured_image %}
+                            <img src="{{ blog.featured_image.url }}" alt="{{ blog.title }}">
+                        {% else %}
+                            <img src="{% static 'home/images/journal-placeholder.jpg' %}" alt="{{ blog.title }}">
+                        {% endif %}
+                    </div>
+
+                    <div class="hp-card-meta">
+                        {% if blog.category %}
+                            {% if blog.category.name %}
+                                {{ blog.category.name }}
+                            {% else %}
+                                {{ blog.category }}
+                            {% endif %}
+                        {% else %}
+                            Uncategorized
+                        {% endif %}
+                        &bull;
+                        {{ forloop.counter|stringformat:"02d" }}
+                    </div>
+
+                    <h3>{{ blog.title }}</h3>
+
+                    <span class="hp-card-link">
+                        {% if blog.slug %}
+                            Explore
+                        {% else %}
+                            Coming Soon
+                        {% endif %}
+                    </span>
+
+                {% if blog.slug %}
+                    </a>
+                {% else %}
+                    </div>
+                {% endif %}
+            {% empty %}
+                <div class="hp-journal-empty hp-reveal">
+                    <p>No journal articles available at the moment.</p>
+                </div>
+            {% endfor %}
+
+        </div>
+
+    </div>
+</section>
+
+<script src="{% static 'home/js/journal.js' %}"></script>

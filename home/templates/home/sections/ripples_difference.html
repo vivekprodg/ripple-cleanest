@@ -1,0 +1,68 @@
+{% load static %}
+
+{% if ripple_difference and ripple_difference.is_active %}
+<section class="features-section">
+    <div class="features-container">
+        <div class="features-grid">
+
+            <div class="feature-text">
+                <h5>{{ ripple_difference.subtitle }}</h5>
+                <h2>{{ ripple_difference.heading }}</h2>
+
+                <p class="section-desc">
+                    {{ ripple_difference.description }}
+                </p>
+
+                <div class="features-list">
+                    <div class="feature-item">
+                        <div class="feature-icon-box" style="background-color: #111;">
+                            <i class="fa-solid fa-pen-ruler"></i>
+                        </div>
+                        <div class="feature-info">
+                            <h4>{{ ripple_difference.feature_one_title }}</h4>
+                            <p>{{ ripple_difference.feature_one_description }}</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-icon-box" style="background-color: var(--accent);">
+                            <i class="fa-solid fa-leaf"></i>
+                        </div>
+                        <div class="feature-info">
+                            <h4>{{ ripple_difference.feature_two_title }}</h4>
+                            <p>{{ ripple_difference.feature_two_description }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="feature-actions">
+                    <a href="{{ ripple_difference.button_url }}" class="btn btn--primary">
+                        {{ ripple_difference.button_text }}
+                    </a>
+                </div>
+            </div>
+
+            <div class="feature-images-wrapper">
+
+                {% if ripple_difference.main_image %}
+                    <img
+                        src="{{ ripple_difference.main_image.url }}"
+                        class="main-feature-img"
+                        alt="{{ ripple_difference.feature_one_title }}"
+                    >
+                {% endif %}
+
+                {% if ripple_difference.secondary_image %}
+                    <img
+                        src="{{ ripple_difference.secondary_image.url }}"
+                        class="secondary-feature-img"
+                        alt="{{ ripple_difference.feature_two_title }}"
+                    >
+                {% endif %}
+
+            </div>
+
+        </div>
+    </div>
+</section>
+{% endif %}

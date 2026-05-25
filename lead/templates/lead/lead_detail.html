@@ -1,0 +1,486 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    {{ lead_page_title|default:"Lead Detail | Ripple CRM" }}
+{% endblock %}
+
+{% block body_class %}
+    {{ lead_body_class|default:"lead-page lead-detail-page" }}
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'lead/css/lead.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<main class="lead-page">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="sidebar-header">
+            <h2>
+                {{ sidebar_brand_name|default:"Ripple" }}
+                <span>{{ sidebar_brand_accent|default:"CRM" }}</span>
+            </h2>
+        </div>
+
+        <div class="sidebar-meta">
+            {{ sidebar_meta_line_1|default:"Unified lead management system" }}<br>
+            {{ sidebar_meta_line_2|default:"RFQ • Contact • Campaigns • Ads" }}<br>
+            {{ sidebar_meta_line_3|default:"Internal dashboard only" }}
+        </div>
+
+        <ul class="nav-links">
+            <li>
+                <a href="{% url 'lead:lead_list' %}">
+                    <i class="fas fa-columns"></i> {{ nav_board_label|default:"Lead Board" }}
+                </a>
+            </li>
+
+            <li class="active">
+                <i class="fas fa-user"></i> {{ nav_detail_label|default:"Lead Detail" }}
+            </li>
+
+            <li>
+                <i class="fas fa-users"></i> {{ nav_contacts_label|default:"All Contacts" }}
+            </li>
+
+            <li>
+                <i class="fas fa-chart-line"></i> {{ nav_analytics_label|default:"Analytics" }}
+            </li>
+
+            <li>
+                <i class="fas fa-cog"></i> {{ nav_settings_label|default:"Settings" }}
+            </li>
+        </ul>
+
+        <div class="sidebar-footer">
+            {{ sidebar_footer_text|default:"Centralized CRM for all inbound leads" }}
+        </div>
+
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main-content">
+
+        <!-- HEADER -->
+        <header class="top-header">
+
+            <div class="header-left">
+                <h1>{{ page_heading|default:"Lead Detail" }}</h1>
+
+                <p>
+                    {{ page_subheading|default:"Unified lead profile, engagement tracking, and internal CRM management." }}
+                </p>
+            </div>
+
+            <div class="header-actions">
+
+                <a class="btn btn-secondary" href="{% url 'lead:lead_list' %}">
+                    <i class="fas fa-arrow-left"></i>
+                    {{ back_label|default:"Back" }}
+                </a>
+
+                <button class="btn btn-primary" onclick="window.print()">
+                    <i class="fas fa-print"></i>
+                    {{ print_label|default:"Print" }}
+                </button>
+
+            </div>
+
+        </header>
+
+        <!-- DASHBOARD -->
+        <section class="dashboard">
+
+            <div class="content-area">
+
+                <!-- SUMMARY -->
+                <div class="summary-grid">
+
+                    <div class="summary-card">
+                        <div class="label">
+                            {{ label_status|default:"Status" }}
+                        </div>
+
+                        <div class="value">
+                            {{ lead.status_label }}
+                        </div>
+
+                        <div class="sub">
+                            {{ lead_status_sub|default:"Current pipeline stage" }}
+                        </div>
+                    </div>
+
+                    <div class="summary-card">
+                        <div class="label">
+                            {{ label_priority|default:"Priority" }}
+                        </div>
+
+                        <div class="value">
+                            {{ lead.priority_label }}
+                        </div>
+
+                        <div class="sub">
+                            {{ lead_priority_sub|default:"Follow-up urgency" }}
+                        </div>
+                    </div>
+
+                    <div class="summary-card">
+                        <div class="label">
+                            {{ label_source|default:"Source" }}
+                        </div>
+
+                        <div class="value">
+                            {{ lead.source_label }}
+                        </div>
+
+                        <div class="sub">
+                            {{ lead_source_sub|default:"Lead acquisition channel" }}
+                        </div>
+                    </div>
+
+                    <div class="summary-card">
+                        <div class="label">
+                            {{ label_budget|default:"Budget" }}
+                        </div>
+
+                        <div class="value">
+                            {{ lead.budget|default:"-" }}
+                        </div>
+
+                        <div class="sub">
+                            {{ lead_budget_sub|default:"Estimated project investment" }}
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- DETAIL LAYOUT -->
+                <div class="lead-detail-layout">
+
+                    <!-- MAIN COLUMN -->
+                    <section class="lead-detail-main">
+
+                        <!-- HERO CARD -->
+                        <div class="detail-card detail-hero-card">
+
+                            <div class="detail-hero-top">
+
+                                <div class="detail-client">
+
+                                    <img
+                                        src="{% if lead.avatar %}{{ lead.avatar }}{% else %}https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80{% endif %}"
+                                        class="avatar"
+                                        alt="Lead Avatar"
+                                    >
+
+                                    <div>
+                                        <h2>{{ lead.display_name }}</h2>
+                                        <p>{{ lead.display_email }}</p>
+                                    </div>
+
+                                </div>
+
+                                <div class="detail-badges">
+
+                                    <span class="status-badge status-{{ lead.status }}">
+                                        {{ lead.status_label }}
+                                    </span>
+
+                                    <span class="priority-badge priority-{{ lead.priority }}">
+                                        {{ lead.priority_label }}
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                            <div class="detail-hero-grid">
+
+                                <div class="detail-field">
+                                    <span class="k">{{ field_phone|default:"Phone" }}</span>
+                                    <span class="v">{{ lead.phone|default:"-" }}</span>
+                                </div>
+
+                                <div class="detail-field">
+                                    <span class="k">{{ field_project|default:"Project Type" }}</span>
+                                    <span class="v">{{ lead.project|default:"-" }}</span>
+                                </div>
+
+                                <div class="detail-field">
+                                    <span class="k">{{ field_location|default:"Location" }}</span>
+                                    <span class="v">{{ lead.location|default:"-" }}</span>
+                                </div>
+
+                                <div class="detail-field">
+                                    <span class="k">{{ field_timeline|default:"Timeline" }}</span>
+                                    <span class="v">{{ lead.timeline|default:"-" }}</span>
+                                </div>
+
+                                <div class="detail-field">
+                                    <span class="k">{{ field_type|default:"Lead Type" }}</span>
+                                    <span class="v">{{ lead.lead_type_label }}</span>
+                                </div>
+
+                                <div class="detail-field">
+                                    <span class="k">{{ field_source|default:"Source" }}</span>
+                                    <span class="v">{{ lead.source_label }}</span>
+                                </div>
+
+                                <div class="detail-field">
+                                    <span class="k">{{ field_created|default:"Created" }}</span>
+                                    <span class="v">
+                                        {{ lead.created_at|date:"M d, Y" }}
+                                    </span>
+                                </div>
+
+                                <div class="detail-field">
+                                    <span class="k">{{ field_updated|default:"Last Updated" }}</span>
+                                    <span class="v">
+                                        {{ lead.updated_at|date:"M d, Y" }}
+                                    </span>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- PROJECT BRIEF -->
+                        <div class="detail-card">
+
+                            <div class="detail-card-header">
+                                <h3>{{ brief_title|default:"Project Brief" }}</h3>
+                            </div>
+
+                            <div class="detail-content">
+                                {{ lead.vision_narrative|default:"No detailed project brief provided." }}
+                            </div>
+
+                        </div>
+
+                        <!-- INTERNAL NOTES -->
+                        <div class="detail-card">
+
+                            <div class="detail-card-header">
+                                <h3>{{ notes_title|default:"Internal Notes" }}</h3>
+                            </div>
+
+                            <div class="detail-content">
+                                {{ lead.notes|default:"No notes added yet." }}
+                            </div>
+
+                        </div>
+
+                        <!-- TAGS -->
+                        <div class="detail-card">
+
+                            <div class="detail-card-header">
+                                <h3>{{ tags_title|default:"Tags" }}</h3>
+                            </div>
+
+                            <div class="tag-row">
+
+                                {% for tag in lead.tags_list %}
+                                    <span class="tag">{{ tag }}</span>
+                                {% empty %}
+                                    <span class="tag">Lead</span>
+                                {% endfor %}
+
+                            </div>
+
+                        </div>
+
+                        <!-- TIMELINE -->
+                        <div class="detail-card">
+
+                            <div class="detail-card-header">
+                                <h3>{{ timeline_title|default:"Activity Timeline" }}</h3>
+                            </div>
+
+                            <div class="timeline-list">
+
+                                <div class="timeline-item">
+                                    <div class="timeline-content">
+                                        <strong>{{ timeline_step_1|default:"Lead captured" }}</strong>
+
+                                        <p>
+                                            {{ timeline_desc_1|default:"Lead entered the unified Ripple CRM pipeline." }}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="timeline-item">
+                                    <div class="timeline-content">
+                                        <strong>{{ timeline_step_2|default:"Qualification review" }}</strong>
+
+                                        <p>
+                                            {{ timeline_desc_2|default:"Internal team reviewed project fit and scope." }}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="timeline-item">
+                                    <div class="timeline-content">
+                                        <strong>{{ timeline_step_3|default:"Follow-up planning" }}</strong>
+
+                                        <p>
+                                            {{ timeline_desc_3|default:"Next communication or proposal action prepared." }}
+                                        </p>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+                    <!-- SIDE COLUMN -->
+                    <aside class="lead-detail-side">
+
+                        <!-- ACTIONS -->
+                        <div class="detail-card sticky-card">
+
+                            <div class="detail-card-header">
+                                <h3>{{ actions_title|default:"Actions" }}</h3>
+                            </div>
+
+                            <div class="detail-actions">
+
+                                <button class="btn btn-primary" type="button">
+                                    <i class="fas fa-phone"></i>
+                                    {{ action_call|default:"Call" }}
+                                </button>
+
+                                <button class="btn btn-secondary" type="button">
+                                    <i class="fas fa-envelope"></i>
+                                    {{ action_email|default:"Email" }}
+                                </button>
+
+                                <button class="btn btn-secondary" type="button">
+                                    <i class="fas fa-calendar"></i>
+                                    {{ action_schedule|default:"Schedule" }}
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <!-- UPDATE -->
+                        <div class="detail-card">
+
+                            <div class="detail-card-header">
+                                <h3>{{ update_title|default:"Update Lead" }}</h3>
+                            </div>
+
+                            <form method="post">
+
+                                {% csrf_token %}
+
+                                <label>Status</label>
+
+                                <select name="status">
+                                    {% for value, label in lead_statuses %}
+                                        <option
+                                            value="{{ value }}"
+                                            {% if lead.status == value %}selected{% endif %}
+                                        >
+                                            {{ label }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+
+                                <label>Priority</label>
+
+                                <select name="priority">
+                                    {% for value, label in lead_priorities %}
+                                        <option
+                                            value="{{ value }}"
+                                            {% if lead.priority == value %}selected{% endif %}
+                                        >
+                                            {{ label }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+
+                                <label>Source</label>
+
+                                <select name="source">
+                                    {% for value, label in lead_sources %}
+                                        <option
+                                            value="{{ value }}"
+                                            {% if lead.source == value %}selected{% endif %}
+                                        >
+                                            {{ label }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+
+                                <label>Notes</label>
+
+                                <textarea name="notes">{{ lead.notes }}</textarea>
+
+                                <button class="btn btn-primary" type="submit">
+                                    {{ save_label|default:"Save Changes" }}
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                        <!-- LEAD META -->
+                        <div class="detail-card">
+
+                            <div class="detail-card-header">
+                                <h3>{{ metadata_title|default:"Lead Metadata" }}</h3>
+                            </div>
+
+                            <div class="detail-hero-grid">
+
+                                <div class="detail-field">
+                                    <span class="k">Source Type</span>
+                                    <span class="v">{{ lead.source_label }}</span>
+                                </div>
+
+                                <div class="detail-field">
+                                    <span class="k">Pipeline</span>
+                                    <span class="v">Unified Lead System</span>
+                                </div>
+
+                                <div class="detail-field">
+                                    <span class="k">Lead Category</span>
+                                    <span class="v">{{ lead.lead_type_label }}</span>
+                                </div>
+
+                                <div class="detail-field">
+                                    <span class="k">RFQ Entry</span>
+                                    <span class="v">
+                                        {% if lead.source == "rfq" %}
+                                            Yes
+                                        {% else %}
+                                            No
+                                        {% endif %}
+                                    </span>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </aside>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</main>
+
+{% endblock %}

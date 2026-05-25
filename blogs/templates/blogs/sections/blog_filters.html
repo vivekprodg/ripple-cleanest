@@ -1,0 +1,48 @@
+{% load static %}
+
+<section class="blog-filters">
+
+    <div class="container">
+
+        <!-- FILTER BAR -->
+        <div class="categories" id="blogFilter">
+
+            <button class="active" data-filter="all">
+                All
+            </button>
+
+            {% for category in categories %}
+
+                <button data-filter="{{ category.slug|default:'category' }}">
+                    {{ category.name|default:"Unnamed Category" }}
+                </button>
+
+            {% empty %}
+
+                <button data-filter="architecture">
+                    Architecture
+                </button>
+
+                <button data-filter="interiors">
+                    Interiors
+                </button>
+
+                <button data-filter="materials">
+                    Materials
+                </button>
+
+                <button data-filter="sustainability">
+                    Sustainability
+                </button>
+
+                <button data-filter="studio">
+                    Studio Notes
+                </button>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>

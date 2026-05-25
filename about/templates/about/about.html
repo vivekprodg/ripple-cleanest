@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    {{ page.page_title|default:"About Us" }} | Ripple
+{% endblock %}
+
+{% block body_class %}
+has-hero about-page
+{% endblock %}
+
+{% block content %}
+
+<!-- =========================================================
+     ABOUT PAGE STYLES
+========================================================= -->
+<link rel="stylesheet" href="{% static 'about/css/overview.css' %}">
+<link rel="stylesheet" href="{% static 'about/css/vision_mission_values.css' %}">
+<link rel="stylesheet" href="{% static 'about/css/key_stats.css' %}">
+<link rel="stylesheet" href="{% static 'about/css/our_team.css' %}">
+<link rel="stylesheet" href="{% static 'about/css/associated_with.css' %}">
+
+
+<main class="about-page-wrapper">
+
+    <!-- =========================================================
+         HERO SECTION
+    ========================================================== -->
+    {% if hero.is_active %}
+        {% include "about/sections/about_hero.html" %}
+    {% endif %}
+
+
+    <!-- =========================================================
+         OVERVIEW SECTION
+    ========================================================== -->
+    {% if overview.is_active %}
+        {% include "about/sections/overview.html" %}
+    {% endif %}
+
+
+    <!-- =========================================================
+         VISION / MISSION / VALUES
+    ========================================================== -->
+    {% if vision_mission_values and vision_mission_values.is_active %}
+        {% include "about/sections/vision_mission_values.html" with vmv=vision_mission_values %}
+    {% endif %}
+
+
+    <!-- =========================================================
+         KEY STATS SECTION
+    ========================================================== -->
+    {% if key_stats and key_stats.is_active %}
+        {% include "about/sections/key_stats.html" with stats=key_stats %}
+    {% endif %}
+
+
+    <!-- =========================================================
+         OUR TEAM SECTION (🔥 FIXED POSITION - BEFORE ASSOCIATED WITH)
+    ========================================================== -->
+    {% include "about/sections/our_team.html" %}
+
+
+    <!-- =========================================================
+         ASSOCIATED WITH SECTION
+    ========================================================== -->
+    {% if associated_with and associated_with.is_active %}
+        {% include "about/sections/associated_with.html" %}
+    {% endif %}
+
+</main>
+
+
+<!-- =========================================================
+     SCRIPTS
+========================================================= -->
+<script src="{% static 'about/js/overview.js' %}" defer></script>
+<script src="{% static 'about/js/vision_mission_values.js' %}" defer></script>
+<script src="{% static 'about/js/key_stats.js' %}" defer></script>
+<script src="{% static 'about/js/our_team.js' %}" defer></script>
+<script src="{% static 'about/js/associated_with.js' %}" defer></script>
+
+{% endblock %}

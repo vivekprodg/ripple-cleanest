@@ -1,0 +1,45 @@
+{% load static %}
+
+<!-- =========================================================
+     INTERIOR HERO (CMS DRIVEN + NAVBAR TRACKING FIX)
+========================================================= -->
+
+<section
+    class="hero"
+    id="interiorHero"
+    data-navbar-hero
+    aria-label="Interior Hero"
+
+    {% if hero.background_image %}
+        style="background-image: url('{{ hero.background_image.url }}');"
+    {% endif %}
+>
+
+    <!-- =====================================================
+         HERO CONTENT
+    ====================================================== -->
+    <div class="hero-content">
+
+        {% if hero.eyebrow %}
+            <div class="hero-tag">
+                {{ hero.eyebrow }}
+            </div>
+        {% endif %}
+
+        {% if hero.title %}
+            <h1>
+                {{ hero.title }}
+            </h1>
+        {% endif %}
+
+        {% if hero.subtitle %}
+            <p>
+                {{ hero.subtitle }}
+            </p>
+        {% endif %}
+
+    </div>
+
+</section>
+
+<div class="hero-end-sentinel"></div>

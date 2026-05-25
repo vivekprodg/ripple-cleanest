@@ -1,0 +1,197 @@
+<div class="project-page">
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <div class="sidebar">
+
+        <div class="label">Status</div>
+
+        <!-- DYNAMIC STATUS FILTER -->
+        <button class="btn active" data-status="all">
+            All
+        </button>
+
+        {% for status in statuses %}
+            <button
+                class="btn"
+                data-status="{{ status.slug }}"
+            >
+                {{ status.name }}
+            </button>
+        {% endfor %}
+
+        <div class="label">Category</div>
+
+        <!-- DYNAMIC CATEGORY FILTER -->
+        <button class="btn cat active" data-cat="all">
+            All
+        </button>
+
+        {% for cat in categories %}
+            <button
+                class="btn cat"
+                data-cat="{{ cat.slug }}"
+            >
+                {{ cat.name }}
+            </button>
+        {% endfor %}
+
+    </div>
+
+    <!-- ================= RIGHT AREA ================= -->
+
+    <div class="right">
+
+        <!-- ================= GRID ================= -->
+
+        <div class="grid" id="grid">
+
+            {% for project in projects %}
+
+                <div
+                    class="card"
+
+                    data-status="{{ project.status.slug|default:'all' }}"
+                    data-cat="{{ project.category.slug|default:'uncategorized' }}"
+
+                    data-title="{{ project.title|default:'' }}"
+                    data-client="{{ project.client|default:'' }}"
+                    data-date="{{ project.date|default:'' }}"
+                    data-category="{{ project.category.name|default:'' }}"
+                    data-subcategory="{{ project.subcategory.name|default:'' }}"
+                    data-desc="{{ project.description|default:'' }}"
+
+                    data-img="{% if project.image %}{{ project.image.url }}{% endif %}"
+                >
+
+                    <!-- ================= CARD IMAGE ================= -->
+
+                    <div class="card-img">
+
+                        {% if project.image %}
+                            <img
+                                src="{{ project.image.url }}"
+                                alt="{{ project.title }}"
+                            >
+                        {% endif %}
+
+                        <!-- TITLE INSIDE IMAGE -->
+                        <div class="card-title">
+                            {{ project.title }}
+                        </div>
+
+                    </div>
+
+                </div>
+
+            {% empty %}
+
+                <p style="grid-column:1/-1;color:#888;">
+                    No projects found.
+                </p>
+
+            {% endfor %}
+
+        </div>
+
+        <!-- ================= DETAIL VIEW ================= -->
+
+        <div class="detail" id="detail">
+
+            <div class="back" onclick="back()">
+                ← Back
+            </div>
+
+            <div class="detail-wrap">
+
+                <!-- ================= LEFT ================= -->
+
+                <div>
+
+                    <!-- FEATURED IMAGE -->
+                    <div class="detail-media">
+
+                        <img
+                            id="img"
+                            alt="Project Image"
+                        >
+
+                    </div>
+
+                    <!-- ================= GALLERY ================= -->
+
+                    <div class="project-gallery">
+
+                        {% for project in projects %}
+
+                            <div
+                                class="gallery-set"
+                                data-gallery="{{ project.id }}"
+                                style="display:none;"
+                            >
+
+                                {% for gallery in project.gallery_images.all %}
+
+                                    {% if gallery.image %}
+
+                                        <div class="gallery-item">
+
+                                            <img
+                                                src="{{ gallery.image.url }}"
+                                                alt="{{ gallery.title }}"
+                                            >
+
+                                        </div>
+
+                                    {% endif %}
+
+                                {% endfor %}
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+                <!-- ================= RIGHT ================= -->
+
+                <div class="meta">
+
+                    <h1 id="title"></h1>
+
+                    <div>
+                        <b>Client:</b>
+                        <span id="client"></span>
+                    </div>
+
+                    <div>
+                        <b>Date:</b>
+                        <span id="date"></span>
+                    </div>
+
+                    <div>
+                        <b>Category:</b>
+                        <span id="category"></span>
+                    </div>
+
+                    <div>
+                        <b>Subcategory:</b>
+                        <span id="subcategory"></span>
+                    </div>
+
+                    <div
+                        class="desc"
+                        id="desc"
+                    ></div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

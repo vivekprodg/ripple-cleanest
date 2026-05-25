@@ -1,0 +1,257 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Request a Quote | Ripple Architecture
+{% endblock %}
+
+{% block body_class %}
+has-hero quote-rfq-page
+{% endblock %}
+
+{% block extra_css %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'quote/css/quote_hero.css' %}">
+<link rel="stylesheet" href="{% static 'quote/css/request_quote.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{% include 'quote/sections/quote_hero.html' %}
+
+<div class="wrapper">
+
+    <!-- LEFT PANEL -->
+    <aside class="intro-column" aria-label="RFQ introduction">
+
+        <div class="brand-identity">
+            Ripple Architecture
+        </div>
+
+        <div class="hero-statement">
+            <h1>
+                Sculpting spaces <br>
+                with rigorous intent.
+            </h1>
+
+            <p>
+                Please furnish the core parameters of your project. Our studio reviews every comprehensive brief to analyze site feasibility and design alignment.
+            </p>
+        </div>
+
+        <div class="footer-note">
+            Strictly Confidential<br>
+            Architecture Commission Office
+        </div>
+
+    </aside>
+
+    <!-- RIGHT PANEL -->
+    <section class="form-column" aria-label="Request quote form">
+
+        <form method="POST" action="{% url 'quote:submit' %}" id="comprehensive-rfq" novalidate>
+            {% csrf_token %}
+
+            <!-- SECTION 01 -->
+            <div class="form-segment">
+
+                <span class="segment-num">01</span>
+                <h2 class="segment-title">Project Identity &amp; Location</h2>
+
+                <div class="field-row">
+
+                    <div class="field-group">
+                        <label class="field-label" for="typology">Project Typology</label>
+                        <select class="field-input" id="typology" name="typology" required>
+                            <option value="" disabled selected>Select typology...</option>
+                            {% for option in typologies %}
+                                <option value="{{ option.value }}">{{ option.label }}</option>
+                            {% empty %}
+                                <option value="" disabled>No typology options available</option>
+                            {% endfor %}
+                        </select>
+                        <span class="err-msg">Please assign a project type.</span>
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label" for="site_status">Current Site Status</label>
+                        <select class="field-input" id="site_status" name="site_status" required>
+                            <option value="" disabled selected>Select site condition...</option>
+                            {% for option in site_statuses %}
+                                <option value="{{ option.value }}">{{ option.label }}</option>
+                            {% empty %}
+                                <option value="" disabled>No site status options available</option>
+                            {% endfor %}
+                        </select>
+                        <span class="err-msg">Please specify site status.</span>
+                    </div>
+
+                </div>
+
+                <div class="field-row">
+
+                    <div class="field-group">
+                        <label class="field-label" for="location">Geographic Location</label>
+                        <input type="text" class="field-input" id="location" name="location" placeholder="Kathmandu, Nepal">
+                        <span class="err-msg">A destination footprint is required.</span>
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label" for="scale">Approximate Scale (Sq. Ft / Sq. M)</label>
+                        <input type="text" class="field-input" id="scale" name="scale" placeholder="e.g., 12,000 sq ft">
+                        <span class="err-msg">Please estimate spatial scale.</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- SECTION 02 -->
+            <div class="form-segment">
+
+                <span class="segment-num">02</span>
+                <h2 class="segment-title">Required Engagements</h2>
+
+                <div class="field-group full-width">
+                    <label class="field-label" for="services">Scope of Services</label>
+                    <select class="field-input" id="services" name="services" required>
+                        <option value="" disabled selected>Select primary design service...</option>
+                        {% for option in services %}
+                            <option value="{{ option.value }}">{{ option.label }}</option>
+                        {% empty %}
+                            <option value="" disabled>No service options available</option>
+                        {% endfor %}
+                    </select>
+                    <span class="err-msg">Please assign an engagement scope.</span>
+                </div>
+
+                <div class="field-group full-width">
+                    <label class="field-label" for="vision_narrative">The Architectural Vision Brief</label>
+                    <textarea
+                        class="field-input"
+                        id="vision_narrative"
+                        name="vision_narrative"
+                        placeholder="Describe the topography, light expectations, primary spatial flow, and material philosophies you wish to explore..."></textarea>
+                    <span class="err-msg">Please communicate your basic programmatic vision.</span>
+                </div>
+
+            </div>
+
+            <!-- SECTION 03 -->
+            <div class="form-segment">
+
+                <span class="segment-num">03</span>
+                <h2 class="segment-title">Investment &amp; Timeline</h2>
+
+                <div class="field-row">
+
+                    <div class="field-group">
+                        <label class="field-label" for="budget">Target Investment Allocation (NPR)</label>
+                        <select class="field-input" id="budget" name="budget" required>
+                            <option value="" disabled selected>Select value asset scale...</option>
+                            {% for option in budgets %}
+                                <option value="{{ option.value }}">{{ option.label }}</option>
+                            {% empty %}
+                                <option value="" disabled>No budget options available</option>
+                            {% endfor %}
+                        </select>
+                        <span class="err-msg">An asset tier selection assists design logic pairing.</span>
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label" for="timeline">Target Occupancy Year</label>
+                        <input type="text" class="field-input" id="timeline" name="timeline" placeholder="e.g., Late 2027">
+                        <span class="err-msg">Please designate a target timeline.</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- SECTION 04 -->
+            <div class="form-segment">
+
+                <span class="segment-num">04</span>
+                <h2 class="segment-title">Principal Contact Credentials</h2>
+
+                <div class="field-group full-width">
+                    <label class="field-label" for="principal_name">Principal Name / Representing Entity</label>
+                    <input
+                        type="text"
+                        class="field-input"
+                        id="principal_name"
+                        name="principal_name"
+                        placeholder="Sterling Family Office / Lord Sterling"
+                        required>
+                    <span class="err-msg">The identity of the principal contact is mandatory.</span>
+                </div>
+
+                <div class="field-row">
+
+                    <div class="field-group">
+                        <label class="field-label" for="principal_email">Confidential Email Address</label>
+                        <input
+                            type="email"
+                            class="field-input"
+                            id="principal_email"
+                            name="principal_email"
+                            placeholder="principal@sterling.com"
+                            required>
+                        <span class="err-msg">A valid secure email address is required.</span>
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label" for="principal_phone">Direct Secure Voice Line</label>
+                        <input
+                            type="tel"
+                            class="field-input"
+                            id="principal_phone"
+                            name="principal_phone"
+                            placeholder="+977 980-0000000"
+                            required>
+                        <span class="err-msg">A voice authorization endpoint is required.</span>
+                    </div>
+
+                </div>
+
+                <div class="field-group full-width">
+                    <label class="field-label" for="referral">How did you discover our studio?</label>
+                    <select class="field-input" id="referral" name="referral">
+                        <option value="" disabled selected>Select source option (Optional)...</option>
+                        {% for option in referrals %}
+                            <option value="{{ option.value }}">{{ option.label }}</option>
+                        {% empty %}
+                            <option value="" disabled>No referral options available</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+            </div>
+
+            <!-- SUBMIT -->
+            <div class="submit-container">
+                <button type="submit" class="action-button" id="submit-brief">
+                    Transmit Architecture Brief
+                </button>
+            </div>
+
+        </form>
+
+    </section>
+
+</div>
+
+<!-- SUCCESS SCREEN -->
+<div class="success-screen" id="success-screen">
+    <h2>Brief Secured.</h2>
+    <p>A designated Studio Partner will initiate direct coordination within 24 hours.</p>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'quote/js/quote_hero.js' %}" defer></script>
+<script src="{% static 'quote/js/request_quote.js' %}" defer></script>
+{% endblock %}

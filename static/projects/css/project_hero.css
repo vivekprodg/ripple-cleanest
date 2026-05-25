@@ -1,0 +1,106 @@
+/* =========================================================
+   HERO BASE
+========================================================= */
+.project-hero{
+    position: relative;
+    min-height: 85vh;
+    display: flex;
+    will-change: transform;
+    align-items: center;
+    padding: 120px 5vw 90px;
+    overflow: hidden;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+
+    /* ================= CMS IMAGE SUPPORT ================= */
+    background-image: var(--hero-image);
+    background-size: cover;
+    background-position: center 30%;
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+
+    /* ================= FALLBACK COLOR ================= */
+    background-color: #111111;
+}
+
+/* =========================================================
+   HERO OVERLAY
+========================================================= */
+.project-hero__overlay{
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+
+    /* =====================================================
+       DEFAULT FALLBACK OVERLAY
+       CMS CAN OVERRIDE INLINE
+    ===================================================== */
+    background: linear-gradient(
+        rgba(0, 0, 0, 0.58),
+        rgba(0, 0, 0, 0.58)
+    );
+}
+
+/* =========================================================
+   HERO CONTENT WRAPPER
+========================================================= */
+.project-hero__content{
+    position: relative;
+    z-index: 2;
+    max-width: 720px;
+}
+
+/* =========================================================
+   HERO TITLE
+========================================================= */
+.project-hero__title{
+    font-size: clamp(46px, 7vw, 96px);
+    line-height: 1;
+    font-weight: 300;
+    letter-spacing: -0.5px;
+    color: #ffffff;
+    margin-bottom: 24px;
+}
+
+/* =========================================================
+   HERO DESCRIPTION
+========================================================= */
+.project-hero__description{
+    max-width: 580px;
+    font-size: 15px;
+    line-height: 1.9;
+    color: rgba(255, 255, 255, 0.84);
+}
+
+/* =========================================================
+   RESPONSIVE DESIGN
+========================================================= */
+@media (max-width: 768px){
+    .project-hero{
+        min-height: 55vh;
+        padding: 100px 7vw 70px;
+        background-attachment: scroll;
+    }
+
+    .project-hero__title{
+        font-size: 52px;
+    }
+
+    .project-hero__description{
+        font-size: 14px;
+        line-height: 1.8;
+    }
+
+}
+
+@media (max-width: 480px){
+
+    .project-hero__title{
+        font-size: 40px;
+    }
+
+    .project-hero__description{
+        font-size: 13px;
+    }
+
+}

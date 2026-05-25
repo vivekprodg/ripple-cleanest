@@ -1,0 +1,443 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600&family=Jost:wght@300;400;500;600&family=Poppins:wght@300;400;500;600&display=swap');
+
+/* =========================================================
+   OUR TEAM SECTION
+   RIPPLE TYPOGRAPHY SYSTEM
+========================================================= */
+
+:root {
+    --bg: #ffffff;
+    --text-dark: #111111;
+    --text-muted: #777777;
+    --accent: #111111;
+
+    --font-heading: 'Jost', sans-serif;
+    --font-body: 'Montserrat', sans-serif;
+
+    --transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* =========================================================
+   FONT BASE
+========================================================= */
+
+body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text-dark);
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* =========================================================
+   SECTION WRAPPER
+========================================================= */
+
+.team-section {
+    padding: 48px 64px;
+
+    max-width: 1800px;
+    margin: 0 auto;
+
+    background: var(--bg);
+    color: var(--text-dark);
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.team-header {
+    margin-bottom: 32px;
+}
+
+/* Eyebrow → matches feature-text h5 */
+
+.team-header .eyebrow {
+    display: block;
+
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    line-height: 1.2;
+
+    color: var(--text-dark);
+
+    margin-bottom: 15px;
+}
+
+/* Heading → matches feature-text h2 */
+
+.team-header h2 {
+    font-family: var(--font-heading);
+    font-size: 1.75rem;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    text-transform: none;
+    line-height: 1.08;
+
+    color: var(--text-dark);
+
+    margin: 0;
+}
+
+/* =========================================================
+   PASSPORT WRAPPER
+========================================================= */
+
+.passport-wrapper {
+    width: 100%;
+    overflow: hidden;
+}
+
+.passport-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    gap: 16px;
+    width: 100%;
+}
+
+/* =========================================================
+   MEMBER CARD
+========================================================= */
+
+.member-card {
+    flex: 1 1 0;
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    cursor: pointer;
+
+    transition: transform 0.3s ease;
+}
+
+.member-card:hover {
+    transform: translateY(-5px);
+}
+
+/* =========================================================
+   IMAGE CONTAINER
+========================================================= */
+
+.image-container {
+    position: relative;
+
+    width: 100%;
+    aspect-ratio: 3 / 4;
+
+    overflow: hidden;
+
+    background: #f4f4f4;
+
+    margin-bottom: 16px;
+
+    transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.image-container img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    object-position: center;
+
+    display: block;
+
+    filter: grayscale(1) contrast(1.1);
+
+    transition:
+        filter 0.8s cubic-bezier(0.19, 1, 0.22, 1),
+        transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.member-card:hover .image-container {
+    transform: translateY(-5px);
+}
+
+.member-card:hover .image-container img {
+    filter: grayscale(0) contrast(1);
+    transform: scale(1.05);
+}
+
+/* =========================================================
+   TEXT INFO
+========================================================= */
+.member-info {
+    text-align: left;
+}
+
+/* Member Name → matches feature-info h4 */
+
+.member-info h3 {
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    text-transform: none;
+    line-height: 1.08;
+
+    color: var(--text-dark);
+
+    margin-bottom: 10px;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Member Role → matches feature-info p */
+
+.member-info p {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    font-weight: 400;
+    letter-spacing: normal;
+    text-transform: none;
+    line-height: 1.7;
+
+    color: var(--text-muted);
+
+    margin: 0;
+}
+
+/* =========================================================
+   POPUP OVERLAY
+========================================================= */
+
+.popup {
+    position: fixed;
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.7);
+
+    display: none;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 9999;
+}
+
+.popup.active {
+    display: flex;
+}
+
+/* =========================================================
+   POPUP BOX
+========================================================= */
+
+.popup-box {
+    width: 900px;
+    max-width: 95%;
+    min-height: 600px;
+
+    background: #ffffff;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    position: relative;
+}
+
+/* =========================================================
+   POPUP IMAGE
+========================================================= */
+
+.popup-img {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+
+    overflow: hidden;
+
+    background: #eeeeee;
+}
+
+.popup-img img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    object-position: center;
+}
+
+/* =========================================================
+   POPUP CONTENT
+========================================================= */
+
+.popup-content {
+    padding: 40px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Popup Name → matches feature-info h4 */
+.popup-content h2 {
+    font-family: var(--font-heading);
+    font-size: 1.75rem;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    text-transform: none;
+    line-height: 1.08;
+
+    color: var(--text-dark);
+
+    margin-bottom: 10px;
+}
+
+/* Popup Role → matches feature-text h5 */
+
+.popup-content small {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    line-height: 1.2;
+
+    color: var(--text-muted);
+
+    margin-bottom: 20px;
+
+    display: block;
+}
+
+/* Popup Description → matches feature-info p */
+
+.popup-content p {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    font-weight: 400;
+    letter-spacing: normal;
+    text-transform: none;
+    line-height: 1.7;
+
+    color: var(--text-muted);
+
+    margin-bottom: 20px;
+}
+
+/* =========================================================
+   SOCIAL ICONS
+========================================================= */
+
+.social {
+    display: flex;
+    gap: 10px;
+}
+
+.social a {
+    width: 38px;
+    height: 38px;
+
+    border: 1px solid #eeeeee;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-decoration: none;
+
+    color: #333333;
+
+    transition: 0.3s ease;
+}
+
+.social a:hover {
+    background: #111111;
+    color: #ffffff;
+}
+
+/* =========================================================
+   CLOSE BUTTON
+========================================================= */
+
+.close {
+    position: absolute;
+
+    top: 10px;
+    right: 15px;
+
+    cursor: pointer;
+
+    font-size: 18px;
+    color: var(--text-dark);
+
+    transition: 0.2s ease;
+}
+
+.close:hover {
+    opacity: 0.6;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1200px) {
+
+    .passport-row {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+
+        gap: 16px;
+    }
+}
+
+@media (max-width: 900px) {
+
+    .team-header h2 {
+        font-size: 1.75rem;
+    }
+
+    .popup-box {
+        grid-template-columns: 1fr;
+    }
+
+    .popup-content {
+        padding: 25px;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .passport-row {
+        grid-template-columns: repeat(2, 1fr);
+
+        gap: 16px;
+    }
+
+    .team-section {
+        padding: 32px 20px;
+    }
+
+    .team-header {
+        padding-left: 20px;
+        margin-bottom: 24px;
+    }
+
+    .member-info h3 {
+        font-size: 1rem;
+    }
+
+    .popup-content h2 {
+        font-size: 1.75rem;
+    }
+}

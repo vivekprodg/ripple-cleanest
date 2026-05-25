@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    Services | Ripple Architecture
+{% endblock %}
+
+{% block body_class %}
+has-hero services-page
+{% endblock %}
+
+{% block content %}
+
+<!-- =========================================================
+     SERVICES PAGE STYLES
+========================================================= -->
+
+<link rel="stylesheet" href="{% static 'services/css/services_hero.css' %}">
+<link rel="stylesheet" href="{% static 'services/css/services.css' %}">
+<link rel="stylesheet" href="{% static 'services/css/services_why_choose.css' %}">
+
+<!-- =========================================================
+     SERVICES EXTRA SECTIONS STYLES
+========================================================= -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<link rel="stylesheet" href="{% static 'services/css/services_extra_sections.css' %}">
+
+<main class="services-page-wrapper">
+
+    <!-- =========================================================
+         HERO SECTION (CMS DRIVEN)
+    ========================================================== -->
+
+    {% include "services/sections/services_hero.html" %}
+
+    <!-- =========================================================
+         WHY CHOOSE US SECTION (CMS DRIVEN)
+    ========================================================== -->
+
+    {% include "services/sections/services_why_choose.html" %}
+
+    <!-- =========================================================
+         SERVICES MAIN SECTION
+    ========================================================== -->
+
+    {% include "services/sections/services_section.html" with services=services %}
+
+    <!-- =========================================================
+         SERVICES EXTRA SECTIONS
+    ========================================================== -->
+
+    {% include "services/sections/services_extra_sections.html" %}
+
+</main>
+
+{% endblock %}
+
+{% block extra_js %}
+
+<!-- =========================================================
+     SERVICES HERO SCRIPT
+========================================================= -->
+
+<script src="{% static 'services/js/services_hero.js' %}" defer></script>
+
+<!-- =========================================================
+     SERVICES PAGE SCRIPT
+========================================================= -->
+
+<script src="{% static 'services/js/services.js' %}" defer></script>
+
+<!-- =========================================================
+     WHY CHOOSE US SCRIPT
+========================================================= -->
+
+<script src="{% static 'services/js/services_why_choose.js' %}" defer></script>
+
+<!-- =========================================================
+     SERVICES EXTRA SECTIONS SCRIPT
+========================================================= -->
+
+<script src="{% static 'services/js/services_extra_sections.js' %}" defer></script>
+
+{% endblock %}

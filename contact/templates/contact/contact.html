@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    {{ seo_title|default:page_title|default:"Contact Us" }} | Ripple
+{% endblock %}
+
+{% block body_class %}
+has-hero contact-page
+{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'contact/css/contact.css' %}">
+
+<main class="contact-page">
+
+    <!-- HERO -->
+
+    <section class="contact-hero" data-navbar-hero
+        style="
+            background:
+            linear-gradient(rgba(0,0,0,.{{ hero_overlay_strength }}), rgba(0,0,0,.{{ hero_overlay_strength }})),
+            url('{{ hero_background_image_url }}') center/cover no-repeat;
+        "
+    >
+
+        <div class="hero-content">
+
+            <div class="hero-badge">
+                {{ hero_badge }}
+            </div>
+
+            <h1>{{ hero_title }}</h1>
+
+            <p>
+                {{ hero_description }}
+            </p>
+
+        </div>
+
+    </section>
+
+    <!-- TOP CARDS -->
+
+    <section class="top-cards">
+        {% for card in top_cards %}
+            <div class="top-card">
+                <div class="top-icon">{{ card.icon_text|default:'✉' }}</div>
+                <h3>{{ card.title|default:'' }}</h3>
+
+                {% if card.link_url %}
+                    <a href="{{ card.link_url }}">{{ card.value|default:'' }}</a>
+                {% else %}
+                    <p>{{ card.value|default:'' }}</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </section>
+
+    <!-- MAIN -->
+
+    <section class="contact-section">
+        <div class="contact-grid">
+
+            <!-- LEFT -->
+
+            <div class="contact-info"
+                style="
+                    background:
+                    linear-gradient(rgba(17,24,39,.92), rgba(17,24,39,.92)),
+                    url('{{ left_section_background_image_url }}') center/cover no-repeat;
+                "
+            >
+
+                <small>{{ left_section_badge|default:'Premium Support' }}</small>
+
+                <h2>{{ left_section_title|default:"Let's Build Something Beautiful" }}</h2>
+
+                <p class="desc">
+                    {{ left_section_description|default:'Share your ideas and project requirements with us. We provide architecture, interior design, planning, consultation, and renovation services with premium quality.' }}
+                </p>
+
+                {% for box in info_boxes %}
+                    <div class="info-box">
+                        <div class="info-circle">{{ box.icon_text|default:'✉' }}</div>
+                        <div>
+                            <h4>{{ box.title|default:'' }}</h4>
+                            <p>{{ box.value|default:'' }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+
+                {% if social_heading %}
+                    <small style="margin-top:10px;">{{ social_heading }}</small>
+                {% endif %}
+
+                {% if social_links %}
+                    <div class="socials">
+                        {% for link in social_links %}
+                            <a
+                                href="{{ link.url|default:'#' }}"
+                                {% if link.url %}target="_blank" rel="noopener noreferrer"{% endif %}
+                            >
+                                {{ link.icon_text|default:'in' }}
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+            </div>
+
+            <!-- FORM -->
+
+            <div class="contact-form">
+
+                <h2>{{ form_title|default:'Send Inquiry' }}</h2>
+
+                <p class="subtitle">
+                    {{ form_subtitle|default:'Fill the form below and our team will contact you shortly.' }}
+                </p>
+
+                <form id="contactForm" method="post" action="">
+                    {% csrf_token %}
+
+                    <div class="form-group">
+                        <label for="full_name">Full Name</label>
+                        <input
+                            id="full_name"
+                            name="full_name"
+                            type="text"
+                            class="form-control"
+                            placeholder="Enter your full name"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email_address">Email Address</label>
+                        <input
+                            id="email_address"
+                            name="email_address"
+                            type="email"
+                            class="form-control"
+                            placeholder="Enter your email address"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone_number">Phone Number</label>
+                        <input
+                            id="phone_number"
+                            name="phone_number"
+                            type="text"
+                            class="form-control"
+                            placeholder="Enter your phone number"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="project_details">Project Details</label>
+                        <textarea
+                            id="project_details"
+                            name="project_details"
+                            class="form-control"
+                            placeholder="Tell us about your project..."
+                        ></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">
+                        {{ submit_button_text|default:'Start Your Project' }}
+                    </button>
+
+                    <div class="success-message" id="successMessage">
+                        {{ success_message_text|default:'Thank you! Your inquiry has been submitted successfully.' }}
+                    </div>
+
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="success-message show">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                </form>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- MAP -->
+
+    <section class="map-section">
+        <div class="map-card">
+
+            <div class="map-header">
+                <h2>{{ map_title|default:'Visit Our Studio' }}</h2>
+                <p>
+                    {{ map_description|default:'Experience modern architecture and premium interior solutions.' }}
+                </p>
+            </div>
+
+            <iframe
+                class="map-frame"
+                src="{{ map_embed_url }}"
+                loading="lazy">
+            </iframe>
+
+        </div>
+    </section>
+
+</main>
+
+<script src="{% static 'contact/js/contact.js' %}" defer></script>
+
+{% endblock %}

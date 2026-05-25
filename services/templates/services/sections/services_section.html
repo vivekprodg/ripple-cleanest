@@ -1,0 +1,33 @@
+{% load static %}
+
+<section class="services-section services-padding">
+    <div class="services-container">
+        <div class="services-header reveal">
+            <span>CORE EXPERTISE</span>
+            <h2>Comprehensive Services</h2>
+        </div>
+
+        <div class="kinetic-container">
+            {% for service in home_services %}
+                <div class="service-frame reveal">
+                    <div class="frame-visual">
+                        <img src="{{ service.image.url }}" alt="{{ service.title }}">
+                    </div>
+
+                    <div class="frame-info">
+                        <span class="frame-num">{{ forloop.counter|stringformat:"02d" }}</span>
+                        <h3>{{ service.title }}</h3>
+                        <p>{{ service.description }}</p>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="service-frame reveal">
+                    <div class="frame-info" style="grid-column: span 12; text-align: center; padding: 60px 0;">
+                        <h3>No services available</h3>
+                        <p>Please add active services in the admin panel and mark them to show on home.</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>

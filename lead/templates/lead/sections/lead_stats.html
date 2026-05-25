@@ -1,0 +1,101 @@
+{% load static %}
+
+<div class="summary-grid">
+
+    <!-- NEW LEADS -->
+    <div class="summary-card">
+        <div class="label">
+            <span>{{ summary_new_label|default:"New Leads" }}</span>
+            <i class="fas fa-circle"></i>
+        </div>
+
+        <div class="value" id="stat-new">
+            {{ lead_stats.new|default:0 }}
+        </div>
+
+        <div class="sub">
+            {{ summary_new_subtitle|default:"Fresh inbound leads from all channels" }}
+        </div>
+    </div>
+
+    <!-- CONTACTED -->
+    <div class="summary-card">
+        <div class="label">
+            <span>{{ summary_contacted_label|default:"Contacted" }}</span>
+            <i class="fas fa-circle"></i>
+        </div>
+
+        <div class="value" id="stat-contacted">
+            {{ lead_stats.contacted|default:0 }}
+        </div>
+
+        <div class="sub">
+            {{ summary_contacted_subtitle|default:"Follow-up already initiated" }}
+        </div>
+    </div>
+
+    <!-- WON -->
+    <div class="summary-card">
+        <div class="label">
+            <span>{{ summary_won_label|default:"Won" }}</span>
+            <i class="fas fa-circle"></i>
+        </div>
+
+        <div class="value" id="stat-won">
+            {{ lead_stats.won|default:0 }}
+        </div>
+
+        <div class="sub">
+            {{ summary_won_subtitle|default:"Successfully converted projects" }}
+        </div>
+    </div>
+
+    <!-- CONVERSION -->
+    <div class="summary-card">
+        <div class="label">
+            <span>{{ summary_conversion_label|default:"Conversion" }}</span>
+            <i class="fas fa-circle"></i>
+        </div>
+
+        <div class="value" id="stat-conv">
+            {{ lead_stats.conversion_rate|default:0 }}%
+        </div>
+
+        <div class="sub">
+            {{ summary_conversion_subtitle|default:"Won leads vs total leads" }}
+        </div>
+    </div>
+
+    <!-- RFQ SOURCE -->
+    <div class="summary-card">
+        <div class="label">
+            <span>{{ summary_rfq_label|default:"RFQ Source" }}</span>
+            <i class="fas fa-file-signature"></i>
+        </div>
+
+        <div class="value" id="stat-rfq">
+            {{ lead_stats.rfq|default:0 }}
+        </div>
+
+        <div class="sub">
+            {{ summary_rfq_subtitle|default:"Leads submitted through RFQ forms" }}
+        </div>
+    </div>
+
+    <!-- WEBSITE SOURCE -->
+    <div class="summary-card">
+        <div class="label">
+            <span>{{ summary_website_label|default:"Website Leads" }}</span>
+            <i class="fas fa-globe"></i>
+        </div>
+
+        <div class="value" id="stat-website">
+            {{ lead_stats.website|default:0 }}
+        </div>
+
+        <div class="sub">
+            {{ summary_website_subtitle|default:"General website contact inquiries" }}
+        </div>
+    </div>
+
+</div>
