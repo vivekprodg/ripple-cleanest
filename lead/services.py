@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.core.mail import send_mail
 from django.db import transaction
 from django.db.models import Q
 
@@ -40,6 +42,39 @@ def parse_tags(value):
     return []
 
 
+def _to_bool(value):
+    """
+    Convert common truthy/falsey values safely.
+    """
+    if value in (True, False):
+        return value
+
+    if value is None:
+        return False
+
+    if isinstance(value, str):
+        return value.strip().lower() in {"1", "true", "yes", "on"}
+
+    return bool(value)
+
+
+def _pick_first_non_empty(data, *keys, default=""):
+    """
+    Return the first non-empty value from a dict using multiple possible keys.
+    """
+    if not data:
+        return default
+
+    for key in keys:
+        if key not in data:
+            continue
+        value = data.get(key)
+        if value not in (None, ""):
+            return value
+
+    return default
+
+
 def lead_defaults():
     """
     Default lead payload with empty, optional-friendly values.
@@ -57,9 +92,16 @@ def lead_defaults():
         "project": "",
         "location": "",
         "timeline": "",
+        "typology": "",
+        "site_status": "",
+        "services": "",
+        "referral": "",
+        "scale": "",
+        "vision_narrative": "",
         "avatar": "",
         "notes": "",
         "tags": [],
+        "is_subscriber": False,
         "is_archived": False,
         "is_deleted": False,
     }
@@ -73,20 +115,49 @@ def clean_lead_data(data):
     - no field is required
     - unknown keys are ignored
     - empty values are preserved as safe defaults
+    - common aliases from contact/RFQ forms are accepted
     """
     cleaned = lead_defaults()
 
     if not data:
         return cleaned
 
-    for key in cleaned.keys():
-        if key not in data:
-            continue
+    alias_map = {
+        "name": ("name", "full_name", "principal_name"),
+        "email": ("email", "email_address", "principal_email"),
+        "phone": ("phone", "phone_number", "principal_phone"),
+        "lead_type": ("lead_type",),
+        "status": ("status",),
+        "priority": ("priority",),
+        "source": ("source",),
+        "budget": ("budget",),
+        "project": ("project", "subject", "service", "typology", "project_type", "lead_project"),
+        "location": ("location",),
+        "timeline": ("timeline",),
+        "typology": ("typology", "project", "project_type", "lead_project"),
+        "site_status": ("site_status",),
+        "services": ("services",),
+        "referral": ("referral",),
+        "scale": ("scale",),
+        "vision_narrative": ("vision_narrative", "message", "notes", "description", "project_details"),
+        "avatar": ("avatar",),
+        "notes": ("notes", "message", "description", "project_details", "vision_narrative"),
+        "tags": ("tags",),
+        "is_subscriber": ("is_subscriber",),
+        "is_archived": ("is_archived",),
+        "is_deleted": ("is_deleted",),
+    }
 
-        value = data.get(key)
+    for key in cleaned.keys():
+        value = _pick_first_non_empty(data, *alias_map.get(key, (key,)), default=None)
+
+        if value is None and key not in data:
+            continue
 
         if key == "tags":
             cleaned[key] = parse_tags(value)
+        elif key in {"is_subscriber", "is_archived", "is_deleted"}:
+            cleaned[key] = _to_bool(value)
         elif key in {
             "name",
             "email",
@@ -99,12 +170,16 @@ def clean_lead_data(data):
             "project",
             "location",
             "timeline",
+            "typology",
+            "site_status",
+            "services",
+            "referral",
+            "scale",
+            "vision_narrative",
             "avatar",
             "notes",
         }:
             cleaned[key] = normalize_text(value)
-        elif key in {"is_archived", "is_deleted"}:
-            cleaned[key] = bool(value)
         else:
             cleaned[key] = value
 
@@ -116,15 +191,7 @@ def create_lead(**data):
     """
     Create a Lead using optional, normalized data.
 
-    Used by RFQ, contact, website, ad, WhatsApp, and manual lead entry.
-
-    Example:
-        lead = create_lead(
-            name="John Doe",
-            email="john@example.com",
-            project="Residential Villa",
-            tags="Architecture, Luxury"
-        )
+    Used by RFQ, contact, website, ad, WhatsApp, subscription, and manual lead entry.
     """
     cleaned = clean_lead_data(data)
 
@@ -140,9 +207,16 @@ def create_lead(**data):
         project=cleaned["project"],
         location=cleaned["location"],
         timeline=cleaned["timeline"],
+        typology=cleaned["typology"],
+        site_status=cleaned["site_status"],
+        services=cleaned["services"],
+        referral=cleaned["referral"],
+        scale=cleaned["scale"],
+        vision_narrative=cleaned["vision_narrative"],
         avatar=cleaned["avatar"],
         notes=cleaned["notes"],
         tags=cleaned["tags"],
+        is_subscriber=cleaned["is_subscriber"],
         is_archived=cleaned["is_archived"],
         is_deleted=cleaned["is_deleted"],
     )
@@ -173,8 +247,15 @@ def update_lead(lead, **data):
         "project",
         "location",
         "timeline",
+        "typology",
+        "site_status",
+        "services",
+        "referral",
+        "scale",
+        "vision_narrative",
         "avatar",
         "notes",
+        "is_subscriber",
         "is_archived",
         "is_deleted",
     ):
@@ -336,6 +417,12 @@ def apply_filters(
             | Q(notes__icontains=search)
             | Q(budget__icontains=search)
             | Q(timeline__icontains=search)
+            | Q(typology__icontains=search)
+            | Q(site_status__icontains=search)
+            | Q(services__icontains=search)
+            | Q(referral__icontains=search)
+            | Q(scale__icontains=search)
+            | Q(vision_narrative__icontains=search)
         )
 
     if lead_type:
@@ -461,3 +548,126 @@ def update_lead_tags(lead, tags):
     lead.tags = parse_tags(tags)
     lead.save(update_fields=["tags", "updated_at"])
     return lead
+
+
+def _subscription_subject(lead):
+    company_name = getattr(settings, "SITE_NAME", None) or getattr(
+        settings, "PROJECT_NAME", None
+    ) or "Ripple Cleanest"
+    return f"Subscription confirmed — {company_name}"
+
+
+def _subscription_message(lead):
+    company_name = getattr(settings, "SITE_NAME", None) or getattr(
+        settings, "PROJECT_NAME", None
+    ) or "Ripple Cleanest"
+
+    subscriber_name = lead.display_name if getattr(lead, "name", "") else "Subscriber"
+
+    return (
+        f"Hello {subscriber_name},\n\n"
+        f"Thanks for subscribing to {company_name}.\n"
+        f"We have received your email: {lead.email}.\n\n"
+        f"You will now receive our architectural insights and updates.\n\n"
+        f"Best regards,\n"
+        f"{company_name}"
+    )
+
+
+@transaction.atomic
+def create_subscription_lead(email, name="", send_confirmation=True, notify_admin=False):
+    """
+    Create a subscription lead and optionally send emails.
+
+    Recommended use after footer newsletter form submission.
+    """
+    lead = create_lead(
+        name=name or "Newsletter Subscriber",
+        email=email,
+        phone="",
+        lead_type=Lead.LeadType.SUBSCRIPTION,
+        status=Lead.LeadStatus.NEW,
+        priority=Lead.LeadPriority.COLD,
+        source=Lead.LeadSource.SUBSCRIPTION,
+        budget="",
+        project="Newsletter Subscription",
+        location="",
+        timeline="",
+        typology="",
+        site_status="",
+        services="",
+        referral="",
+        scale="",
+        vision_narrative="",
+        avatar="",
+        notes="Subscribed from website footer subscription form.",
+        tags=["subscription", "newsletter"],
+        is_subscriber=True,
+        is_archived=False,
+        is_deleted=False,
+    )
+
+    if send_confirmation:
+        send_subscription_confirmation_email(lead)
+
+    if notify_admin:
+        send_subscription_admin_notification(lead)
+
+    return lead
+
+
+def send_subscription_confirmation_email(lead):
+    """
+    Send a confirmation email to the subscriber.
+
+    Returns True when Django reports a successful send.
+    """
+    if lead is None or not lead.email:
+        return False
+
+    from_email = getattr(settings, "DEFAULT_FROM_EMAIL", None) or getattr(
+        settings, "EMAIL_HOST_USER", None
+    ) or "no-reply@example.com"
+
+    return send_mail(
+        subject=_subscription_subject(lead),
+        message=_subscription_message(lead),
+        from_email=from_email,
+        recipient_list=[lead.email],
+        fail_silently=True,
+    ) > 0
+
+
+def send_subscription_admin_notification(lead):
+    """
+    Optional admin notification for a new subscription lead.
+    """
+    if lead is None or not lead.email:
+        return False
+
+    from_email = getattr(settings, "DEFAULT_FROM_EMAIL", None) or getattr(
+        settings, "EMAIL_HOST_USER", None
+    ) or "no-reply@example.com"
+
+    admin_email = getattr(settings, "SUBSCRIPTION_NOTIFICATION_EMAIL", None) or getattr(
+        settings, "DEFAULT_FROM_EMAIL", None
+    )
+
+    if not admin_email:
+        return False
+
+    subject = "New footer subscription lead"
+    message = (
+        f"A new newsletter subscription was captured.\n\n"
+        f"Name: {lead.name}\n"
+        f"Email: {lead.email}\n"
+        f"Created: {lead.created_at}\n"
+    )
+
+    return send_mail(
+        subject=subject,
+        message=message,
+        from_email=from_email,
+        recipient_list=[admin_email],
+        fail_silently=True,
+    ) > 0

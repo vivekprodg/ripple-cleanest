@@ -9,6 +9,7 @@ class Lead(models.Model):
         WEBSITE = "website", "Website"
         AD = "ad", "Ad Campaign"
         WHATSAPP = "whatsapp", "WhatsApp"
+        SUBSCRIPTION = "subscription", "Subscription"
 
     class LeadStatus(models.TextChoices):
         NEW = "new", "New"
@@ -28,11 +29,15 @@ class Lead(models.Model):
         FACEBOOK = "facebook", "Facebook"
         LINKEDIN = "linkedin", "LinkedIn"
         WHATSAPP = "whatsapp", "WhatsApp"
+        SUBSCRIPTION = "subscription", "Subscription Footer"
 
     # Core contact fields
     name = models.CharField(max_length=255, blank=True, default="")
-    email = models.EmailField(blank=True, default="")
+    email = models.EmailField(blank=True, default="", db_index=True)
     phone = models.CharField(max_length=50, blank=True, default="")
+
+    # Subscription field
+    is_subscriber = models.BooleanField(default=False)
 
     # Lead classification
     lead_type = models.CharField(
@@ -41,18 +46,21 @@ class Lead(models.Model):
         blank=True,
         default=LeadType.WEBSITE,
     )
+
     status = models.CharField(
         max_length=20,
         choices=LeadStatus.choices,
         blank=True,
         default=LeadStatus.NEW,
     )
+
     priority = models.CharField(
         max_length=20,
         choices=LeadPriority.choices,
         blank=True,
         default=LeadPriority.COLD,
     )
+
     source = models.CharField(
         max_length=20,
         choices=LeadSource.choices,
@@ -107,8 +115,10 @@ class Lead(models.Model):
     def tags_list(self):
         if isinstance(self.tags, list):
             return self.tags
+
         if isinstance(self.tags, str) and self.tags.strip():
             return [tag.strip() for tag in self.tags.split(",") if tag.strip()]
+
         return []
 
     @property

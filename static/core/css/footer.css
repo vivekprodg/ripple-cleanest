@@ -1,13 +1,12 @@
 :root {
-    /* CMS-driven variables with safe fallbacks */
-    --footer-bg: var(--cms-footer-bg, #080808);
-    --footer-border: var(--cms-footer-border, #1a1a1a);
-    --text-main: var(--cms-footer-text, #f4f4f0);
-    --text-muted: var(--cms-footer-muted, #8a8a8a);
-    --accent: var(--cms-footer-accent, #b89768);
+    --footer-bg: #080808;
+    --footer-border: #1a1a1a;
+    --text-main: #f4f4f0;
+    --text-muted: #8a8a8a;
+    --accent: #b89768;
 
-    --font-ui: var(--cms-footer-font-ui, 'Inter', sans-serif);
-    --font-display: var(--cms-footer-font-display, 'Playfair Display', serif);
+    --font-ui: 'Inter', sans-serif;
+    --font-display: 'Playfair Display', serif;
 }
 
 * {
@@ -17,14 +16,16 @@
 }
 
 .site-footer {
-    background-color: var(--footer-bg);
-    color: var(--text-main);
+    background-color: var(--cms-footer-bg, var(--footer-bg));
+    color: var(--cms-footer-text, var(--text-main));
     font-family: var(--font-ui);
     padding: 70px 5% 25px;
-    border-top: 1px solid var(--footer-border);
+    border-top: 1px solid var(--cms-footer-border, var(--footer-border));
     letter-spacing: 0.02em;
     width: 100%;
     overflow: hidden;
+    position: relative;
+    z-index: 2;
 }
 
 .footer-content {
@@ -50,7 +51,7 @@
     letter-spacing: 3px;
     margin-bottom: 15px;
     font-weight: 600;
-    color: var(--text-main);
+    color: var(--cms-footer-text, var(--text-main));
     line-height: 1.1;
 }
 
@@ -71,7 +72,7 @@
 }
 
 .footer-logo p {
-    color: var(--text-muted);
+    color: var(--cms-footer-muted, var(--text-muted));
     line-height: 1.8;
     max-width: 320px;
     font-size: 0.95rem;
@@ -82,7 +83,7 @@
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 3px;
-    color: var(--accent);
+    color: var(--cms-footer-accent, var(--accent));
     margin-bottom: 30px;
     font-weight: 500;
     line-height: 1.2;
@@ -99,7 +100,7 @@
 }
 
 .footer-nav a {
-    color: var(--text-main);
+    color: var(--cms-footer-text, var(--text-main));
     text-decoration: none;
     font-size: 0.9rem;
     opacity: 0.6;
@@ -111,11 +112,11 @@
 .footer-nav a:hover {
     opacity: 1;
     transform: translateX(6px);
-    color: var(--accent);
+    color: var(--cms-footer-accent, var(--accent));
 }
 
 .footer-newsletter p {
-    color: var(--text-muted);
+    color: var(--cms-footer-muted, var(--text-muted));
     font-size: 0.85rem;
     margin-bottom: 25px;
     line-height: 1.6;
@@ -126,20 +127,20 @@
     display: flex;
     align-items: center;
     gap: 0;
-    border-bottom: 1px solid var(--footer-border);
+    border-bottom: 1px solid var(--cms-footer-border, var(--footer-border));
     padding-bottom: 8px;
     transition: border-color 0.4s ease;
     max-width: 100%;
 }
 
 .newsletter-form:focus-within {
-    border-bottom-color: var(--accent);
+    border-bottom-color: var(--cms-footer-accent, var(--accent));
 }
 
 .newsletter-form input {
     background: transparent;
     border: none;
-    color: var(--text-main);
+    color: var(--cms-footer-text, var(--text-main));
     flex: 1;
     padding: 10px 0;
     outline: none;
@@ -148,14 +149,14 @@
 }
 
 .newsletter-form input::placeholder {
-    color: var(--text-muted);
+    color: var(--cms-footer-muted, var(--text-muted));
     opacity: 0.9;
 }
 
 .newsletter-form button {
     background: transparent;
     border: none;
-    color: var(--accent);
+    color: var(--cms-footer-accent, var(--accent));
     text-transform: uppercase;
     font-size: 0.7rem;
     font-weight: 600;
@@ -168,19 +169,19 @@
 }
 
 .newsletter-form button:hover {
-    color: var(--text-main);
+    color: var(--cms-footer-text, var(--text-main));
 }
 
 .footer-bottom {
     max-width: 1400px;
     margin: 0 auto;
     padding-top: 10px;
-    border-top: 1px solid var(--footer-border);
+    border-top: 1px solid var(--cms-footer-border, var(--footer-border));
     display: flex;
     justify-content: space-between;
     align-items: center;
     font-size: 0.68rem;
-    color: var(--text-muted);
+    color: var(--cms-footer-muted, var(--text-muted));
     text-transform: uppercase;
     letter-spacing: 1.2px;
     gap: 10px;
@@ -205,10 +206,12 @@
     gap: 18px;
     align-items: center;
     flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
 }
 
 .social-links a {
-    color: var(--text-muted);
+    color: var(--cms-footer-muted, var(--text-muted));
     text-decoration: none;
     display: inline-flex;
     align-items: center;
@@ -221,7 +224,7 @@
 }
 
 .social-links a:hover {
-    color: var(--accent);
+    color: var(--cms-footer-accent, var(--accent));
     transform: translateY(-2px);
 }
 

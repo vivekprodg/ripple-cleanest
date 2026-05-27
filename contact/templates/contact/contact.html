@@ -16,17 +16,16 @@ has-hero contact-page
 <main class="contact-page">
 
     <!-- HERO -->
-
-    <section class="contact-hero" data-navbar-hero
+    <section
+        class="contact-hero"
+        data-navbar-hero
         style="
             background:
             linear-gradient(rgba(0,0,0,.{{ hero_overlay_strength }}), rgba(0,0,0,.{{ hero_overlay_strength }})),
             url('{{ hero_background_image_url }}') center/cover no-repeat;
         "
     >
-
         <div class="hero-content">
-
             <div class="hero-badge">
                 {{ hero_badge }}
             </div>
@@ -36,13 +35,10 @@ has-hero contact-page
             <p>
                 {{ hero_description }}
             </p>
-
         </div>
-
     </section>
 
     <!-- TOP CARDS -->
-
     <section class="top-cards">
         {% for card in top_cards %}
             <div class="top-card">
@@ -59,20 +55,18 @@ has-hero contact-page
     </section>
 
     <!-- MAIN -->
-
     <section class="contact-section">
         <div class="contact-grid">
 
             <!-- LEFT -->
-
-            <div class="contact-info"
+            <div
+                class="contact-info"
                 style="
                     background:
                     linear-gradient(rgba(17,24,39,.92), rgba(17,24,39,.92)),
                     url('{{ left_section_background_image_url }}') center/cover no-repeat;
                 "
             >
-
                 <small>{{ left_section_badge|default:'Premium Support' }}</small>
 
                 <h2>{{ left_section_title|default:"Let's Build Something Beautiful" }}</h2>
@@ -107,62 +101,78 @@ has-hero contact-page
                         {% endfor %}
                     </div>
                 {% endif %}
-
             </div>
 
             <!-- FORM -->
-
             <div class="contact-form">
-
                 <h2>{{ form_title|default:'Send Inquiry' }}</h2>
 
                 <p class="subtitle">
                     {{ form_subtitle|default:'Fill the form below and our team will contact you shortly.' }}
                 </p>
 
-                <form id="contactForm" method="post" action="">
+                <form id="contactForm" method="post" action="{% url 'contact:contact' %}">
                     {% csrf_token %}
 
+                    <!-- Unified intake markers -->
+                    <input type="hidden" name="lead_type" id="lead_type" value="contact">
+                    <input type="hidden" name="source" id="source" value="contact">
+                    <input type="hidden" name="project" id="project" value="Contact Inquiry">
+
+                    <!-- Legacy aliases for the current contact view -->
+                    <input type="hidden" name="full_name" id="full_name">
+                    <input type="hidden" name="email_address" id="email_address">
+                    <input type="hidden" name="phone_number" id="phone_number">
+                    <input type="hidden" name="project_details" id="project_details">
+
+                    <!-- Visible fields -->
                     <div class="form-group">
-                        <label for="full_name">Full Name</label>
+                        <label for="name">Full Name</label>
                         <input
-                            id="full_name"
-                            name="full_name"
+                            id="name"
+                            name="name"
                             type="text"
                             class="form-control"
                             placeholder="Enter your full name"
+                            autocomplete="name"
+                            required
                         >
                     </div>
 
                     <div class="form-group">
-                        <label for="email_address">Email Address</label>
+                        <label for="email">Email Address</label>
                         <input
-                            id="email_address"
-                            name="email_address"
+                            id="email"
+                            name="email"
                             type="email"
                             class="form-control"
                             placeholder="Enter your email address"
+                            autocomplete="email"
+                            required
                         >
                     </div>
 
                     <div class="form-group">
-                        <label for="phone_number">Phone Number</label>
+                        <label for="phone">Phone Number</label>
                         <input
-                            id="phone_number"
-                            name="phone_number"
-                            type="text"
+                            id="phone"
+                            name="phone"
+                            type="tel"
                             class="form-control"
                             placeholder="Enter your phone number"
+                            autocomplete="tel"
                         >
                     </div>
 
                     <div class="form-group">
-                        <label for="project_details">Project Details</label>
+                        <label for="message">Message</label>
                         <textarea
-                            id="project_details"
-                            name="project_details"
+                            id="message"
+                            name="message"
                             class="form-control"
                             placeholder="Tell us about your project..."
+                            rows="5"
+                            required
                         ></textarea>
                     </div>
 
@@ -181,19 +191,15 @@ has-hero contact-page
                             </div>
                         {% endfor %}
                     {% endif %}
-
                 </form>
-
             </div>
 
         </div>
     </section>
 
     <!-- MAP -->
-
     <section class="map-section">
         <div class="map-card">
-
             <div class="map-header">
                 <h2>{{ map_title|default:'Visit Our Studio' }}</h2>
                 <p>
@@ -206,11 +212,54 @@ has-hero contact-page
                 src="{{ map_embed_url }}"
                 loading="lazy">
             </iframe>
-
         </div>
     </section>
 
 </main>
+
+<script>
+    (function () {
+        const form = document.getElementById('contactForm');
+        if (!form) return;
+
+        const fields = {
+            name: document.getElementById('name'),
+            email: document.getElementById('email'),
+            phone: document.getElementById('phone'),
+            message: document.getElementById('message'),
+            full_name: document.getElementById('full_name'),
+            email_address: document.getElementById('email_address'),
+            phone_number: document.getElementById('phone_number'),
+            project_details: document.getElementById('project_details'),
+            project: document.getElementById('project'),
+            lead_type: document.getElementById('lead_type'),
+            source: document.getElementById('source')
+        };
+
+        function syncHiddenFields() {
+            if (fields.full_name && fields.name) fields.full_name.value = fields.name.value || '';
+            if (fields.email_address && fields.email) fields.email_address.value = fields.email.value || '';
+            if (fields.phone_number && fields.phone) fields.phone_number.value = fields.phone.value || '';
+            if (fields.project_details && fields.message) fields.project_details.value = fields.message.value || '';
+            if (fields.project && !fields.project.value) fields.project.value = 'Contact Inquiry';
+            if (fields.lead_type && !fields.lead_type.value) fields.lead_type.value = 'contact';
+            if (fields.source && !fields.source.value) fields.source.value = 'contact';
+        }
+
+        ['input', 'change', 'blur'].forEach(function (eventName) {
+            if (fields.name) fields.name.addEventListener(eventName, syncHiddenFields);
+            if (fields.email) fields.email.addEventListener(eventName, syncHiddenFields);
+            if (fields.phone) fields.phone.addEventListener(eventName, syncHiddenFields);
+            if (fields.message) fields.message.addEventListener(eventName, syncHiddenFields);
+        });
+
+        form.addEventListener('submit', function () {
+            syncHiddenFields();
+        });
+
+        syncHiddenFields();
+    })();
+</script>
 
 <script src="{% static 'contact/js/contact.js' %}" defer></script>
 

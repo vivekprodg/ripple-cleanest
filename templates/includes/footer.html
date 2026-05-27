@@ -2,7 +2,13 @@
 {% now "Y" as current_year %}
 
 {% with settings=footer_settings %}
-<footer class="site-footer">
+<footer class="site-footer" style="
+    --cms-footer-bg: {{ settings.background_color }};
+    --cms-footer-border: {{ settings.border_color }};
+    --cms-footer-text: {{ settings.text_color }};
+    --cms-footer-muted: {{ settings.muted_color }};
+    --cms-footer-accent: {{ settings.accent_color }};
+">
     <div class="footer-content">
 
         <!-- Brand Section -->
@@ -32,7 +38,7 @@
 
         <!-- Projects Section -->
         <div>
-            <h4 class="footer-label">Projects</h4>
+            <h4 class="footer-label">{{ settings.projects_heading|default:"Projects" }}</h4>
             <ul class="footer-nav">
                 {% for item in footer_projects_links %}
                     <li>
@@ -51,7 +57,7 @@
 
         <!-- Practice Section -->
         <div>
-            <h4 class="footer-label">Practice</h4>
+            <h4 class="footer-label">{{ settings.practice_heading|default:"Practice" }}</h4>
             <ul class="footer-nav">
                 {% for item in footer_practice_links %}
                     <li>
@@ -70,12 +76,12 @@
 
         <!-- Newsletter Section -->
         <div class="footer-newsletter">
-            <h4 class="footer-label">Subscription</h4>
+            <h4 class="footer-label">{{ settings.subscription_heading|default:"Subscription" }}</h4>
             <p>
                 {{ settings.newsletter_text|default:"Sign up to receive our biannual curation of architectural insights." }}
             </p>
 
-            <form class="newsletter-form" method="post" action="{{ settings.newsletter_action_url|default:'#' }}">
+            <form class="newsletter-form" method="post" action="{% url 'lead:subscription_create' %}">
                 {% csrf_token %}
                 <input
                     type="email"

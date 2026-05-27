@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.utils.html import format_html
 
 from .models import Lead
 
@@ -14,6 +13,7 @@ class IntakePathFilter(admin.SimpleListFilter):
             ("contact", "Contact"),
             ("ad", "Ad Campaign"),
             ("whatsapp", "WhatsApp"),
+            ("subscription", "Subscription"),
             ("rfq_only", "RFQ only"),
             ("website_only", "Website only"),
         )
@@ -22,7 +22,9 @@ class IntakePathFilter(admin.SimpleListFilter):
         value = self.value()
 
         if value == "rfq_website":
-            return queryset.filter(source__in=[Lead.LeadSource.WEBSITE, Lead.LeadSource.RFQ_FORM])
+            return queryset.filter(
+                source__in=[Lead.LeadSource.WEBSITE, Lead.LeadSource.RFQ_FORM]
+            )
 
         if value == "rfq_only":
             return queryset.filter(source=Lead.LeadSource.RFQ_FORM)
@@ -39,6 +41,31 @@ class IntakePathFilter(admin.SimpleListFilter):
         if value == "whatsapp":
             return queryset.filter(source=Lead.LeadSource.WHATSAPP)
 
+        if value == "subscription":
+            return queryset.filter(is_subscriber=True)
+
+        return queryset
+
+
+class SubscriptionFilter(admin.SimpleListFilter):
+    title = "Subscription"
+    parameter_name = "subscription"
+
+    def lookups(self, request, model_admin):
+        return (
+            ("yes", "Subscribed"),
+            ("no", "Not subscribed"),
+        )
+
+    def queryset(self, request, queryset):
+        value = self.value()
+
+        if value == "yes":
+            return queryset.filter(is_subscriber=True)
+
+        if value == "no":
+            return queryset.filter(is_subscriber=False)
+
         return queryset
 
 
@@ -52,6 +79,7 @@ class LeadAdmin(admin.ModelAdmin):
         "status",
         "priority",
         "source",
+        "is_subscriber",
         "project",
         "location",
         "created_at",
@@ -66,16 +94,19 @@ class LeadAdmin(admin.ModelAdmin):
         "status",
         "priority",
         "source",
+        "is_subscriber",
         "is_archived",
         "is_deleted",
     )
 
     list_filter = (
         IntakePathFilter,
+        SubscriptionFilter,
         "lead_type",
         "status",
         "priority",
         "source",
+        "is_subscriber",
         "is_archived",
         "is_deleted",
         "created_at",
@@ -127,6 +158,7 @@ class LeadAdmin(admin.ModelAdmin):
                     "status",
                     "priority",
                     "source",
+                    "is_subscriber",
                 )
             },
         ),
@@ -180,6 +212,8 @@ class LeadAdmin(admin.ModelAdmin):
         "mark_unarchived",
         "mark_deleted",
         "mark_restored",
+        "mark_subscribed",
+        "mark_unsubscribed",
     )
 
     def get_queryset(self, request):
@@ -225,3 +259,11 @@ class LeadAdmin(admin.ModelAdmin):
     @admin.action(description="Restore selected leads")
     def mark_restored(self, request, queryset):
         queryset.update(is_deleted=False)
+
+    @admin.action(description="Mark selected leads as Subscribed")
+    def mark_subscribed(self, request, queryset):
+        queryset.update(is_subscriber=True)
+
+    @admin.action(description="Mark selected leads as Not Subscribed")
+    def mark_unsubscribed(self, request, queryset):
+        queryset.update(is_subscriber=False)

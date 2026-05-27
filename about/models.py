@@ -229,13 +229,13 @@ class AboutOverviewSection(SingletonModel):
     # =====================================
     button_text = models.CharField(
         max_length=100,
-        default="Discover Our Studio",
+        default="Discover Our Office",
         blank=True
     )
 
     button_link = models.CharField(
         max_length=300,
-        default="#studio",
+        default="#office",
         blank=True
     )
 

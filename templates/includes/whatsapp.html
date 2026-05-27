@@ -1,0 +1,21 @@
+{% load static %}
+
+<!-- Ripple Cleanest WhatsApp Floating Button -->
+<div
+    class="whatsapp-btn-container"
+    data-whatsapp-phone="{{ whatsapp_phone_number|default_if_none:''|escape }}"
+    data-whatsapp-message="{{ whatsapp_prefilled_text|default_if_none:''|escape }}"
+    data-whatsapp-active="{{ whatsapp_is_active|yesno:'true,false' }}"
+>
+    <span class="whatsapp-tooltip">Chat with us!</span>
+
+    <a
+        href="https://api.whatsapp.com/send?phone={{ whatsapp_phone_number|default_if_none:''|escape }}&text={{ whatsapp_prefilled_text|default_if_none:'Hello! I would like to get more information about your services.'|urlencode }}"
+        id="whatsappLink"
+        class="whatsapp-button"
+        target="_blank"
+        rel="noopener noreferrer"
+    >
+        <i class="fab fa-whatsapp"></i>
+    </a>
+</div>

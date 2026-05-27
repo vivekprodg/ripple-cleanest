@@ -1,0 +1,91 @@
+/* =========================================
+   Ripple Cleanest - WhatsApp Floating Button
+   ========================================= */
+
+/* Container */
+.whatsapp-btn-container {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+/* Tooltip */
+.whatsapp-tooltip {
+    position: absolute;
+    right: 80px;
+    background-color: #ffffff;
+    color: #333333;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+    pointer-events: none;
+}
+
+/* Show tooltip on hover */
+.whatsapp-btn-container:hover .whatsapp-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+}
+
+/* Button */
+.whatsapp-button {
+    width: 60px;
+    height: 60px;
+    background-color: #25D366;
+    color: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 30px;
+    box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
+    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    pointer-events: auto;
+}
+
+/* Hover effect */
+.whatsapp-button:hover {
+    background-color: #20ba5a;
+    transform: scale(1.08);
+    box-shadow: 0 6px 20px rgba(32, 186, 90, 0.4);
+}
+
+/* Pulse animation */
+.whatsapp-button::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #25D366;
+    border-radius: 50%;
+    z-index: -1;
+    animation: whatsapp-pulse 2s infinite;
+    opacity: 0.4;
+}
+
+/* Pulse keyframes */
+@keyframes whatsapp-pulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.4;
+    }
+    100% {
+        transform: scale(1.5);
+        opacity: 0;
+    }
+}

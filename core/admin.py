@@ -9,6 +9,7 @@ from .models import (
     FooterProjectLink,
     FooterPracticeLink,
     FooterSocialLink,
+    WhatsAppSettings,
 )
 
 
@@ -359,4 +360,39 @@ class FooterSettingsAdmin(SingletonAdmin):
                 )
             },
         ),
+    )
+
+
+@admin.register(WhatsAppSettings)
+class WhatsAppSettingsAdmin(SingletonAdmin):
+    list_display = (
+        "__str__",
+        "phone_number",
+        "is_active",
+        "updated_at",
+    )
+
+    fieldsets = (
+        (
+            "WhatsApp Configuration",
+            {
+                "fields": (
+                    "phone_number",
+                    "prefilled_text",
+                    "is_active",
+                )
+            },
+        ),
+        (
+            "System",
+            {
+                "fields": (
+                    "updated_at",
+                )
+            },
+        ),
+    )
+
+    readonly_fields = (
+        "updated_at",
     )

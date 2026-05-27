@@ -5,7 +5,9 @@ from typing import Any
 from django.contrib import messages
 from django.shortcuts import redirect, render
 
-from .models import ContactInquiry, ContactPageSettings
+from lead.services import create_lead
+
+from .models import ContactPageSettings
 
 
 def _safe_text(value: Any) -> str:
@@ -30,23 +32,83 @@ def _get_client_ip(request) -> str:
     return request.META.get("REMOTE_ADDR", "") or ""
 
 
+def _first_non_empty(data, *keys, default="") -> str:
+    for key in keys:
+        value = _safe_text(data.get(key))
+        if value:
+            return value
+    return default
+
+
+def _build_contact_notes(request, message: str) -> str:
+    parts = []
+
+    if message:
+        parts.append("Message:")
+        parts.append(message.strip())
+
+    ip_address = _get_client_ip(request)
+    user_agent = _safe_text(request.META.get("HTTP_USER_AGENT"))
+    source_page = _safe_text(request.path)
+
+    if source_page:
+        parts.append("")
+        parts.append(f"Source Page: {source_page}")
+    if ip_address:
+        parts.append(f"IP Address: {ip_address}")
+    if user_agent:
+        parts.append(f"User Agent: {user_agent}")
+
+    return "\n".join(parts).strip()
+
+
 def contact_page(request):
     settings = ContactPageSettings.get_solo()
 
     if request.method == "POST":
-        ContactInquiry.objects.create(
-            full_name=_safe_text(request.POST.get("full_name")),
-            email_address=_safe_text(request.POST.get("email_address")),
-            phone_number=_safe_text(request.POST.get("phone_number")),
-            project_details=_safe_text(request.POST.get("project_details")),
-            source_page=request.path,
-            ip_address=_get_client_ip(request),
-            user_agent=_safe_text(request.META.get("HTTP_USER_AGENT")),
+        name = _first_non_empty(request.POST, "full_name", "name", "principal_name")
+        email = _first_non_empty(request.POST, "email_address", "email", "principal_email")
+        phone = _first_non_empty(request.POST, "phone_number", "phone", "principal_phone")
+        message = _first_non_empty(
+            request.POST,
+            "project_details",
+            "message",
+            "notes",
+            "description",
+        )
+
+        project = _first_non_empty(
+            request.POST,
+            "project",
+            "subject",
+            "service",
+            default="Contact Inquiry",
+        )
+
+        lead = create_lead(
+            name=name,
+            email=email,
+            phone=phone,
+            lead_type="contact",
+            source="contact",
+            status="new",
+            priority="cold",
+            budget="",
+            project=project or "Contact Inquiry",
+            location="",
+            timeline="",
+            avatar="",
+            notes=_build_contact_notes(request, message),
+            tags=["contact", "website"],
+            is_archived=False,
+            is_deleted=False,
         )
 
         success_message = _safe_text(settings.success_message)
         if success_message:
             messages.success(request, success_message)
+        else:
+            messages.success(request, "Thank you. Your message has been received.")
 
         return redirect("contact:contact")
 

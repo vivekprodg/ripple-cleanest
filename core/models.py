@@ -560,3 +560,29 @@ class FooterSocialLink(models.Model):
 
     def __str__(self):
         return self.name
+    
+class WhatsAppSettings(models.Model):
+    phone_number = models.CharField(
+        max_length=20,
+        default="9779802113456",
+        help_text="WhatsApp number with country code (no +, no spaces)"
+    )
+
+    prefilled_text = models.TextField(
+        default="Hello! I would like to get more information about your services.",
+        help_text="Default WhatsApp message"
+    )
+
+    is_active = models.BooleanField(default=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "WhatsApp Settings"
+        verbose_name_plural = "WhatsApp Settings"
+
+    def __str__(self):
+        return "WhatsApp Settings"
+
+    def save(self, *args, **kwargs):
+        self.pk = 1
+        super().save(*args, **kwargs)

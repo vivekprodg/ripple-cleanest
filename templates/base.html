@@ -30,6 +30,11 @@
         href="{% static 'core/css/footer.css' %}"
     >
 
+    <link
+        rel="stylesheet"
+        href="{% static 'core/css/whatsapp.css' %}"
+    >
+
     {% block extra_css %}{% endblock %}
 
     <style>
@@ -40,6 +45,12 @@
             --cms-nav-hover: {{ navbar_settings.nav_hover_color|default_if_none:'' }};
             --cms-nav-border: {{ navbar_settings.nav_border_color|default_if_none:'' }};
             --cms-nav-font: {{ navbar_settings.nav_font_family|default_if_none:'' }};
+
+            --cms-footer-bg: {{ footer_settings.background_color }};
+            --cms-footer-border: {{ footer_settings.border_color }};
+            --cms-footer-text: {{ footer_settings.text_color }};
+            --cms-footer-muted: {{ footer_settings.muted_color }};
+            --cms-footer-accent: {{ footer_settings.accent_color }};
 
             --home-hero-title-font: {{ hero_typography.home.title_font_family|default_if_none:'' }};
             --home-hero-title-type: {{ hero_typography.home.title_font_type|default_if_none:'' }};
@@ -445,6 +456,14 @@
     </main>
 
     {% include "includes/footer.html" %}
+    {% include "includes/whatsapp.html" %}
+
+    <!-- WhatsApp CMS data -->
+    <script>
+        window.WHATSAPP_PHONE_NUMBER = "{{ whatsapp_phone_number|default_if_none:''|escapejs }}";
+        window.WHATSAPP_PREFILLED_TEXT = "{{ whatsapp_prefilled_text|default_if_none:''|escapejs }}";
+        window.WHATSAPP_IS_ACTIVE = "{{ whatsapp_is_active|yesno:'true,false' }}";
+    </script>
 
     <script
         src="{% static 'core/js/navbar.js' %}"
@@ -453,6 +472,11 @@
 
     <script
         src="{% static 'core/js/footer.js' %}"
+        defer
+    ></script>
+
+    <script
+        src="{% static 'core/js/whatsapp.js' %}"
         defer
     ></script>
 

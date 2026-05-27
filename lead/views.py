@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from typing import Any
 
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
@@ -63,11 +64,40 @@ def _boolish(value):
     return bool(value)
 
 
+def _safe_str(value: Any) -> str:
+    if value is None:
+        return ""
+    return str(value).strip()
+
+
 def _get_value(data, *keys, default=""):
     for key in keys:
         if key in data and data.get(key) not in (None, ""):
             return data.get(key)
     return default
+
+
+def _get_value_str(data, *keys, default=""):
+    return _safe_str(_get_value(data, *keys, default=default))
+
+
+def _normalize_tags(value):
+    if value is None or value == "":
+        return []
+
+    if isinstance(value, list):
+        return value
+
+    if isinstance(value, tuple):
+        return list(value)
+
+    if isinstance(value, str):
+        stripped = value.strip()
+        if not stripped:
+            return []
+        return parse_tags(stripped)
+
+    return parse_tags(value)
 
 
 def _request_filters(request):
@@ -111,15 +141,23 @@ def _build_intake_notes(data):
     """
     parts = []
 
-    typology = _get_value(data, "typology", "project", "project_type", "lead_project")
-    site_status = _get_value(data, "site_status")
-    services = _get_value(data, "services")
-    budget = _get_value(data, "budget")
-    referral = _get_value(data, "referral")
-    location = _get_value(data, "location")
-    scale = _get_value(data, "scale")
-    timeline = _get_value(data, "timeline")
-    message = _get_value(data, "vision_narrative", "message", "notes", "description")
+    typology = _get_value_str(data, "typology", "project", "project_type", "lead_project")
+    site_status = _get_value_str(data, "site_status")
+    services = _get_value_str(data, "services")
+    budget = _get_value_str(data, "budget")
+    referral = _get_value_str(data, "referral")
+    location = _get_value_str(data, "location")
+    scale = _get_value_str(data, "scale")
+    timeline = _get_value_str(data, "timeline")
+
+    message = _get_value_str(
+        data,
+        "vision_narrative",
+        "message",
+        "notes",
+        "description",
+        "project_details",
+    )
 
     if typology:
         parts.append(f"Project: {typology}")
@@ -141,7 +179,7 @@ def _build_intake_notes(data):
     if message:
         parts.append("")
         parts.append("Message:")
-        parts.append(str(message).strip())
+        parts.append(message.strip())
 
     return "\n".join(parts).strip()
 
@@ -150,12 +188,18 @@ def _resolve_lead_type(data):
     """
     Resolve lead type for all intake sources.
     """
-    value = _get_value(data, "lead_type", "type", "intake_type", default="").strip().lower()
-    if value in {choice[0] for choice in Lead.LeadType.choices}:
+    value = _get_value_str(data, "lead_type", "type", "intake_type").lower()
+    valid_types = {choice[0] for choice in Lead.LeadType.choices}
+
+    if value in valid_types:
         return value
 
-    source = _get_value(data, "source", "lead_source", default="").strip().lower()
-    if source in {choice[0] for choice in Lead.LeadSource.choices}:
+    source = _get_value_str(data, "source", "lead_source").lower()
+    valid_sources = {choice[0] for choice in Lead.LeadSource.choices}
+
+    if source in valid_types:
+        return source
+    if source in valid_sources:
         return source
 
     return Lead.LeadType.WEBSITE
@@ -165,13 +209,13 @@ def _resolve_source(data, lead_type=None):
     """
     Keep source and lead_type aligned, but allow explicit source override.
     """
-    source = _get_value(data, "source", "lead_source", default="").strip().lower()
+    source = _get_value_str(data, "source", "lead_source").lower()
     valid_sources = {choice[0] for choice in Lead.LeadSource.choices}
 
     if source in valid_sources:
         return source
 
-    lead_type = (lead_type or "").strip().lower()
+    lead_type = _safe_str(lead_type).lower()
     if lead_type in valid_sources:
         return lead_type
 
@@ -186,6 +230,7 @@ def _serialize_lead(lead: Lead):
         "email": lead.email,
         "display_email": lead.display_email,
         "phone": lead.phone,
+        "is_subscriber": lead.is_subscriber,
         "lead_type": lead.lead_type,
         "lead_type_label": lead.get_lead_type_display() if lead.lead_type else "",
         "status": lead.status,
@@ -302,7 +347,7 @@ def lead_detail(request, pk):
         }
 
         if tags is not None:
-            update_kwargs["tags"] = parse_tags(tags)
+            update_kwargs["tags"] = _normalize_tags(tags)
 
         update_lead(lead, **update_kwargs)
 
@@ -342,20 +387,20 @@ def lead_create(request):
     source = _resolve_source(data, lead_type=lead_type)
 
     lead = create_lead(
-        name=_get_value(data, "name", "principal_name", default=""),
-        email=_get_value(data, "email", "principal_email", default=""),
-        phone=_get_value(data, "phone", "principal_phone", default=""),
+        name=_get_value_str(data, "name", "principal_name", "full_name"),
+        email=_get_value_str(data, "email", "principal_email", "email_address"),
+        phone=_get_value_str(data, "phone", "principal_phone", "phone_number"),
         lead_type=lead_type,
-        status=_get_value(data, "status", default=Lead.LeadStatus.NEW),
-        priority=_get_value(data, "priority", default=Lead.LeadPriority.COLD),
+        status=_get_value_str(data, "status", default=Lead.LeadStatus.NEW) or Lead.LeadStatus.NEW,
+        priority=_get_value_str(data, "priority", default=Lead.LeadPriority.COLD) or Lead.LeadPriority.COLD,
         source=source,
-        budget=_get_value(data, "budget", default=""),
-        project=_get_value(data, "project", "typology", "project_type", default=""),
-        location=_get_value(data, "location", default=""),
-        timeline=_get_value(data, "timeline", default=""),
-        avatar=_get_value(data, "avatar", default=""),
+        budget=_get_value_str(data, "budget"),
+        project=_get_value_str(data, "project", "typology", "project_type", "lead_project"),
+        location=_get_value_str(data, "location"),
+        timeline=_get_value_str(data, "timeline"),
+        avatar=_get_value_str(data, "avatar"),
         notes=_build_intake_notes(data),
-        tags=_get_value(data, "tags", default=[]),
+        tags=_normalize_tags(_get_value(data, "tags", default=[])),
         is_archived=_boolish(data.get("is_archived", False)) or False,
         is_deleted=_boolish(data.get("is_deleted", False)) or False,
     )
@@ -388,9 +433,9 @@ def lead_intake_api(request):
     lead_type = _resolve_lead_type(data)
     source = _resolve_source(data, lead_type=lead_type)
 
-    name = _get_value(data, "name", "principal_name", default="")
-    email = _get_value(data, "email", "principal_email", default="")
-    phone = _get_value(data, "phone", "principal_phone", default="")
+    name = _get_value_str(data, "name", "principal_name", "full_name")
+    email = _get_value_str(data, "email", "principal_email", "email_address")
+    phone = _get_value_str(data, "phone", "principal_phone", "phone_number")
 
     notes = _build_intake_notes(data)
 
@@ -400,15 +445,15 @@ def lead_intake_api(request):
         phone=phone,
         lead_type=lead_type,
         source=source,
-        status=_get_value(data, "status", default=Lead.LeadStatus.NEW),
-        priority=_get_value(data, "priority", default=Lead.LeadPriority.COLD),
-        budget=_get_value(data, "budget", default=""),
-        project=_get_value(data, "project", "typology", "project_type", default=""),
-        location=_get_value(data, "location", default=""),
-        timeline=_get_value(data, "timeline", default=""),
-        avatar=_get_value(data, "avatar", default=""),
+        status=_get_value_str(data, "status", default=Lead.LeadStatus.NEW) or Lead.LeadStatus.NEW,
+        priority=_get_value_str(data, "priority", default=Lead.LeadPriority.COLD) or Lead.LeadPriority.COLD,
+        budget=_get_value_str(data, "budget"),
+        project=_get_value_str(data, "project", "typology", "project_type", "lead_project"),
+        location=_get_value_str(data, "location"),
+        timeline=_get_value_str(data, "timeline"),
+        avatar=_get_value_str(data, "avatar"),
         notes=notes,
-        tags=_get_value(data, "tags", default=[]),
+        tags=_normalize_tags(_get_value(data, "tags", default=[])),
         is_archived=_boolish(data.get("is_archived", False)) or False,
         is_deleted=_boolish(data.get("is_deleted", False)) or False,
     )
@@ -418,6 +463,77 @@ def lead_intake_api(request):
             "ok": True,
             "status": "success",
             "message": "Lead received successfully.",
+            "lead": _serialize_lead(lead),
+        },
+        status=201,
+    )
+
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def subscription_create(request):
+    """
+    Footer newsletter subscription endpoint.
+    """
+    data = _payload_from_request(request)
+
+    email = _get_value_str(
+        data,
+        "email",
+        "subscriber_email",
+    ).lower()
+
+    if not email:
+        return JsonResponse(
+            {
+                "ok": False,
+                "message": "Email is required.",
+            },
+            status=400,
+        )
+
+    existing = Lead.objects.filter(
+        email__iexact=email,
+        is_subscriber=True,
+        is_deleted=False,
+    ).first()
+
+    if existing:
+        return JsonResponse(
+            {
+                "ok": True,
+                "message": "You are already subscribed.",
+                "lead": _serialize_lead(existing),
+            }
+        )
+
+    lead = create_lead(
+        name="Newsletter Subscriber",
+        email=email,
+        phone="",
+        lead_type=Lead.LeadType.SUBSCRIPTION,
+        source=Lead.LeadSource.SUBSCRIPTION,
+        status=Lead.LeadStatus.NEW,
+        priority=Lead.LeadPriority.COLD,
+        budget="",
+        project="Newsletter Subscription",
+        location="",
+        timeline="",
+        avatar="",
+        notes="Subscribed from website footer subscription form.",
+        tags=["subscription", "newsletter"],
+        is_archived=False,
+        is_deleted=False,
+    )
+
+    lead.is_subscriber = True
+    lead.save(update_fields=["is_subscriber"])
+
+    return JsonResponse(
+        {
+            "ok": True,
+            "status": "success",
+            "message": "Subscription successful.",
             "lead": _serialize_lead(lead),
         },
         status=201,
@@ -452,7 +568,7 @@ def lead_update(request, pk):
     }
 
     if "tags" in data:
-        update_kwargs["tags"] = parse_tags(data.get("tags"))
+        update_kwargs["tags"] = _normalize_tags(data.get("tags"))
 
     update_lead(lead, **update_kwargs)
 

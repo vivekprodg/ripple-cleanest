@@ -8,8 +8,8 @@
     const data = [
         {
             id: 1,
-            name: "Lord Sterling",
-            email: "lord.sterling@example.com",
+            name: "Vivek Mani Upadhyaya",
+            email: "vivek.upadhyaya@example.com",
             phone: "+977-9812345678",
             project: "12,000 sq ft Villa",
             location: "Kathmandu, Nepal",
@@ -586,6 +586,51 @@
         if (card) openInspectorByCard(card);
     }
 
+    async function handleNewsletterSubmit(e) {
+        e.preventDefault();
+
+        const form = e.currentTarget;
+        const emailInput = form.querySelector("input[name='email']");
+        if (!emailInput) return;
+
+        const email = String(emailInput.value || "").trim();
+        if (!email) {
+            alert("Email is required.");
+            return;
+        }
+
+        try {
+            const formData = new FormData(form);
+            const csrfToken = form.querySelector("[name=csrfmiddlewaretoken]")?.value || "";
+
+            const response = await fetch(form.action, {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "X-CSRFToken": csrfToken,
+                    "Accept": "application/json"
+                }
+            });
+
+            let dataResponse = null;
+            try {
+                dataResponse = await response.json();
+            } catch (jsonError) {
+                dataResponse = null;
+            }
+
+            if (!response.ok) {
+                alert((dataResponse && dataResponse.message) || "Subscription failed");
+                return;
+            }
+
+            alert((dataResponse && dataResponse.message) || "Subscribed successfully");
+            form.reset();
+        } catch (error) {
+            alert("Subscription failed");
+        }
+    }
+
     function bindEvents() {
         const form = getEl("addLeadForm");
         if (form) {
@@ -610,6 +655,11 @@
         if (status) status.addEventListener("change", applyFilters);
         if (priority) priority.addEventListener("change", applyFilters);
         if (source) source.addEventListener("change", applyFilters);
+
+        const newsletterForm = document.querySelector(".newsletter-form");
+        if (newsletterForm) {
+            newsletterForm.addEventListener("submit", handleNewsletterSubmit);
+        }
     }
 
     // Expose functions used by inline HTML handlers

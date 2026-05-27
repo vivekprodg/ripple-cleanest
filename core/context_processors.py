@@ -4,6 +4,7 @@ from .models import (
     FooterSettings,
     NavbarSettings,
     HeroTypographySettings,
+    WhatsAppSettings,
 )
 
 
@@ -31,6 +32,7 @@ def global_context(request):
     logo = SiteLogo.objects.last()
     navbar_settings, _ = NavbarSettings.objects.get_or_create(pk=1)
     footer_settings, _ = FooterSettings.objects.get_or_create(pk=1)
+    whatsapp_settings, _ = WhatsAppSettings.objects.get_or_create(pk=1)
 
     # =====================================================
     # FOOTER LINKS
@@ -74,6 +76,12 @@ def global_context(request):
         "footer_projects_links": footer_projects_links,
         "footer_practice_links": footer_practice_links,
         "footer_social_links": footer_social_links,
+
+        # WHATSAPP
+        "whatsapp_settings": whatsapp_settings,
+        "whatsapp_phone_number": whatsapp_settings.phone_number,
+        "whatsapp_prefilled_text": whatsapp_settings.prefilled_text,
+        "whatsapp_is_active": whatsapp_settings.is_active,
 
         # HERO TYPOGRAPHY
         "hero_typography": hero_typography,
