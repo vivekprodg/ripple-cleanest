@@ -249,6 +249,74 @@
 
                         </div>
 
+                        <!-- ASSIGNMENT -->
+                        <div class="detail-card">
+
+                            <div class="detail-card-header">
+                                <h3>{{ assignment_title|default:"Assignment" }}</h3>
+                            </div>
+
+                            <div class="detail-hero-grid">
+
+                                <div class="detail-field">
+                                    <span class="k">{{ assigned_staff_label|default:"Assigned Staff" }}</span>
+                                    <span class="v">
+                                        {% if lead.assigned_to %}
+                                            {{ lead.assigned_to.get_full_name|default:lead.assigned_to.username }}
+                                        {% else %}
+                                            —
+                                        {% endif %}
+                                    </span>
+                                </div>
+
+                                <div class="detail-field">
+                                    <span class="k">{{ supervisor_label|default:"Supervisor" }}</span>
+                                    <span class="v">
+                                        {% if lead.supervisor %}
+                                            {{ lead.supervisor.get_full_name|default:lead.supervisor.username }}
+                                        {% else %}
+                                            —
+                                        {% endif %}
+                                    </span>
+                                </div>
+
+                                <div class="detail-field">
+                                    <span class="k">{{ assigned_at_label|default:"Assigned At" }}</span>
+                                    <span class="v">
+                                        {% if lead.assigned_at %}
+                                            {{ lead.assigned_at|date:"M d, Y H:i" }}
+                                        {% else %}
+                                            —
+                                        {% endif %}
+                                    </span>
+                                </div>
+
+                                <div class="detail-field">
+                                    <span class="k">{{ last_followup_label|default:"Last Follow-up" }}</span>
+                                    <span class="v">
+                                        {% if lead.last_followup_at %}
+                                            {{ lead.last_followup_at|date:"M d, Y H:i" }}
+                                        {% else %}
+                                            —
+                                        {% endif %}
+                                    </span>
+                                </div>
+
+                                <div class="detail-field">
+                                    <span class="k">{{ next_followup_label|default:"Next Follow-up" }}</span>
+                                    <span class="v">
+                                        {% if lead.next_followup_at %}
+                                            {{ lead.next_followup_at|date:"M d, Y H:i" }}
+                                        {% else %}
+                                            —
+                                        {% endif %}
+                                    </span>
+                                </div>
+
+                            </div>
+
+                        </div>
+
                         <!-- PROJECT BRIEF -->
                         <div class="detail-card">
 
@@ -432,6 +500,66 @@
 
                         </div>
 
+                        <!-- ASSIGNMENT FORM -->
+                        <div class="detail-card">
+
+                            <div class="detail-card-header">
+                                <h3>{{ assign_form_title|default:"Assign Lead" }}</h3>
+                            </div>
+
+                            <form method="post">
+
+                                {% csrf_token %}
+
+                                <label>{{ assign_staff_label|default:"Assigned Staff" }}</label>
+                                <select name="assigned_to">
+                                    <option value="">—</option>
+                                    {% for user in assigned_users %}
+                                        <option value="{{ user.id }}" {% if lead.assigned_to_id == user.id %}selected{% endif %}>
+                                            {% if user.get_full_name %}{{ user.get_full_name }}{% else %}{{ user.username }}{% endif %}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+
+                                <label>{{ assign_supervisor_label|default:"Supervisor" }}</label>
+                                <select name="supervisor">
+                                    <option value="">—</option>
+                                    {% for user in supervisor_users %}
+                                        <option value="{{ user.id }}" {% if lead.supervisor_id == user.id %}selected{% endif %}>
+                                            {% if user.get_full_name %}{{ user.get_full_name }}{% else %}{{ user.username }}{% endif %}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+
+                                <label>{{ assign_time_label|default:"Assigned At" }}</label>
+                                <input
+                                    type="text"
+                                    value="{% if lead.assigned_at %}{{ lead.assigned_at|date:'M d, Y H:i' }}{% else %}—{% endif %}"
+                                    readonly
+                                >
+
+                                <label>{{ followup_next_label|default:"Next Follow-up" }}</label>
+                                <input
+                                    type="datetime-local"
+                                    name="next_followup_at"
+                                    value="{% if lead.next_followup_at %}{{ lead.next_followup_at|date:'Y-m-d\\TH:i' }}{% endif %}"
+                                >
+
+                                <label>{{ followup_last_label|default:"Last Follow-up" }}</label>
+                                <input
+                                    type="datetime-local"
+                                    name="last_followup_at"
+                                    value="{% if lead.last_followup_at %}{{ lead.last_followup_at|date:'Y-m-d\\TH:i' }}{% endif %}"
+                                >
+
+                                <button class="btn btn-primary" type="submit">
+                                    {{ assign_save_label|default:"Assign Lead" }}
+                                </button>
+
+                            </form>
+
+                        </div>
+
                         <!-- LEAD META -->
                         <div class="detail-card">
 
@@ -459,7 +587,7 @@
                                 <div class="detail-field">
                                     <span class="k">RFQ Entry</span>
                                     <span class="v">
-                                        {% if lead.source == "rfq" %}
+                                        {% if lead.source == "quote" %}
                                             Yes
                                         {% else %}
                                             No

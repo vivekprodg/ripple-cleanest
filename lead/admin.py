@@ -1,6 +1,12 @@
 from django.contrib import admin
+from django.utils import timezone
 
 from .models import Lead
+
+try:
+    from .services import send_lead_assignment_notification
+except ImportError:
+    send_lead_assignment_notification = None
 
 
 class IntakePathFilter(admin.SimpleListFilter):
@@ -79,6 +85,9 @@ class LeadAdmin(admin.ModelAdmin):
         "status",
         "priority",
         "source",
+        "assigned_to",
+        "supervisor",
+        "assigned_at",
         "is_subscriber",
         "project",
         "location",
@@ -94,6 +103,8 @@ class LeadAdmin(admin.ModelAdmin):
         "status",
         "priority",
         "source",
+        "assigned_to",
+        "supervisor",
         "is_subscriber",
         "is_archived",
         "is_deleted",
@@ -106,11 +117,14 @@ class LeadAdmin(admin.ModelAdmin):
         "status",
         "priority",
         "source",
+        "assigned_to",
+        "supervisor",
         "is_subscriber",
         "is_archived",
         "is_deleted",
         "created_at",
         "updated_at",
+        "assigned_at",
     )
 
     search_fields = (
@@ -129,6 +143,14 @@ class LeadAdmin(admin.ModelAdmin):
         "vision_narrative",
         "notes",
         "tags",
+        "assigned_to__username",
+        "assigned_to__first_name",
+        "assigned_to__last_name",
+        "assigned_to__email",
+        "supervisor__username",
+        "supervisor__first_name",
+        "supervisor__last_name",
+        "supervisor__email",
     )
 
     ordering = ("-created_at", "-id")
@@ -147,6 +169,16 @@ class LeadAdmin(admin.ModelAdmin):
                     "email",
                     "phone",
                     "avatar",
+                )
+            },
+        ),
+        (
+            "Assignment",
+            {
+                "fields": (
+                    "assigned_to",
+                    "supervisor",
+                    "assigned_at",
                 )
             },
         ),
@@ -201,7 +233,7 @@ class LeadAdmin(admin.ModelAdmin):
         ),
     )
 
-    readonly_fields = ("created_at", "updated_at")
+    readonly_fields = ("created_at", "updated_at", "assigned_at")
 
     actions = (
         "mark_new",
@@ -218,7 +250,7 @@ class LeadAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return qs
+        return qs.select_related("assigned_to", "supervisor")
 
     @admin.display(description="Lead Name", ordering="name")
     def display_name_admin(self, obj):
@@ -227,6 +259,33 @@ class LeadAdmin(admin.ModelAdmin):
     @admin.display(description="Email", ordering="email")
     def display_email_admin(self, obj):
         return obj.display_email
+
+    def save_model(self, request, obj, form, change):
+        old_assigned_to_id = None
+        old_supervisor_id = None
+
+        if change and obj.pk:
+            old = Lead.objects.filter(pk=obj.pk).only(
+                "assigned_to_id",
+                "supervisor_id",
+                "assigned_at",
+            ).first()
+            if old:
+                old_assigned_to_id = old.assigned_to_id
+                old_supervisor_id = old.supervisor_id
+
+        assignment_changed = (
+            old_assigned_to_id != obj.assigned_to_id
+            or old_supervisor_id != obj.supervisor_id
+        )
+
+        if assignment_changed and obj.assigned_to and not obj.assigned_at:
+            obj.assigned_at = timezone.now()
+
+        super().save_model(request, obj, form, change)
+
+        if assignment_changed and obj.assigned_to and send_lead_assignment_notification:
+            send_lead_assignment_notification(obj)
 
     @admin.action(description="Mark selected leads as New")
     def mark_new(self, request, queryset):

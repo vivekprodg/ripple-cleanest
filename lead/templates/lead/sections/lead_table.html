@@ -141,11 +141,8 @@
                     </option>
                 {% endfor %}
 
-                <!-- RFQ source support -->
                 {% if not lead_sources %}
-                    <option value="rfq">
-                        RFQ Form
-                    </option>
+                    <option value="quote">RFQ Form</option>
                 {% endif %}
             </select>
 
@@ -179,16 +176,12 @@
                         >
                             {% if status_value == "new" %}
                                 {{ lead_stats.new|default:0 }}
-
                             {% elif status_value == "contacted" %}
                                 {{ lead_stats.contacted|default:0 }}
-
                             {% elif status_value == "won" %}
                                 {{ lead_stats.won|default:0 }}
-
                             {% elif status_value == "lost" %}
                                 {{ lead_stats.lost|default:0 }}
-
                             {% else %}
                                 0
                             {% endif %}
@@ -273,6 +266,30 @@
                 </div>
 
                 <div class="v" id="i-source">-</div>
+            </div>
+
+            <div class="inspector-kv">
+                <div class="k">
+                    {{ inspector_assigned_to_label|default:"Assigned Staff" }}
+                </div>
+
+                <div class="v" id="i-assigned-to">-</div>
+            </div>
+
+            <div class="inspector-kv">
+                <div class="k">
+                    {{ inspector_supervisor_label|default:"Supervisor" }}
+                </div>
+
+                <div class="v" id="i-supervisor">-</div>
+            </div>
+
+            <div class="inspector-kv">
+                <div class="k">
+                    {{ inspector_assigned_at_label|default:"Assigned At" }}
+                </div>
+
+                <div class="v" id="i-assigned-at">-</div>
             </div>
 
             <!-- STATUS -->
@@ -420,7 +437,6 @@
                     >
                 </div>
 
-                <!-- LEAD TYPE -->
                 <div>
                     <label for="new-type">
                         {{ modal_type_label|default:"Lead Type" }}
@@ -435,7 +451,6 @@
                     </select>
                 </div>
 
-                <!-- STATUS -->
                 <div>
                     <label for="new-status">
                         {{ modal_status_label|default:"Status" }}
@@ -450,7 +465,6 @@
                     </select>
                 </div>
 
-                <!-- PRIORITY -->
                 <div>
                     <label for="new-priority">
                         {{ modal_priority_label|default:"Priority" }}
@@ -465,7 +479,6 @@
                     </select>
                 </div>
 
-                <!-- SOURCE -->
                 <div>
                     <label for="new-source">
                         {{ modal_source_label|default:"Lead Source" }}
@@ -480,7 +493,7 @@
                         {% endfor %}
 
                         {% if not lead_sources %}
-                            <option value="rfq">
+                            <option value="quote">
                                 RFQ Form
                             </option>
                         {% endif %}

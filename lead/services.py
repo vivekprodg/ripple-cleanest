@@ -1,9 +1,18 @@
+from __future__ import annotations
+
+import datetime as dt
+
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
 from django.db import transaction
 from django.db.models import Q
+from django.utils import timezone
+from django.utils.dateparse import parse_datetime
 
 from .models import Lead
+
+User = get_user_model()
 
 
 def normalize_text(value):
@@ -58,6 +67,48 @@ def _to_bool(value):
     return bool(value)
 
 
+def _parse_int(value):
+    """
+    Parse an integer safely.
+    """
+    if value in (None, ""):
+        return None
+
+    try:
+        return int(str(value).strip())
+    except (TypeError, ValueError):
+        return None
+
+
+def _parse_datetime_value(value):
+    """
+    Parse a datetime value safely from string/datetime input.
+    """
+    if value in (None, ""):
+        return None
+
+    if isinstance(value, dt.datetime):
+        if timezone.is_naive(value):
+            try:
+                return timezone.make_aware(value, timezone.get_current_timezone())
+            except Exception:
+                return value
+        return value
+
+    if isinstance(value, str):
+        parsed = parse_datetime(value.strip())
+        if parsed is None:
+            return None
+        if timezone.is_naive(parsed):
+            try:
+                return timezone.make_aware(parsed, timezone.get_current_timezone())
+            except Exception:
+                return parsed
+        return parsed
+
+    return None
+
+
 def _pick_first_non_empty(data, *keys, default=""):
     """
     Return the first non-empty value from a dict using multiple possible keys.
@@ -73,6 +124,22 @@ def _pick_first_non_empty(data, *keys, default=""):
             return value
 
     return default
+
+
+def _company_name():
+    return (
+        getattr(settings, "SITE_NAME", None)
+        or getattr(settings, "PROJECT_NAME", None)
+        or "Ripple Cleanest"
+    )
+
+
+def _from_email():
+    return (
+        getattr(settings, "DEFAULT_FROM_EMAIL", None)
+        or getattr(settings, "EMAIL_HOST_USER", None)
+        or "no-reply@example.com"
+    )
 
 
 def lead_defaults():
@@ -104,6 +171,11 @@ def lead_defaults():
         "is_subscriber": False,
         "is_archived": False,
         "is_deleted": False,
+        "assigned_to_id": None,
+        "supervisor_id": None,
+        "assigned_at": None,
+        "last_followup_at": None,
+        "next_followup_at": None,
     }
 
 
@@ -146,6 +218,11 @@ def clean_lead_data(data):
         "is_subscriber": ("is_subscriber",),
         "is_archived": ("is_archived",),
         "is_deleted": ("is_deleted",),
+        "assigned_to_id": ("assigned_to_id", "assigned_to"),
+        "supervisor_id": ("supervisor_id", "supervisor"),
+        "assigned_at": ("assigned_at",),
+        "last_followup_at": ("last_followup_at",),
+        "next_followup_at": ("next_followup_at",),
     }
 
     for key in cleaned.keys():
@@ -158,6 +235,10 @@ def clean_lead_data(data):
             cleaned[key] = parse_tags(value)
         elif key in {"is_subscriber", "is_archived", "is_deleted"}:
             cleaned[key] = _to_bool(value)
+        elif key in {"assigned_to_id", "supervisor_id"}:
+            cleaned[key] = _parse_int(value)
+        elif key in {"assigned_at", "last_followup_at", "next_followup_at"}:
+            cleaned[key] = _parse_datetime_value(value)
         elif key in {
             "name",
             "email",
@@ -184,6 +265,19 @@ def clean_lead_data(data):
             cleaned[key] = value
 
     return cleaned
+
+
+def _apply_assignment_defaults(lead):
+    """
+    Ensure assigned_at is populated when assignment exists.
+    """
+    if lead is None:
+        return lead
+
+    if lead.assigned_to_id and not lead.assigned_at:
+        lead.assigned_at = timezone.now()
+
+    return lead
 
 
 @transaction.atomic
@@ -219,7 +313,18 @@ def create_lead(**data):
         is_subscriber=cleaned["is_subscriber"],
         is_archived=cleaned["is_archived"],
         is_deleted=cleaned["is_deleted"],
+        assigned_to_id=cleaned["assigned_to_id"],
+        supervisor_id=cleaned["supervisor_id"],
+        assigned_at=cleaned["assigned_at"],
+        last_followup_at=cleaned["last_followup_at"],
+        next_followup_at=cleaned["next_followup_at"],
     )
+
+    _apply_assignment_defaults(lead)
+
+    if lead.assigned_at and lead.pk:
+        lead.save(update_fields=["assigned_at"])
+
     return lead
 
 
@@ -258,14 +363,24 @@ def update_lead(lead, **data):
         "is_subscriber",
         "is_archived",
         "is_deleted",
+        "assigned_at",
+        "last_followup_at",
+        "next_followup_at",
     ):
         value = cleaned.get(field)
         if value is not None:
             setattr(lead, field, value)
 
+    if cleaned.get("assigned_to_id", None) is not None:
+        lead.assigned_to_id = cleaned["assigned_to_id"]
+
+    if cleaned.get("supervisor_id", None) is not None:
+        lead.supervisor_id = cleaned["supervisor_id"]
+
     if "tags" in cleaned:
         lead.tags = cleaned["tags"]
 
+    _apply_assignment_defaults(lead)
     lead.save()
     return lead
 
@@ -550,17 +665,111 @@ def update_lead_tags(lead, tags):
     return lead
 
 
+def _lead_assignment_subject_staff():
+    return "New Lead Assigned"
+
+
+def _lead_assignment_subject_supervisor():
+    return "Lead Assignment Notification"
+
+
+def _lead_assignment_message_staff(lead):
+    assigned_to = getattr(lead, "assigned_to", None)
+
+    return (
+        f"Lead Name: {lead.display_name}\n"
+        f"Contact: {lead.phone or '—'}\n"
+        f"Email: {lead.email or '—'}\n\n"
+        f"Please follow up.\n"
+        f"\n"
+        f"Assigned To: {assigned_to.get_full_name() if assigned_to and hasattr(assigned_to, 'get_full_name') else getattr(assigned_to, 'username', '') if assigned_to else ''}\n"
+        f"Assigned At: {lead.assigned_at or '—'}\n"
+    )
+
+
+def _lead_assignment_message_supervisor(lead):
+    assigned_to = getattr(lead, "assigned_to", None)
+    assigned_name = ""
+    if assigned_to:
+        full_name = ""
+        if hasattr(assigned_to, "get_full_name"):
+            full_name = (assigned_to.get_full_name() or "").strip()
+        assigned_name = full_name or getattr(assigned_to, "username", "") or getattr(assigned_to, "email", "") or "the staff member"
+
+    return (
+        f"Lead {lead.display_name} has been assigned to {assigned_name}.\n\n"
+        f"Please monitor progress.\n\n"
+        f"Lead Contact: {lead.phone or '—'}\n"
+        f"Lead Email: {lead.email or '—'}\n"
+        f"Assigned At: {lead.assigned_at or '—'}\n"
+    )
+
+
+def _send_mail_safe(subject, message, recipient_list):
+    """
+    Send email safely. Returns True only when at least one message is sent.
+    """
+    recipient_list = [email for email in recipient_list if email]
+    if not recipient_list:
+        return False
+
+    try:
+        return (
+            send_mail(
+                subject=subject,
+                message=message,
+                from_email=_from_email(),
+                recipient_list=recipient_list,
+                fail_silently=True,
+            )
+            > 0
+        )
+    except Exception:
+        return False
+
+
+def send_lead_assignment_notification(lead):
+    """
+    Send assignment emails to the assigned staff and supervisor.
+
+    Staff receives:
+    - Subject: New Lead Assigned
+
+    Supervisor receives:
+    - Subject: Lead Assignment Notification
+    """
+    if lead is None:
+        return False
+
+    sent_any = False
+
+    staff_email = getattr(getattr(lead, "assigned_to", None), "email", "") or ""
+    supervisor_email = getattr(getattr(lead, "supervisor", None), "email", "") or ""
+
+    if lead.assigned_to and staff_email:
+        sent_any = _send_mail_safe(
+            subject=_lead_assignment_subject_staff(),
+            message=_lead_assignment_message_staff(lead),
+            recipient_list=[staff_email],
+        ) or sent_any
+
+    if lead.supervisor and supervisor_email and supervisor_email != staff_email:
+        sent_any = _send_mail_safe(
+            subject=_lead_assignment_subject_supervisor(),
+            message=_lead_assignment_message_supervisor(lead),
+            recipient_list=[supervisor_email],
+        ) or sent_any
+
+    return sent_any
+
+
 def _subscription_subject(lead):
-    company_name = getattr(settings, "SITE_NAME", None) or getattr(
-        settings, "PROJECT_NAME", None
-    ) or "Ripple Cleanest"
+    company_name = _company_name()
     return f"Subscription confirmed — {company_name}"
 
 
 def _subscription_message(lead):
-    company_name = getattr(settings, "SITE_NAME", None) or getattr(
-        settings, "PROJECT_NAME", None
-    ) or "Ripple Cleanest"
+    company_name = _company_name()
 
     subscriber_name = lead.display_name if getattr(lead, "name", "") else "Subscriber"
 
@@ -625,17 +834,11 @@ def send_subscription_confirmation_email(lead):
     if lead is None or not lead.email:
         return False
 
-    from_email = getattr(settings, "DEFAULT_FROM_EMAIL", None) or getattr(
-        settings, "EMAIL_HOST_USER", None
-    ) or "no-reply@example.com"
-
-    return send_mail(
+    return _send_mail_safe(
         subject=_subscription_subject(lead),
         message=_subscription_message(lead),
-        from_email=from_email,
         recipient_list=[lead.email],
-        fail_silently=True,
-    ) > 0
+    )
 
 
 def send_subscription_admin_notification(lead):
@@ -644,10 +847,6 @@ def send_subscription_admin_notification(lead):
     """
     if lead is None or not lead.email:
         return False
-
-    from_email = getattr(settings, "DEFAULT_FROM_EMAIL", None) or getattr(
-        settings, "EMAIL_HOST_USER", None
-    ) or "no-reply@example.com"
 
     admin_email = getattr(settings, "SUBSCRIPTION_NOTIFICATION_EMAIL", None) or getattr(
         settings, "DEFAULT_FROM_EMAIL", None
@@ -664,10 +863,8 @@ def send_subscription_admin_notification(lead):
         f"Created: {lead.created_at}\n"
     )
 
-    return send_mail(
+    return _send_mail_safe(
         subject=subject,
         message=message,
-        from_email=from_email,
         recipient_list=[admin_email],
-        fail_silently=True,
-    ) > 0
+    )

@@ -66,35 +66,35 @@
         </div>
     </div>
 
-    <!-- RFQ SOURCE -->
+    <!-- ASSIGNED -->
     <div class="summary-card">
         <div class="label">
-            <span>{{ summary_rfq_label|default:"RFQ Source" }}</span>
-            <i class="fas fa-file-signature"></i>
+            <span>{{ summary_assigned_label|default:"Assigned" }}</span>
+            <i class="fas fa-user-check"></i>
         </div>
 
-        <div class="value" id="stat-rfq">
-            {{ lead_stats.rfq|default:0 }}
+        <div class="value" id="stat-assigned">
+            {{ lead_stats.assigned|default:0 }}
         </div>
 
         <div class="sub">
-            {{ summary_rfq_subtitle|default:"Leads submitted through RFQ forms" }}
+            {{ summary_assigned_subtitle|default:"Leads already assigned to staff" }}
         </div>
     </div>
 
-    <!-- WEBSITE SOURCE -->
+    <!-- UNASSIGNED -->
     <div class="summary-card">
         <div class="label">
-            <span>{{ summary_website_label|default:"Website Leads" }}</span>
-            <i class="fas fa-globe"></i>
+            <span>{{ summary_unassigned_label|default:"Unassigned" }}</span>
+            <i class="fas fa-user-minus"></i>
         </div>
 
-        <div class="value" id="stat-website">
-            {{ lead_stats.website|default:0 }}
+        <div class="value" id="stat-unassigned">
+            {{ lead_stats.unassigned|default:0 }}
         </div>
 
         <div class="sub">
-            {{ summary_website_subtitle|default:"General website contact inquiries" }}
+            {{ summary_unassigned_subtitle|default:"Leads waiting for assignment" }}
         </div>
     </div>
 

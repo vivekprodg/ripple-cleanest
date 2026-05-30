@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
@@ -32,6 +33,11 @@ from .services import (
     update_lead_notes,
     update_lead_tags,
 )
+
+try:
+    from .services import send_lead_assignment_notification
+except ImportError:
+    send_lead_assignment_notification = None
 
 
 def _wants_json(request):
@@ -98,6 +104,93 @@ def _normalize_tags(value):
         return parse_tags(stripped)
 
     return parse_tags(value)
+
+
+def _parse_optional_int(value):
+    if value in (None, ""):
+        return None
+    try:
+        return int(str(value).strip())
+    except (TypeError, ValueError):
+        return None
+
+
+def _extract_optional_fk_id(data, current_value=None, *keys):
+    """
+    Return (value, provided_flag).
+
+    If the key is present with an empty value, it clears the relation.
+    If the key is present with an invalid value, it leaves current_value unchanged.
+    If the key is absent, it returns current_value and False.
+    """
+    for key in keys:
+        if key in data:
+            raw = data.get(key)
+            if raw in (None, ""):
+                return None, True
+            parsed = _parse_optional_int(raw)
+            if parsed is None:
+                return current_value, False
+            return parsed, True
+    return current_value, False
+
+
+def _user_display(user_obj):
+    if not user_obj:
+        return ""
+    full_name = _safe_str(getattr(user_obj, "get_full_name", lambda: "")())
+    if full_name:
+        return full_name
+    username = _safe_str(getattr(user_obj, "username", ""))
+    if username:
+        return username
+    email = _safe_str(getattr(user_obj, "email", ""))
+    return email
+
+
+def _serialize_lead(lead: Lead):
+    assigned_to = getattr(lead, "assigned_to", None)
+    supervisor = getattr(lead, "supervisor", None)
+
+    return {
+        "id": lead.pk,
+        "name": lead.name,
+        "display_name": lead.display_name,
+        "email": lead.email,
+        "display_email": lead.display_email,
+        "phone": lead.phone,
+        "is_subscriber": lead.is_subscriber,
+        "lead_type": lead.lead_type,
+        "lead_type_label": lead.get_lead_type_display() if lead.lead_type else "",
+        "status": lead.status,
+        "status_label": lead.get_status_display() if lead.status else "",
+        "priority": lead.priority,
+        "priority_label": lead.get_priority_display() if lead.priority else "",
+        "source": lead.source,
+        "source_label": lead.get_source_display() if lead.source else "",
+        "budget": lead.budget,
+        "project": lead.project,
+        "location": lead.location,
+        "timeline": lead.timeline,
+        "avatar": lead.avatar,
+        "notes": lead.notes,
+        "tags": lead.tags_list,
+        "is_archived": lead.is_archived,
+        "is_deleted": lead.is_deleted,
+        "assigned_to_id": lead.assigned_to_id,
+        "assigned_to_name": _user_display(assigned_to),
+        "supervisor_id": lead.supervisor_id,
+        "supervisor_name": _user_display(supervisor),
+        "assigned_at": lead.assigned_at.isoformat() if lead.assigned_at else None,
+        "last_followup_at": (
+            lead.last_followup_at.isoformat() if lead.last_followup_at else None
+        ),
+        "next_followup_at": (
+            lead.next_followup_at.isoformat() if lead.next_followup_at else None
+        ),
+        "created_at": lead.created_at.isoformat() if lead.created_at else None,
+        "updated_at": lead.updated_at.isoformat() if lead.updated_at else None,
+    }
 
 
 def _request_filters(request):
@@ -222,35 +315,54 @@ def _resolve_source(data, lead_type=None):
     return Lead.LeadSource.WEBSITE
 
 
-def _serialize_lead(lead: Lead):
-    return {
-        "id": lead.pk,
-        "name": lead.name,
-        "display_name": lead.display_name,
-        "email": lead.email,
-        "display_email": lead.display_email,
-        "phone": lead.phone,
-        "is_subscriber": lead.is_subscriber,
-        "lead_type": lead.lead_type,
-        "lead_type_label": lead.get_lead_type_display() if lead.lead_type else "",
-        "status": lead.status,
-        "status_label": lead.get_status_display() if lead.status else "",
-        "priority": lead.priority,
-        "priority_label": lead.get_priority_display() if lead.priority else "",
-        "source": lead.source,
-        "source_label": lead.get_source_display() if lead.source else "",
-        "budget": lead.budget,
-        "project": lead.project,
-        "location": lead.location,
-        "timeline": lead.timeline,
-        "avatar": lead.avatar,
-        "notes": lead.notes,
-        "tags": lead.tags_list,
-        "is_archived": lead.is_archived,
-        "is_deleted": lead.is_deleted,
-        "created_at": lead.created_at.isoformat() if lead.created_at else None,
-        "updated_at": lead.updated_at.isoformat() if lead.updated_at else None,
-    }
+def _apply_assignment_update(lead, data):
+    """
+    Save assigned_to / supervisor / assigned_at changes and notify on assignment.
+    """
+    if lead is None:
+        return lead, False
+
+    assigned_to_id, assigned_provided = _extract_optional_fk_id(
+        data,
+        lead.assigned_to_id,
+        "assigned_to",
+        "assigned_to_id",
+    )
+    supervisor_id, supervisor_provided = _extract_optional_fk_id(
+        data,
+        lead.supervisor_id,
+        "supervisor",
+        "supervisor_id",
+    )
+
+    assignment_changed = False
+    update_fields = []
+
+    if assigned_provided and assigned_to_id != lead.assigned_to_id:
+        lead.assigned_to_id = assigned_to_id
+        assignment_changed = True
+        update_fields.append("assigned_to")
+
+    if supervisor_provided and supervisor_id != lead.supervisor_id:
+        lead.supervisor_id = supervisor_id
+        assignment_changed = True
+        update_fields.append("supervisor")
+
+    if assignment_changed:
+        if lead.assigned_to_id and not lead.assigned_at:
+            lead.assigned_at = timezone.now()
+            update_fields.append("assigned_at")
+
+        update_fields.append("updated_at")
+        lead.save(update_fields=list(dict.fromkeys(update_fields)))
+
+        if lead.assigned_to and send_lead_assignment_notification:
+            try:
+                send_lead_assignment_notification(lead)
+            except Exception:
+                pass
+
+    return lead, assignment_changed
 
 
 def _lead_queryset_for_board(request):
@@ -264,7 +376,7 @@ def _lead_queryset_for_board(request):
     queryset = get_board_queryset(
         include_deleted=True if filters["is_deleted"] is True else False,
         include_archived=True,
-    )
+    ).select_related("assigned_to", "supervisor")
 
     queryset = apply_filters(
         queryset,
@@ -350,6 +462,7 @@ def lead_detail(request, pk):
             update_kwargs["tags"] = _normalize_tags(tags)
 
         update_lead(lead, **update_kwargs)
+        _apply_assignment_update(lead, data)
 
         if _wants_json(request):
             return JsonResponse(
@@ -391,8 +504,10 @@ def lead_create(request):
         email=_get_value_str(data, "email", "principal_email", "email_address"),
         phone=_get_value_str(data, "phone", "principal_phone", "phone_number"),
         lead_type=lead_type,
-        status=_get_value_str(data, "status", default=Lead.LeadStatus.NEW) or Lead.LeadStatus.NEW,
-        priority=_get_value_str(data, "priority", default=Lead.LeadPriority.COLD) or Lead.LeadPriority.COLD,
+        status=_get_value_str(data, "status", default=Lead.LeadStatus.NEW)
+        or Lead.LeadStatus.NEW,
+        priority=_get_value_str(data, "priority", default=Lead.LeadPriority.COLD)
+        or Lead.LeadPriority.COLD,
         source=source,
         budget=_get_value_str(data, "budget"),
         project=_get_value_str(data, "project", "typology", "project_type", "lead_project"),
@@ -404,6 +519,8 @@ def lead_create(request):
         is_archived=_boolish(data.get("is_archived", False)) or False,
         is_deleted=_boolish(data.get("is_deleted", False)) or False,
     )
+
+    _apply_assignment_update(lead, data)
 
     if _wants_json(request):
         return JsonResponse(
@@ -445,8 +562,10 @@ def lead_intake_api(request):
         phone=phone,
         lead_type=lead_type,
         source=source,
-        status=_get_value_str(data, "status", default=Lead.LeadStatus.NEW) or Lead.LeadStatus.NEW,
-        priority=_get_value_str(data, "priority", default=Lead.LeadPriority.COLD) or Lead.LeadPriority.COLD,
+        status=_get_value_str(data, "status", default=Lead.LeadStatus.NEW)
+        or Lead.LeadStatus.NEW,
+        priority=_get_value_str(data, "priority", default=Lead.LeadPriority.COLD)
+        or Lead.LeadPriority.COLD,
         budget=_get_value_str(data, "budget"),
         project=_get_value_str(data, "project", "typology", "project_type", "lead_project"),
         location=_get_value_str(data, "location"),
@@ -457,6 +576,8 @@ def lead_intake_api(request):
         is_archived=_boolish(data.get("is_archived", False)) or False,
         is_deleted=_boolish(data.get("is_deleted", False)) or False,
     )
+
+    _apply_assignment_update(lead, data)
 
     return JsonResponse(
         {
@@ -571,6 +692,7 @@ def lead_update(request, pk):
         update_kwargs["tags"] = _normalize_tags(data.get("tags"))
 
     update_lead(lead, **update_kwargs)
+    _apply_assignment_update(lead, data)
 
     if _wants_json(request):
         return JsonResponse(
