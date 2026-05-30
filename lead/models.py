@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth import get_user_model
 
+User = get_user_model()
 
 class Lead(models.Model):
     class LeadType(models.TextChoices):
@@ -94,6 +96,39 @@ class Lead(models.Model):
     # Timestamps
     created_at = models.DateTimeField(default=timezone.now, blank=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    # Lead Assignment
+
+    assigned_to = models.ForeignKey(
+    User,
+    on_delete=models.SET_NULL,
+    null=True,
+    blank=True,
+    related_name="assigned_leads",
+    )
+
+    supervisor = models.ForeignKey(
+    User,
+    on_delete=models.SET_NULL,
+    null=True,
+    blank=True,
+    related_name="supervised_leads",
+    )
+
+    assigned_at = models.DateTimeField(
+    null=True,
+    blank=True,
+    )
+
+    last_followup_at = models.DateTimeField(
+    null=True,
+    blank=True,
+    )
+
+    next_followup_at = models.DateTimeField(
+    null=True,
+    blank=True,
+    )
 
     class Meta:
         ordering = ["-created_at", "-id"]
