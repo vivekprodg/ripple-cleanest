@@ -42,8 +42,7 @@ has-hero contact-page
     <section class="top-cards">
         {% for card in top_cards %}
             <div class="top-card">
-                <div class="top-icon">{{ card.icon_text|default:'✉' }}</div>
-                <h3>{{ card.title|default:'' }}</h3>
+                <div class="top-icon">{{ card.icon_text }}</div>                <h3>{{ card.title|default:'' }}</h3>
 
                 {% if card.link_url %}
                     <a href="{{ card.link_url }}">{{ card.value|default:'' }}</a>

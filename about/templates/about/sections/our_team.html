@@ -1,6 +1,6 @@
 {% if our_team and our_team.is_active %}
 
-<section class="team-section">
+<section class="team-section about-team-section">
 
     <header class="team-header">
         <span class="eyebrow">{{ our_team.eyebrow|default:"The Studio" }}</span>
@@ -45,33 +45,33 @@
         </div>
     </div>
 
-</section>
+    <div class="popup" id="teamPopup">
+        <div class="popup-box">
 
-<div class="popup" id="teamPopup">
-    <div class="popup-box">
-
-        <div class="popup-img">
-            <img id="popupImg" alt="">
-        </div>
-
-        <div class="popup-content">
-            <h2 id="popupName"></h2>
-
-            {% comment %} Role is filled via JS; keep empty safely {% endcomment %}
-            <small id="popupRole"></small>
-
-            <p id="popupDesc"></p>
-
-            <div class="social">
-                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                <a href="#"><i class="fab fa-x-twitter"></i></a>
-                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <div class="popup-img">
+                <img id="popupImg" alt="">
             </div>
+
+            <div class="popup-content">
+                <h2 id="popupName"></h2>
+
+                {% comment %} Role is filled via JS; keep empty safely {% endcomment %}
+                <small id="popupRole"></small>
+
+                <p id="popupDesc"></p>
+
+                <div class="social">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-x-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+
+            <div class="close" id="popupClose">✕</div>
+
         </div>
-
-        <div class="close" id="popupClose">✕</div>
-
     </div>
-</div>
+
+</section>
 
 {% endif %}

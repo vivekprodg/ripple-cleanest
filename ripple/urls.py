@@ -40,7 +40,7 @@ urlpatterns = [
     path("lead/", include("lead.urls")),
 ]
 
-# MEDIA & STATIC FILES (development only)
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+# MEDIA FILES
+# WhiteNoise handles /static/ in production.
+# /media/ is served here so uploaded files like logo.png work on cPanel.
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

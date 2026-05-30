@@ -6,19 +6,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # =========================================================
 # CORE SETTINGS
 # =========================================================
-SECRET_KEY = config("SECRET_KEY")
+SECRET_KEY = config("SECRET_KEY", default="django-insecure-temp")
 
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "shubhakamanafp.com.np",
+    "www.shubhakamanafp.com.np",
+]
 
 # =========================================================
 # APPLICATIONS
 # =========================================================
 INSTALLED_APPS = [
-    # -----------------------------------------------------
     # DJANGO CORE
-    # -----------------------------------------------------
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -27,18 +28,14 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.sites",
 
-    # -----------------------------------------------------
     # THIRD PARTY
-    # -----------------------------------------------------
     "modelcluster",
     "taggit",
     "django_filters",
     "guardian",
     "material",
 
-    # -----------------------------------------------------
     # PROJECT APPS
-    # -----------------------------------------------------
     "core",
     "home",
     "about",
@@ -56,6 +53,8 @@ INSTALLED_APPS = [
 # =========================================================
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -72,19 +71,12 @@ ROOT_URLCONF = "ripple.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-
-        # Global templates folder
         "DIRS": [
             BASE_DIR / "templates",
         ],
-
         "APP_DIRS": True,
-
         "OPTIONS": {
             "context_processors": [
-                # -----------------------------------------
-                # DJANGO DEFAULT
-                # -----------------------------------------
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
@@ -116,28 +108,16 @@ DATABASES = {
 # =========================================================
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": (
-            "django.contrib.auth.password_validation."
-            "UserAttributeSimilarityValidator"
-        )
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        "NAME": (
-            "django.contrib.auth.password_validation."
-            "MinimumLengthValidator"
-        )
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        "NAME": (
-            "django.contrib.auth.password_validation."
-            "CommonPasswordValidator"
-        )
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        "NAME": (
-            "django.contrib.auth.password_validation."
-            "NumericPasswordValidator"
-        )
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
@@ -155,9 +135,7 @@ SITE_ID = 1
 # INTERNATIONALIZATION
 # =========================================================
 LANGUAGE_CODE = "en-us"
-
 TIME_ZONE = "Asia/Kathmandu"
-
 USE_I18N = True
 USE_TZ = True
 
@@ -165,18 +143,27 @@ USE_TZ = True
 # STATIC FILES
 # =========================================================
 STATIC_URL = "/static/"
-
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
-
 STATIC_ROOT = BASE_DIR / "staticfiles"
+
+# Django 5.x preferred storage config
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
+
+WHITENOISE_ALLOW_ALL_ORIGINS = True
 
 # =========================================================
 # MEDIA FILES
 # =========================================================
 MEDIA_URL = "/media/"
-
 MEDIA_ROOT = BASE_DIR / "media"
 
 # =========================================================

@@ -1,180 +1,181 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600&family=Jost:wght@300;400;500;600&family=Poppins:wght@300;400;500;600&display=swap');
 
-:root {
+.home-team-section {
     --bg: #ffffff;
     --text-dark: #111111;
     --text-muted: #777777;
-    --accent: #111111;
-    --img-width: 9vw;
 
-    --ease: cubic-bezier(0.19, 1, 0.22, 1);
+    --font-heading: 'Jost', sans-serif;
+    --font-body: 'Montserrat', sans-serif;
+
     --transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-}
 
-/* =========================
-   TEAM SECTION
-========================= */
-.team-section {
     padding: 48px 64px;
     max-width: 1800px;
     margin: 0 auto;
     background: var(--bg);
     color: var(--text-dark);
-    font-family: 'Montserrat', sans-serif;
+
+    font-family: var(--font-body);
+
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
-/* =========================
+.home-team-section *,
+.home-team-section *::before,
+.home-team-section *::after {
+    box-sizing: border-box;
+}
+
+/* =========================================================
    HEADER
-========================= */
+========================================================= */
 
-.team-header {
+.home-team-section .team-header {
     margin-bottom: 32px;
-    padding-left: 0;
 }
 
-.team-header .eyebrow {
-    font-family: 'Montserrat', sans-serif;
+.home-team-section .team-header .eyebrow {
+    display: block;
+    font-family: var(--font-body);
     font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 0.3em;
     text-transform: uppercase;
     line-height: 1.2;
-    color: #111111;
+    color: var(--text-dark);
     margin-bottom: 15px;
 }
 
-.team-header h2 {
-    font-family: 'Jost', sans-serif;
+.home-team-section .team-header h2 {
+    font-family: var(--font-heading);
     font-size: 1.75rem;
     font-weight: 400;
     letter-spacing: -0.02em;
-    text-transform: none;
     line-height: 1.08;
-    color: #111111;
-    margin: 0 0 25px;
+    color: var(--text-dark);
+    margin: 0;
 }
 
-/* =========================
+/* =========================================================
    PASSPORT STRIP
-========================= */
+========================================================= */
 
-.passport-row {
+.home-team-section .passport-row {
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     gap: 16px;
-    width: 100%;
 }
 
-/* =========================
+/* =========================================================
    MEMBER CARD
-========================= */
+========================================================= */
 
-.member-card {
+.home-team-section .member-card {
     flex: 1 1 0;
     min-width: 0;
+
     display: flex;
     flex-direction: column;
-    opacity: 0;
-    transform: translateY(20px);
 }
 
-/* =========================
+/* =========================================================
    IMAGE
-========================= */
+========================================================= */
 
-.image-container {
+.home-team-section .image-container {
     position: relative;
     width: 100%;
     aspect-ratio: 3 / 4;
     overflow: hidden;
     background: #f4f4f4;
     margin-bottom: 16px;
-    transition: transform 0.6s var(--ease);
 }
 
-.image-container img {
+.home-team-section .image-container img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center;
     display: block;
+
     filter: grayscale(1) contrast(1.1);
-    transition:
-        filter 0.8s var(--ease),
-        transform 0.8s var(--ease);
 }
 
-/* =========================
-   HOVER EFFECTS
-========================= */
-
-.member-card:hover .image-container {
-    transform: translateY(-5px);
-}
-
-.member-card:hover .image-container img {
-    filter: grayscale(0) contrast(1);
-    transform: scale(1.05);
-}
-
-/* =========================
+/* =========================================================
    TYPOGRAPHY
-========================= */
-.member-info {
+========================================================= */
+
+.home-team-section .member-info {
     text-align: left;
 }
 
-.member-info h3 {
-    font-family: 'Jost', sans-serif;
+.home-team-section .member-info h3 {
+    font-family: var(--font-heading);
     font-size: 1rem;
     font-weight: 400;
     letter-spacing: -0.02em;
-    text-transform: none;
     line-height: 1.08;
-    color: #111111;
-    margin-bottom: 10px;
+    color: var(--text-dark);
+
+    margin: 0 0 10px;
+
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.member-info p {
-    font-family: 'Montserrat', sans-serif;
+.home-team-section .member-info p {
+    font-family: var(--font-body);
     font-size: 0.95rem;
     font-weight: 400;
-    letter-spacing: normal;
-    text-transform: none;
     line-height: 1.7;
-    color: #777777;
+    color: var(--text-muted);
+
     margin: 0;
 }
 
-/* =========================
+/* =========================================================
    RESPONSIVE
-========================= */
+========================================================= */
 
 @media (max-width: 1200px) {
-    .passport-row {
+    .home-team-section .passport-row {
         display: grid;
         grid-template-columns: repeat(5, 1fr);
         gap: 16px;
     }
 }
 
+@media (max-width: 900px) {
+    .home-team-section {
+        padding: 40px 32px;
+    }
+
+    .home-team-section .passport-row {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
 @media (max-width: 600px) {
-    .passport-row {
+    .home-team-section {
+        padding: 32px 20px;
+    }
+
+    .home-team-section .team-header {
+        padding-left: 20px;
+        margin-bottom: 24px;
+    }
+
+    .home-team-section .passport-row {
         grid-template-columns: repeat(2, 1fr);
         gap: 16px;
     }
 
-    .team-section {
-        padding: 32px 20px;
-    }
-
-    .team-header {
-        padding-left: 20px;
-        margin-bottom: 24px;
+    .home-team-section .member-info h3 {
+        font-size: 1rem;
     }
 }
