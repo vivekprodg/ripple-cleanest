@@ -8,11 +8,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # =========================================================
 SECRET_KEY = config("SECRET_KEY", default="django-insecure-temp")
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
-    "shubhakamanafp.com.np",
-    "www.shubhakamanafp.com.np",
+    "127.0.0.1", "localhost", "shubhakamanafp.com.np", "www.shubhakamanafp.com.np"
 ]
 
 # =========================================================
